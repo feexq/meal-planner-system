@@ -1,0 +1,108 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-categories-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: slug
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+
+        - addForeignKeyConstraint:
+            baseTableName: categories
+            baseColumnNames: parent_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_category_parent
+            onDelete: SET NULL
+
+        - createIndex:
+            tableName: categories
+            indexName: idx_categories_slug
+            columns:
+              - column:
+                  name: slug
+        - createIndex:
+            tableName: categories
+            indexName: idx_categories_parent_id
+            columns:
+              - column:
+                  name: parent_id
+
+  - changeSet:
+      id: extend-ingredients-with-product-fields
+      author: feex
+      changes:
+        - addColumn:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: price
+                  type: DECIMAL(10,2)
+              - column:
+                  name: unit
+                  type: VARCHAR(20)
+              - column:
+                  name: stock
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: category_id
+                  type: BIGINT
+
+        - addForeignKeyConstraint:
+            baseTableName: ingredients
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_ingredient_category
+            onDelete: SET NULL
+
+        - createIndex:
+            tableName: ingredients
+            indexName: idx_ingredients_category_id
+            columns:
+              - column:
+                  name: category_id
+
+      rollback:
+        - dropColumn:
+            tableName: ingredients
+            columnName: price
+        - dropColumn:
+            tableName: ingredients
+            columnName: unit
+        - dropColumn:
+            tableName: ingredients
+            columnName: stock
+        - dropColumn:
+            tableName: ingredients
+            columnName: category_id
+        - dropTable:
+            tableName: categories

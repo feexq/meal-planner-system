@@ -1,0 +1,157 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-preferences-tables
+      author: feex
+      changes:
+        - createTable:
+            tableName: user_preferences
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: gender
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: height_cm
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weight_kg
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activity_level
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: goal
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: goal_intensity
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: diet_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: meals_per_day
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cooking_complexity
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: budget_level
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: zigzag
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: user_preferences
+            baseColumnNames: user_id
+            constraintName: fk_user_preferences_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            tableName: user_health_conditions
+            columns:
+              - column:
+                  name: user_preference_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: condition_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_health_conditions
+            baseColumnNames: user_preference_id
+            constraintName: fk_user_health_conditions_pref_id
+            referencedTableName: user_preferences
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            tableName: user_allergies
+            columns:
+              - column:
+                  name: user_preference_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: allergy_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_allergies
+            baseColumnNames: user_preference_id
+            constraintName: fk_user_allergies_pref_id
+            referencedTableName: user_preferences
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            tableName: user_disliked_ingredients
+            columns:
+              - column:
+                  name: user_preference_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ingredient_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_disliked_ingredients
+            baseColumnNames: user_preference_id
+            constraintName: fk_user_disliked_pref_id
+            referencedTableName: user_preferences
+            referencedColumnNames: id
+            onDelete: CASCADE

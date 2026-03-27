@@ -1,0 +1,4500 @@
+{
+  "userId": "user-006",
+  "dailyCalorieTarget": 2409,
+  "weeklyCalorieTarget": 17100,
+  "relaxationRate": 0.0,
+  "lowCoverageWarning": false,
+  "days": [
+    {
+      "day": 1,
+      "dailyCalorieTarget": 2649,
+      "estimatedDailyMacros": {
+        "proteinG": 192,
+        "carbsG": 192,
+        "fatG": 90,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 107,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 80,
+        "carbsStatus": "OK",
+        "fatCoveragePercent": 111,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 528998,
+              "recipeName": "Breakfast Meat Muffins",
+              "score": 68,
+              "caloriesPerServing": 566.3,
+              "recommendedServings": 1.4,
+              "scaledCalories": 792.8,
+              "caloricDeviation": -0.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 5,
+                "carbsFit": 7,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "bisquick",
+                "milk",
+                "cheese",
+                "butter",
+                "ground beef",
+                "onion"
+              ]
+            },
+            {
+              "recipeId": 176637,
+              "recipeName": "Cheesy Baked Egg and Bacon Benedict",
+              "score": 59,
+              "caloriesPerServing": 537.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 806.7,
+              "caloricDeviation": 1.5,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "bacon",
+                "swiss cheese",
+                "eggs",
+                "whipping cream",
+                "salt and black pepper",
+                "parmesan cheese",
+                "paprika"
+              ]
+            },
+            {
+              "recipeId": 533181,
+              "recipeName": "A Bacon Cheddar Western Omelette With Bacon on the Side",
+              "score": 58,
+              "caloriesPerServing": 844.4,
+              "recommendedServings": 0.9,
+              "scaledCalories": 760.0,
+              "caloricDeviation": -4.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 30,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "milk",
+                "black pepper",
+                "red onion",
+                "green pepper",
+                "cheddar cheese",
+                "bacon"
+              ]
+            },
+            {
+              "recipeId": 542557,
+              "recipeName": "Breakfast Omelette (Scd)",
+              "score": 58,
+              "caloriesPerServing": 823.9,
+              "recommendedServings": 1.0,
+              "scaledCalories": 823.9,
+              "caloricDeviation": 3.7,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 5,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "ground beef",
+                "cheese",
+                "eggs"
+              ]
+            },
+            {
+              "recipeId": 285168,
+              "recipeName": "Southwestern Omelet Wrap - Ziploc Steam Bags",
+              "score": 54,
+              "caloriesPerServing": 479.7,
+              "recommendedServings": 1.5,
+              "scaledCalories": 719.6,
+              "caloricDeviation": -9.5,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 24,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "cheese",
+                "chopped tomatoes",
+                "chile",
+                "heavy cream",
+                "butter",
+                "hot sauce",
+                "salt"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 1060,
+          "candidates": [
+            {
+              "recipeId": 538421,
+              "recipeName": "Basic Grilled Tofu",
+              "score": 57,
+              "caloriesPerServing": 566.2,
+              "recommendedServings": 1.5,
+              "scaledCalories": 849.3,
+              "caloricDeviation": -19.9,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 12,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "firm tofu",
+                "soy sauce",
+                "toasted sesame oil"
+              ]
+            },
+            {
+              "recipeId": 542216,
+              "recipeName": "Chilled Lentil Soup With Spinach",
+              "score": 40,
+              "caloriesPerServing": 579.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 869.7,
+              "caloricDeviation": -17.9,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of dried lentils"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 14,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "extra virgin olive oil",
+                "onion",
+                "celery",
+                "garlic",
+                "dried lentils",
+                "beef broth",
+                "frozen chopped spinach"
+              ]
+            },
+            {
+              "recipeId": 542056,
+              "recipeName": "Kale and Quinoa Pilaf",
+              "score": 31,
+              "caloriesPerServing": 543.0,
+              "recommendedServings": 1.5,
+              "scaledCalories": 814.5,
+              "caloricDeviation": -23.1,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of quinoa"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 8,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "salt water",
+                "quinoa",
+                "kale",
+                "meyer lemon",
+                "scallions",
+                "walnut oil",
+                "pine nuts",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 542918,
+              "recipeName": "Tuscan Beans With Sage",
+              "score": 29,
+              "caloriesPerServing": 588.7,
+              "recommendedServings": 1.5,
+              "scaledCalories": 883.1,
+              "caloricDeviation": -16.7,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of lemon juice",
+                "Contains acceptable amount of cannellini beans"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 16,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 30
+              },
+              "ingredients": [
+                "fresh sage",
+                "garlic cloves",
+                "olive oil",
+                "diced tomatoes",
+                "lemon juice",
+                "cannellini beans",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 539077,
+              "recipeName": "Green Bean and Red Potato Salad",
+              "score": 16,
+              "caloriesPerServing": 520.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 780.2,
+              "caloricDeviation": -26.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of new potato",
+                "Contains acceptable amount of lemon juice"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 4,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 30
+              },
+              "ingredients": [
+                "new potato",
+                "green beans",
+                "olive oil",
+                "lemon juice",
+                "lemon zest",
+                "red onions",
+                "chives",
+                "tarragon",
+                "basil",
+                "parmesan cheese"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 540700,
+              "recipeName": "Portuguese Chicken",
+              "score": 74,
+              "caloriesPerServing": 503.5,
+              "recommendedServings": 1.5,
+              "scaledCalories": 755.3,
+              "caloricDeviation": -5.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 29,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "frying chickens",
+                "tomatoes",
+                "onion",
+                "bell peppers",
+                "black olives",
+                "garlic cloves",
+                "fresh parsley",
+                "salt and pepper",
+                "lemon",
+                "water"
+              ]
+            },
+            {
+              "recipeId": 539517,
+              "recipeName": "Lemon Garlic Chicken",
+              "score": 75,
+              "caloriesPerServing": 531.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 796.7,
+              "caloricDeviation": 0.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "chicken breasts",
+                "garlic cloves",
+                "lemons",
+                "salt",
+                "pepper",
+                "olive oil",
+                "butter"
+              ]
+            },
+            {
+              "recipeId": 540135,
+              "recipeName": "Turkey Mini Meatballs",
+              "score": 71,
+              "caloriesPerServing": 667.5,
+              "recommendedServings": 1.2,
+              "scaledCalories": 801.0,
+              "caloricDeviation": 0.8,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "parmesan cheese",
+                "egg",
+                "pepper",
+                "fresh basil",
+                "salt",
+                "olive oil",
+                "ground turkey",
+                "garlic clove",
+                "onion"
+              ]
+            },
+            {
+              "recipeId": 291758,
+              "recipeName": "American Sirloin Steaks",
+              "score": 70,
+              "caloriesPerServing": 710.4,
+              "recommendedServings": 1.1,
+              "scaledCalories": 781.4,
+              "caloricDeviation": -1.7,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "worcestershire sauce",
+                "vinegar",
+                "garlic cloves",
+                "salt",
+                "fresh black pepper",
+                "sirloin steaks"
+              ]
+            },
+            {
+              "recipeId": 459452,
+              "recipeName": "Grilleed Steak With Blue Cheese Butter",
+              "score": 67,
+              "caloriesPerServing": 907.5,
+              "recommendedServings": 0.9,
+              "scaledCalories": 816.8,
+              "caloricDeviation": 2.8,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "blue cheese",
+                "unsalted butter",
+                "fresh parsley",
+                "new york strip steaks",
+                "salt and pepper"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    },
+    {
+      "day": 2,
+      "dailyCalorieTarget": 2168,
+      "estimatedDailyMacros": {
+        "proteinG": 201,
+        "carbsG": 150,
+        "fatG": 87,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 112,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 63,
+        "carbsStatus": "LOW",
+        "fatCoveragePercent": 107,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 650,
+          "candidates": [
+            {
+              "recipeId": 540912,
+              "recipeName": "Pommes de Terre pour le Petit Dejeuner",
+              "score": 59,
+              "caloriesPerServing": 475.1,
+              "recommendedServings": 1.4,
+              "scaledCalories": 665.1,
+              "caloricDeviation": 2.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of potato"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "potato",
+                "bacon grease"
+              ]
+            },
+            {
+              "recipeId": 538781,
+              "recipeName": "Leek and Pepper Omelette",
+              "score": 65,
+              "caloriesPerServing": 520.6,
+              "recommendedServings": 1.2,
+              "scaledCalories": 624.7,
+              "caloricDeviation": -3.9,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 30,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "leek",
+                "cold water",
+                "sweet pepper",
+                "eggs",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 538687,
+              "recipeName": "Persian Herb Omelette Kuku",
+              "score": 57,
+              "caloriesPerServing": 404.6,
+              "recommendedServings": 1.5,
+              "scaledCalories": 606.9,
+              "caloricDeviation": -6.7,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 27,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "leeks",
+                "flat leaf parsley",
+                "cilantro",
+                "scallions",
+                "dill",
+                "baby spinach",
+                "eggs",
+                "olive oil",
+                "salt",
+                "pepper",
+                "cumin",
+                "turmeric",
+                "ground coriander",
+                "coriander seed"
+              ]
+            },
+            {
+              "recipeId": 232381,
+              "recipeName": "Denver Omelette Baked in the Oven",
+              "score": 56,
+              "caloriesPerServing": 451.5,
+              "recommendedServings": 1.4,
+              "scaledCalories": 632.1,
+              "caloricDeviation": -2.8,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "half-and-half cream",
+                "sharp cheddar cheese",
+                "cooked ham",
+                "green pepper",
+                "sweet red pepper",
+                "green onions",
+                "butter"
+              ]
+            },
+            {
+              "recipeId": 398942,
+              "recipeName": "Eggs Italiana (Crock Pot/Crockpot)",
+              "score": 53,
+              "caloriesPerServing": 501.8,
+              "recommendedServings": 1.3,
+              "scaledCalories": 652.3,
+              "caloricDeviation": 0.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 0,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "provolone cheese",
+                "eggs",
+                "half-and-half cream",
+                "black pepper",
+                "roasted red pepper",
+                "prosciutto",
+                "canned artichoke heart"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 867,
+          "candidates": [
+            {
+              "recipeId": 539723,
+              "recipeName": "Crema De Palmitos - Hearts of Palm Soup",
+              "score": 75,
+              "caloriesPerServing": 576.9,
+              "recommendedServings": 1.5,
+              "scaledCalories": 865.4,
+              "caloricDeviation": -0.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "scallions",
+                "garlic cloves",
+                "olive oil",
+                "hearts of palm",
+                "chicken stock"
+              ]
+            },
+            {
+              "recipeId": 538441,
+              "recipeName": "Mediterranean Lentil Salad",
+              "score": 68,
+              "caloriesPerServing": 556.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 834.2,
+              "caloricDeviation": -3.8,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "brown lentils",
+                "water",
+                "bay leaves",
+                "dried thyme",
+                "garlic",
+                "sun-dried tomato",
+                "boiling water",
+                "celery",
+                "red bell pepper",
+                "red onion",
+                "fresh parsley",
+                "olive oil",
+                "red wine vinegar",
+                "ground fennel",
+                "dijon mustard",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 538542,
+              "recipeName": "White Cabbage, Radish, Mint and Caraway Salad (Slaw)",
+              "score": 64,
+              "caloriesPerServing": 675.5,
+              "recommendedServings": 1.3,
+              "scaledCalories": 878.2,
+              "caloricDeviation": 1.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "cabbage",
+                "mint",
+                "red radishes",
+                "red onion",
+                "caraway seeds",
+                "lemon",
+                "extra virgin olive oil",
+                "sea salt",
+                "black pepper"
+              ]
+            },
+            {
+              "recipeId": 542003,
+              "recipeName": "Mighty Miso Soup (With Dashi - Fish Stock)",
+              "score": 64,
+              "caloriesPerServing": 551.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 826.7,
+              "caloricDeviation": -4.7,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 30,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "soft tofu",
+                "dashi stock",
+                "red miso",
+                "green onion",
+                "shiitake mushrooms",
+                "wakame seaweed",
+                "fish oil",
+                "soy sauce"
+              ]
+            },
+            {
+              "recipeId": 292993,
+              "recipeName": "Wurstsalat",
+              "score": 63,
+              "caloriesPerServing": 664.6,
+              "recommendedServings": 1.3,
+              "scaledCalories": 864.0,
+              "caloricDeviation": -0.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "hot dog",
+                "onion",
+                "pickles",
+                "swiss cheese",
+                "salt and pepper",
+                "vinegar",
+                "water"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 650,
+          "candidates": [
+            {
+              "recipeId": 540012,
+              "recipeName": "Pepper-Crusted Flank Steak",
+              "score": 78,
+              "caloriesPerServing": 938.0,
+              "recommendedServings": 0.7,
+              "scaledCalories": 656.6,
+              "caloricDeviation": 1.0,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "flank steaks",
+                "salt",
+                "black pepper",
+                "olive oil"
+              ]
+            },
+            {
+              "recipeId": 322371,
+              "recipeName": "Crock Pot Burrito Meat",
+              "score": 73,
+              "caloriesPerServing": 432.3,
+              "recommendedServings": 1.5,
+              "scaledCalories": 648.5,
+              "caloricDeviation": -0.3,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "beef roast",
+                "boneless skinless chicken breasts",
+                "onion",
+                "celery",
+                "water",
+                "salt",
+                "black pepper",
+                "garlic powder",
+                "cumin",
+                "chili powder",
+                "sour cream",
+                "salsa",
+                "lettuce",
+                "cheese",
+                "chopped tomato",
+                "guacamole",
+                "onion",
+                "cilantro"
+              ]
+            },
+            {
+              "recipeId": 539996,
+              "recipeName": "Iraqi Shish Kebab",
+              "score": 73,
+              "caloriesPerServing": 552.1,
+              "recommendedServings": 1.2,
+              "scaledCalories": 662.5,
+              "caloricDeviation": 1.9,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "lamb",
+                "vinegar",
+                "olive oil",
+                "onion",
+                "salt",
+                "pepper"
+              ]
+            },
+            {
+              "recipeId": 338977,
+              "recipeName": "Plain Ole Turkey",
+              "score": 71,
+              "caloriesPerServing": 553.1,
+              "recommendedServings": 1.2,
+              "scaledCalories": 663.7,
+              "caloricDeviation": 2.1,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "whole turkey",
+                "turkey neck",
+                "turkey giblets",
+                "water"
+              ]
+            },
+            {
+              "recipeId": 541594,
+              "recipeName": "Simple Italian Deer Steaks",
+              "score": 70,
+              "caloriesPerServing": 775.6,
+              "recommendedServings": 0.8,
+              "scaledCalories": 620.5,
+              "caloricDeviation": -4.6,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 30,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "venison steak",
+                "wishbone italian dressing"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    },
+    {
+      "day": 3,
+      "dailyCalorieTarget": 2649,
+      "estimatedDailyMacros": {
+        "proteinG": 163,
+        "carbsG": 133,
+        "fatG": 90,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 91,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 56,
+        "carbsStatus": "LOW",
+        "fatCoveragePercent": 112,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 232041,
+              "recipeName": "Tomato and Mushroom Omelette",
+              "score": 33,
+              "caloriesPerServing": 409.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 614.1,
+              "caloricDeviation": -22.7,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of potato"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 8,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 8,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "eggs",
+                "potato",
+                "cheddar cheese",
+                "dried chives",
+                "tomatoes",
+                "mushroom",
+                "ground black pepper"
+              ]
+            },
+            {
+              "recipeId": 524139,
+              "recipeName": "Cheesy Baked Eggs With Zucchini",
+              "score": 44,
+              "caloriesPerServing": 451.9,
+              "recommendedServings": 1.5,
+              "scaledCalories": 677.8,
+              "caloricDeviation": -14.7,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 18,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "zucchini",
+                "eggs",
+                "salt and pepper",
+                "cheddar cheese",
+                "fresh basil"
+              ]
+            },
+            {
+              "recipeId": 443642,
+              "recipeName": "Sausage \u0026amp; Spinach Eggs (With Mushrooms)",
+              "score": 43,
+              "caloriesPerServing": 459.0,
+              "recommendedServings": 1.5,
+              "scaledCalories": 688.5,
+              "caloricDeviation": -13.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 19,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "breakfast sausage",
+                "olive oil",
+                "onion",
+                "fresh mushrooms",
+                "jalapeno",
+                "garlic clove",
+                "ground nutmeg",
+                "dried oregano",
+                "seasoning salt",
+                "pepper",
+                "fresh spinach",
+                "eggs",
+                "hot pepper sauce",
+                "cheese",
+                "feta cheese"
+              ]
+            },
+            {
+              "recipeId": 355531,
+              "recipeName": "Omeleta Horiatiki (Greek Omelet)",
+              "score": 43,
+              "caloriesPerServing": 426.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 639.6,
+              "caloricDeviation": -19.5,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 12,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "black olives",
+                "feta cheese",
+                "onions",
+                "olive oil",
+                "salt and pepper",
+                "red peppers"
+              ]
+            },
+            {
+              "recipeId": 262868,
+              "recipeName": "Veggie Omelet for One",
+              "score": 37,
+              "caloriesPerServing": 414.3,
+              "recommendedServings": 1.5,
+              "scaledCalories": 621.5,
+              "caloricDeviation": -21.8,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 10,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 5,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "onion",
+                "green pepper",
+                "red pepper",
+                "mushroom",
+                "egg",
+                "egg whites",
+                "milk",
+                "cheese"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 1060,
+          "candidates": [
+            {
+              "recipeId": 537796,
+              "recipeName": "Thai Spicy Soup - Vegan",
+              "score": 39,
+              "caloriesPerServing": 671.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 1006.7,
+              "caloricDeviation": -5.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of chili paste",
+                "Contains acceptable amount of lemon juice"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 29,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 30
+              },
+              "ingredients": [
+                "water",
+                "lemongrass",
+                "galanga root",
+                "kaffir lime leaves",
+                "chili paste",
+                "mushroom",
+                "onion",
+                "oil",
+                "lemon juice",
+                "vegetarian oyster sauce",
+                "tomatoes",
+                "chile",
+                "light soy sauce",
+                "coriander"
+              ]
+            },
+            {
+              "recipeId": 542112,
+              "recipeName": "Hot \u0026 Spicy Braised Prawns",
+              "score": 56,
+              "caloriesPerServing": 783.0,
+              "recommendedServings": 1.4,
+              "scaledCalories": 1096.2,
+              "caloricDeviation": 3.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of sherry wine"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "prawns",
+                "sherry wine",
+                "chili oil",
+                "garlic",
+                "ginger",
+                "green onions",
+                "sesame oil"
+              ]
+            },
+            {
+              "recipeId": 442352,
+              "recipeName": "Golden Gate Grilled Cheese",
+              "score": 55,
+              "caloriesPerServing": 695.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 1043.1,
+              "caloricDeviation": -1.6,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of sourdough loaf"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "butter",
+                "garlic",
+                "red chile",
+                "egg",
+                "milk",
+                "parmesan cheese",
+                "sourdough loaf",
+                "turkey",
+                "avocado",
+                "cilantro",
+                "muenster cheese"
+              ]
+            },
+            {
+              "recipeId": 540307,
+              "recipeName": "Cream Cheese Potato Soup",
+              "score": 53,
+              "caloriesPerServing": 759.3,
+              "recommendedServings": 1.4,
+              "scaledCalories": 1063.0,
+              "caloricDeviation": 0.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of russet potatoes"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "russet potatoes",
+                "chicken broth",
+                "bacon",
+                "onion",
+                "mushrooms",
+                "milk",
+                "cream cheese",
+                "salt and pepper",
+                "green onion top"
+              ]
+            },
+            {
+              "recipeId": 537859,
+              "recipeName": "Tofu Taco/Burrito Filling",
+              "score": 52,
+              "caloriesPerServing": 753.2,
+              "recommendedServings": 1.4,
+              "scaledCalories": 1054.5,
+              "caloricDeviation": -0.5,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of tomato paste"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "extra firm tofu",
+                "onion",
+                "garlic clove",
+                "extra virgin olive oil",
+                "braggs liquid aminos",
+                "tomato paste",
+                "ground cumin",
+                "chili powder",
+                "diced tomatoes"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 351401,
+              "recipeName": "Fast Sherry Chicken",
+              "score": 52,
+              "caloriesPerServing": 646.2,
+              "recommendedServings": 1.2,
+              "scaledCalories": 775.4,
+              "caloricDeviation": -2.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of sherry wine"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "skinless chicken thigh",
+                "garlic",
+                "sherry wine",
+                "salt",
+                "black pepper"
+              ]
+            },
+            {
+              "recipeId": 539501,
+              "recipeName": "Mustard Herb Glazed Chicken",
+              "score": 79,
+              "caloriesPerServing": 567.5,
+              "recommendedServings": 1.4,
+              "scaledCalories": 794.5,
+              "caloricDeviation": 0.0,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "boneless chicken breasts",
+                "salt %26 freshly ground black pepper",
+                "extra virgin olive oil",
+                "dijon mustard",
+                "chervil",
+                "tarragon",
+                "chives",
+                "rosemary"
+              ]
+            },
+            {
+              "recipeId": 542449,
+              "recipeName": "Pan-Seared Pork Chops W/ Rosemary",
+              "score": 76,
+              "caloriesPerServing": 598.1,
+              "recommendedServings": 1.3,
+              "scaledCalories": 777.5,
+              "caloricDeviation": -2.2,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "center-cut pork chops",
+                "coarse sea salt",
+                "fresh ground black pepper",
+                "olive oil",
+                "fresh rosemary"
+              ]
+            },
+            {
+              "recipeId": 541485,
+              "recipeName": "Spicy Grilled Chicken Breasts",
+              "score": 75,
+              "caloriesPerServing": 566.0,
+              "recommendedServings": 1.4,
+              "scaledCalories": 792.4,
+              "caloricDeviation": -0.3,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "boneless skinless chicken breasts",
+                "red hot sauce",
+                "garlic powder",
+                "fresh ground black pepper"
+              ]
+            },
+            {
+              "recipeId": 539745,
+              "recipeName": "Pan-Seared Rosemary Chicken With Shallots and Arugula (Rocket)",
+              "score": 74,
+              "caloriesPerServing": 535.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 803.1,
+              "caloricDeviation": 1.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "chicken breasts",
+                "rosemary",
+                "lemon",
+                "salted butter",
+                "chicken stock",
+                "shallots",
+                "arugula",
+                "sea salt",
+                "fresh ground pepper",
+                "extra virgin olive oil"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    },
+    {
+      "day": 4,
+      "dailyCalorieTarget": 2168,
+      "estimatedDailyMacros": {
+        "proteinG": 192,
+        "carbsG": 141,
+        "fatG": 89,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 107,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 59,
+        "carbsStatus": "LOW",
+        "fatCoveragePercent": 110,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 650,
+          "candidates": [
+            {
+              "recipeId": 538781,
+              "recipeName": "Leek and Pepper Omelette",
+              "score": 65,
+              "caloriesPerServing": 520.6,
+              "recommendedServings": 1.2,
+              "scaledCalories": 624.7,
+              "caloricDeviation": -3.9,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 30,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "leek",
+                "cold water",
+                "sweet pepper",
+                "eggs",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 355531,
+              "recipeName": "Omeleta Horiatiki (Greek Omelet)",
+              "score": 64,
+              "caloriesPerServing": 426.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 639.6,
+              "caloricDeviation": -1.6,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "black olives",
+                "feta cheese",
+                "onions",
+                "olive oil",
+                "salt and pepper",
+                "red peppers"
+              ]
+            },
+            {
+              "recipeId": 443642,
+              "recipeName": "Sausage \u0026amp; Spinach Eggs (With Mushrooms)",
+              "score": 58,
+              "caloriesPerServing": 459.0,
+              "recommendedServings": 1.4,
+              "scaledCalories": 642.6,
+              "caloricDeviation": -1.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "breakfast sausage",
+                "olive oil",
+                "onion",
+                "fresh mushrooms",
+                "jalapeno",
+                "garlic clove",
+                "ground nutmeg",
+                "dried oregano",
+                "seasoning salt",
+                "pepper",
+                "fresh spinach",
+                "eggs",
+                "hot pepper sauce",
+                "cheese",
+                "feta cheese"
+              ]
+            },
+            {
+              "recipeId": 524139,
+              "recipeName": "Cheesy Baked Eggs With Zucchini",
+              "score": 58,
+              "caloriesPerServing": 451.9,
+              "recommendedServings": 1.4,
+              "scaledCalories": 632.7,
+              "caloricDeviation": -2.7,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "zucchini",
+                "eggs",
+                "salt and pepper",
+                "cheddar cheese",
+                "fresh basil"
+              ]
+            },
+            {
+              "recipeId": 203096,
+              "recipeName": "Variations on an Omelette - Cheese",
+              "score": 57,
+              "caloriesPerServing": 407.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 611.7,
+              "caloricDeviation": -5.9,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 28,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "butter",
+                "smoked cheese",
+                "brie cheese",
+                "mushrooms"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 867,
+          "candidates": [
+            {
+              "recipeId": 542918,
+              "recipeName": "Tuscan Beans With Sage",
+              "score": 46,
+              "caloriesPerServing": 588.7,
+              "recommendedServings": 1.5,
+              "scaledCalories": 883.1,
+              "caloricDeviation": 1.8,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of lemon juice",
+                "Contains acceptable amount of cannellini beans"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 30
+              },
+              "ingredients": [
+                "fresh sage",
+                "garlic cloves",
+                "olive oil",
+                "diced tomatoes",
+                "lemon juice",
+                "cannellini beans",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 541839,
+              "recipeName": "Mexican Ceviche",
+              "score": 70,
+              "caloriesPerServing": 597.5,
+              "recommendedServings": 1.5,
+              "scaledCalories": 896.3,
+              "caloricDeviation": 3.4,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "halibut fillets",
+                "limes",
+                "fresh tomato",
+                "green pepper",
+                "parsley",
+                "salt",
+                "pepper",
+                "oregano",
+                "jalapeno peppers",
+                "white vinegar",
+                "onion",
+                "fresh cilantro",
+                "tabasco sauce",
+                "lettuce leaf",
+                "avocado",
+                "black olives"
+              ]
+            },
+            {
+              "recipeId": 540282,
+              "recipeName": "Broccoli Salad",
+              "score": 57,
+              "caloriesPerServing": 1462.5,
+              "recommendedServings": 0.6,
+              "scaledCalories": 877.5,
+              "caloricDeviation": 1.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of grapes"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "broccoli florets",
+                "grapes",
+                "cheddar cheese",
+                "coleslaw dressing"
+              ]
+            },
+            {
+              "recipeId": 542056,
+              "recipeName": "Kale and Quinoa Pilaf",
+              "score": 51,
+              "caloriesPerServing": 543.0,
+              "recommendedServings": 1.5,
+              "scaledCalories": 814.5,
+              "caloricDeviation": -6.1,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of quinoa"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 28,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "salt water",
+                "quinoa",
+                "kale",
+                "meyer lemon",
+                "scallions",
+                "walnut oil",
+                "pine nuts",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 540224,
+              "recipeName": "Delicious Cannellini Beans",
+              "score": 46,
+              "caloriesPerServing": 504.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 757.2,
+              "caloricDeviation": -12.7,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of cannellini beans"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 20,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 5,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "cannellini beans",
+                "garlic cloves",
+                "olive oil",
+                "thyme",
+                "black pepper"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 650,
+          "candidates": [
+            {
+              "recipeId": 538709,
+              "recipeName": "Low Fat California Saag",
+              "score": 61,
+              "caloriesPerServing": 438.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 657.6,
+              "caloricDeviation": 1.1,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of cornstarch"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "yogurt",
+                "cornstarch",
+                "water",
+                "salt",
+                "vegetable oil",
+                "onion",
+                "frozen spinach",
+                "curry powder",
+                "hot red pepper",
+                "chicken"
+              ]
+            },
+            {
+              "recipeId": 542449,
+              "recipeName": "Pan-Seared Pork Chops W/ Rosemary",
+              "score": 75,
+              "caloriesPerServing": 598.1,
+              "recommendedServings": 1.1,
+              "scaledCalories": 657.9,
+              "caloricDeviation": 1.2,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 4,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "center-cut pork chops",
+                "coarse sea salt",
+                "fresh ground black pepper",
+                "olive oil",
+                "fresh rosemary"
+              ]
+            },
+            {
+              "recipeId": 539745,
+              "recipeName": "Pan-Seared Rosemary Chicken With Shallots and Arugula (Rocket)",
+              "score": 72,
+              "caloriesPerServing": 535.4,
+              "recommendedServings": 1.2,
+              "scaledCalories": 642.5,
+              "caloricDeviation": -1.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "chicken breasts",
+                "rosemary",
+                "lemon",
+                "salted butter",
+                "chicken stock",
+                "shallots",
+                "arugula",
+                "sea salt",
+                "fresh ground pepper",
+                "extra virgin olive oil"
+              ]
+            },
+            {
+              "recipeId": 542496,
+              "recipeName": "L-C Bacon Wrapped Chicken   L-C-F",
+              "score": 70,
+              "caloriesPerServing": 481.9,
+              "recommendedServings": 1.3,
+              "scaledCalories": 626.5,
+              "caloricDeviation": -3.7,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 2,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "boneless skinless chicken breast halves",
+                "whipped cream cheese",
+                "butter",
+                "salt",
+                "cayenne pepper",
+                "bacon"
+              ]
+            },
+            {
+              "recipeId": 538480,
+              "recipeName": "India Spiced Eggplant (Aubergine)",
+              "score": 69,
+              "caloriesPerServing": 481.5,
+              "recommendedServings": 1.4,
+              "scaledCalories": 674.1,
+              "caloricDeviation": 3.7,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggplants",
+                "salad oil",
+                "cumin seed",
+                "fresh ginger",
+                "red onion",
+                "turmeric",
+                "green pepper",
+                "ground coriander",
+                "ground cumin",
+                "paprika",
+                "salt",
+                "black pepper",
+                "tomatoes",
+                "water",
+                "fresh cilantro"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    },
+    {
+      "day": 5,
+      "dailyCalorieTarget": 2649,
+      "estimatedDailyMacros": {
+        "proteinG": 187,
+        "carbsG": 156,
+        "fatG": 93,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 104,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 65,
+        "carbsStatus": "LOW",
+        "fatCoveragePercent": 115,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 528998,
+              "recipeName": "Breakfast Meat Muffins",
+              "score": 54,
+              "caloriesPerServing": 566.3,
+              "recommendedServings": 1.4,
+              "scaledCalories": 792.8,
+              "caloricDeviation": -0.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [
+                "gapRelaxed"
+              ],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 5,
+                "carbsFit": 7,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": -4,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "bisquick",
+                "milk",
+                "cheese",
+                "butter",
+                "ground beef",
+                "onion"
+              ]
+            },
+            {
+              "recipeId": 176637,
+              "recipeName": "Cheesy Baked Egg and Bacon Benedict",
+              "score": 59,
+              "caloriesPerServing": 537.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 806.7,
+              "caloricDeviation": 1.5,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "bacon",
+                "swiss cheese",
+                "eggs",
+                "whipping cream",
+                "salt and black pepper",
+                "parmesan cheese",
+                "paprika"
+              ]
+            },
+            {
+              "recipeId": 533181,
+              "recipeName": "A Bacon Cheddar Western Omelette With Bacon on the Side",
+              "score": 58,
+              "caloriesPerServing": 844.4,
+              "recommendedServings": 0.9,
+              "scaledCalories": 760.0,
+              "caloricDeviation": -4.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 30,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "milk",
+                "black pepper",
+                "red onion",
+                "green pepper",
+                "cheddar cheese",
+                "bacon"
+              ]
+            },
+            {
+              "recipeId": 542557,
+              "recipeName": "Breakfast Omelette (Scd)",
+              "score": 58,
+              "caloriesPerServing": 823.9,
+              "recommendedServings": 1.0,
+              "scaledCalories": 823.9,
+              "caloricDeviation": 3.7,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 31,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 5,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "ground beef",
+                "cheese",
+                "eggs"
+              ]
+            },
+            {
+              "recipeId": 285168,
+              "recipeName": "Southwestern Omelet Wrap - Ziploc Steam Bags",
+              "score": 54,
+              "caloriesPerServing": 479.7,
+              "recommendedServings": 1.5,
+              "scaledCalories": 719.6,
+              "caloricDeviation": -9.5,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 24,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "cheese",
+                "chopped tomatoes",
+                "chile",
+                "heavy cream",
+                "butter",
+                "hot sauce",
+                "salt"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 1060,
+          "candidates": [
+            {
+              "recipeId": 539092,
+              "recipeName": "Algerian Cucumber Salad",
+              "score": 30,
+              "caloriesPerServing": 446.6,
+              "recommendedServings": 1.5,
+              "scaledCalories": 669.9,
+              "caloricDeviation": -36.8,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 0,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 0,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "cucumber",
+                "red bell pepper",
+                "sweet onions",
+                "green olives",
+                "parsley",
+                "fresh mint leaves",
+                "cilantro",
+                "paprika",
+                "extra virgin olive oil",
+                "rice wine vinegar",
+                "salt",
+                "fresh ground black pepper"
+              ]
+            },
+            {
+              "recipeId": 73512,
+              "recipeName": "Bean Sprouts And Tomato Salad Topped With Pesto",
+              "score": 21,
+              "caloriesPerServing": 498.9,
+              "recommendedServings": 1.5,
+              "scaledCalories": 748.3,
+              "caloricDeviation": -29.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 1,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 0,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "fresh basil leaves",
+                "olive oil",
+                "white vinegar",
+                "garlic",
+                "parmesan cheese",
+                "salt",
+                "bean sprouts",
+                "tomatoes",
+                "lettuce leaves"
+              ]
+            },
+            {
+              "recipeId": 539551,
+              "recipeName": "Shrimp in Ginger Butter Sauce",
+              "score": 14,
+              "caloriesPerServing": 486.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 730.2,
+              "caloricDeviation": -31.1,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of medium-dry sherry"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 0,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 5,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "shrimp",
+                "unsalted butter",
+                "garlic cloves",
+                "gingerroot",
+                "medium-dry sherry",
+                "cilantro"
+              ]
+            },
+            {
+              "recipeId": 539721,
+              "recipeName": "Cajun Potato, Prawn/Shrimp and Avocado Salad",
+              "score": 10,
+              "caloriesPerServing": 479.7,
+              "recommendedServings": 1.5,
+              "scaledCalories": 719.6,
+              "caloricDeviation": -32.1,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of new potatoes"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 0,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 0,
+                "carbsFit": 7,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "new potatoes",
+                "olive oil",
+                "king prawns",
+                "garlic clove",
+                "spring onions",
+                "cajun seasoning",
+                "avocado",
+                "alfalfa sprout",
+                "salt"
+              ]
+            },
+            {
+              "recipeId": 306307,
+              "recipeName": "Chickpea Salad (Ensalada De Garbanzas)",
+              "score": -4,
+              "caloriesPerServing": 507.6,
+              "recommendedServings": 1.5,
+              "scaledCalories": 761.4,
+              "caloricDeviation": -28.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of fresh lemon juice",
+                "Contains acceptable amount of chickpeas"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 2,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 0,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 30
+              },
+              "ingredients": [
+                "olive oil",
+                "fresh lemon juice",
+                "fresh ground black pepper",
+                "ground coriander",
+                "salt",
+                "chickpeas",
+                "cream cheese",
+                "onion",
+                "lettuce",
+                "hardboiled egg"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 538999,
+              "recipeName": "Pan-fried Artichokes With Basil and Pine Nuts",
+              "score": 60,
+              "caloriesPerServing": 791.8,
+              "recommendedServings": 1.0,
+              "scaledCalories": 791.8,
+              "caloricDeviation": -0.4,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of lemon juice"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "artichokes",
+                "lemon juice",
+                "salt",
+                "olive oil",
+                "garlic cloves",
+                "basil leaves",
+                "pine nuts"
+              ]
+            },
+            {
+              "recipeId": 539996,
+              "recipeName": "Iraqi Shish Kebab",
+              "score": 72,
+              "caloriesPerServing": 552.1,
+              "recommendedServings": 1.4,
+              "scaledCalories": 772.9,
+              "caloricDeviation": -2.8,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "lamb",
+                "vinegar",
+                "olive oil",
+                "onion",
+                "salt",
+                "pepper"
+              ]
+            },
+            {
+              "recipeId": 541594,
+              "recipeName": "Simple Italian Deer Steaks",
+              "score": 72,
+              "caloriesPerServing": 775.6,
+              "recommendedServings": 1.0,
+              "scaledCalories": 775.6,
+              "caloricDeviation": -2.4,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "venison steak",
+                "wishbone italian dressing"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    },
+    {
+      "day": 6,
+      "dailyCalorieTarget": 2168,
+      "estimatedDailyMacros": {
+        "proteinG": 189,
+        "carbsG": 133,
+        "fatG": 94,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 105,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 55,
+        "carbsStatus": "LOW",
+        "fatCoveragePercent": 116,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 650,
+          "candidates": [
+            {
+              "recipeId": 355531,
+              "recipeName": "Omeleta Horiatiki (Greek Omelet)",
+              "score": 64,
+              "caloriesPerServing": 426.4,
+              "recommendedServings": 1.5,
+              "scaledCalories": 639.6,
+              "caloricDeviation": -1.6,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "black olives",
+                "feta cheese",
+                "onions",
+                "olive oil",
+                "salt and pepper",
+                "red peppers"
+              ]
+            },
+            {
+              "recipeId": 443642,
+              "recipeName": "Sausage \u0026amp; Spinach Eggs (With Mushrooms)",
+              "score": 58,
+              "caloriesPerServing": 459.0,
+              "recommendedServings": 1.4,
+              "scaledCalories": 642.6,
+              "caloricDeviation": -1.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "breakfast sausage",
+                "olive oil",
+                "onion",
+                "fresh mushrooms",
+                "jalapeno",
+                "garlic clove",
+                "ground nutmeg",
+                "dried oregano",
+                "seasoning salt",
+                "pepper",
+                "fresh spinach",
+                "eggs",
+                "hot pepper sauce",
+                "cheese",
+                "feta cheese"
+              ]
+            },
+            {
+              "recipeId": 524139,
+              "recipeName": "Cheesy Baked Eggs With Zucchini",
+              "score": 58,
+              "caloriesPerServing": 451.9,
+              "recommendedServings": 1.4,
+              "scaledCalories": 632.7,
+              "caloricDeviation": -2.7,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "zucchini",
+                "eggs",
+                "salt and pepper",
+                "cheddar cheese",
+                "fresh basil"
+              ]
+            },
+            {
+              "recipeId": 203096,
+              "recipeName": "Variations on an Omelette - Cheese",
+              "score": 57,
+              "caloriesPerServing": 407.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 611.7,
+              "caloricDeviation": -5.9,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 28,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "butter",
+                "smoked cheese",
+                "brie cheese",
+                "mushrooms"
+              ]
+            },
+            {
+              "recipeId": 538687,
+              "recipeName": "Persian Herb Omelette Kuku",
+              "score": 57,
+              "caloriesPerServing": 404.6,
+              "recommendedServings": 1.5,
+              "scaledCalories": 606.9,
+              "caloricDeviation": -6.7,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 27,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "leeks",
+                "flat leaf parsley",
+                "cilantro",
+                "scallions",
+                "dill",
+                "baby spinach",
+                "eggs",
+                "olive oil",
+                "salt",
+                "pepper",
+                "cumin",
+                "turmeric",
+                "ground coriander",
+                "coriander seed"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 867,
+          "candidates": [
+            {
+              "recipeId": 538421,
+              "recipeName": "Basic Grilled Tofu",
+              "score": 54,
+              "caloriesPerServing": 566.2,
+              "recommendedServings": 1.5,
+              "scaledCalories": 849.3,
+              "caloricDeviation": -2.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": -14,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "firm tofu",
+                "soy sauce",
+                "toasted sesame oil"
+              ]
+            },
+            {
+              "recipeId": 538095,
+              "recipeName": "Properly Prepared Spaghetti Squash",
+              "score": 71,
+              "caloriesPerServing": 980.6,
+              "recommendedServings": 0.9,
+              "scaledCalories": 882.5,
+              "caloricDeviation": 1.8,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "spaghetti squash",
+                "garlic",
+                "salt",
+                "pepper",
+                "olive oil",
+                "vegetable oil",
+                "vegetables"
+              ]
+            },
+            {
+              "recipeId": 542216,
+              "recipeName": "Chilled Lentil Soup With Spinach",
+              "score": 61,
+              "caloriesPerServing": 579.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 869.7,
+              "caloricDeviation": 0.3,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of dried lentils"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "extra virgin olive oil",
+                "onion",
+                "celery",
+                "garlic",
+                "dried lentils",
+                "beef broth",
+                "frozen chopped spinach"
+              ]
+            },
+            {
+              "recipeId": 540282,
+              "recipeName": "Broccoli Salad",
+              "score": 57,
+              "caloriesPerServing": 1462.5,
+              "recommendedServings": 0.6,
+              "scaledCalories": 877.5,
+              "caloricDeviation": 1.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of grapes"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 3,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "broccoli florets",
+                "grapes",
+                "cheddar cheese",
+                "coleslaw dressing"
+              ]
+            },
+            {
+              "recipeId": 416886,
+              "recipeName": "Pepper Jack Turkey Burgers With Sun-Dried Tomato Mayonnaise",
+              "score": 52,
+              "caloriesPerServing": 740.1,
+              "recommendedServings": 1.2,
+              "scaledCalories": 888.1,
+              "caloricDeviation": 2.4,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of hamburger"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "onion",
+                "olive oil",
+                "salt",
+                "fresh ground black pepper",
+                "ground turkey",
+                "monterey jack pepper cheese",
+                "hamburger",
+                "sun-dried tomato packed in oil",
+                "mayonnaise",
+                "water",
+                "cider vinegar",
+                "salt",
+                "lettuce leaf"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 650,
+          "candidates": [
+            {
+              "recipeId": 543559,
+              "recipeName": "Papaya-Marinated Grilled Flank Steak",
+              "score": 66,
+              "caloriesPerServing": 438.9,
+              "recommendedServings": 1.5,
+              "scaledCalories": 658.3,
+              "caloricDeviation": 1.2,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of papaya"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "papaya",
+                "soy sauce",
+                "garlic cloves",
+                "flank steaks"
+              ]
+            },
+            {
+              "recipeId": 498946,
+              "recipeName": "Low Carb Steak and Onions - 0 Net Carbs",
+              "score": 75,
+              "caloriesPerServing": 425.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 637.7,
+              "caloricDeviation": -1.9,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "olive oil",
+                "onion",
+                "steak",
+                "salt",
+                "ground black pepper"
+              ]
+            },
+            {
+              "recipeId": 291758,
+              "recipeName": "American Sirloin Steaks",
+              "score": 75,
+              "caloriesPerServing": 710.4,
+              "recommendedServings": 0.9,
+              "scaledCalories": 639.4,
+              "caloricDeviation": -1.7,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 5,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "worcestershire sauce",
+                "vinegar",
+                "garlic cloves",
+                "salt",
+                "fresh black pepper",
+                "sirloin steaks"
+              ]
+            },
+            {
+              "recipeId": 539517,
+              "recipeName": "Lemon Garlic Chicken",
+              "score": 73,
+              "caloriesPerServing": 531.1,
+              "recommendedServings": 1.2,
+              "scaledCalories": 637.3,
+              "caloricDeviation": -2.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "chicken breasts",
+                "garlic cloves",
+                "lemons",
+                "salt",
+                "pepper",
+                "olive oil",
+                "butter"
+              ]
+            },
+            {
+              "recipeId": 511766,
+              "recipeName": "Low Carb Amish Ham Casserole",
+              "score": 71,
+              "caloriesPerServing": 440.6,
+              "recommendedServings": 1.5,
+              "scaledCalories": 660.9,
+              "caloricDeviation": 1.6,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "ham",
+                "onion",
+                "eggs",
+                "cauliflower",
+                "cheddar cheese",
+                "cottage cheese"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    },
+    {
+      "day": 7,
+      "dailyCalorieTarget": 2649,
+      "estimatedDailyMacros": {
+        "proteinG": 201,
+        "carbsG": 171,
+        "fatG": 93,
+        "proteinTargetG": 180,
+        "proteinMinG": 144,
+        "proteinMaxG": 216,
+        "proteinCoveragePercent": 112,
+        "proteinStatus": "OK",
+        "criticalProteinWarning": false,
+        "fatTargetG": 81,
+        "fatMinG": 54,
+        "fatMaxG": 94,
+        "carbsTargetG": 240,
+        "carbsAbsoluteMinG": 130,
+        "lowCarbWarning": false,
+        "carbsCoveragePercent": 71,
+        "carbsStatus": "OK",
+        "fatCoveragePercent": 115,
+        "fatStatus": "OK"
+      },
+      "slots": [
+        {
+          "mealType": "breakfast",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 540912,
+              "recipeName": "Pommes de Terre pour le Petit Dejeuner",
+              "score": 36,
+              "caloriesPerServing": 475.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 712.7,
+              "caloricDeviation": -10.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of potato"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 23,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 12,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": -4,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "potato",
+                "bacon grease"
+              ]
+            },
+            {
+              "recipeId": 398942,
+              "recipeName": "Eggs Italiana (Crock Pot/Crockpot)",
+              "score": 53,
+              "caloriesPerServing": 501.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 752.7,
+              "caloricDeviation": -5.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 29,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 0,
+                "proteinFit": 12,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "butter",
+                "provolone cheese",
+                "eggs",
+                "half-and-half cream",
+                "black pepper",
+                "roasted red pepper",
+                "prosciutto",
+                "canned artichoke heart"
+              ]
+            },
+            {
+              "recipeId": 232381,
+              "recipeName": "Denver Omelette Baked in the Oven",
+              "score": 42,
+              "caloriesPerServing": 451.5,
+              "recommendedServings": 1.5,
+              "scaledCalories": 677.3,
+              "caloricDeviation": -14.8,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 18,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 6,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "eggs",
+                "half-and-half cream",
+                "sharp cheddar cheese",
+                "cooked ham",
+                "green pepper",
+                "sweet red pepper",
+                "green onions",
+                "butter"
+              ]
+            },
+            {
+              "recipeId": 298303,
+              "recipeName": "Mexican Chorizo \u0026amp; Egg Scramble",
+              "score": 39,
+              "caloriesPerServing": 721.5,
+              "recommendedServings": 1.1,
+              "scaledCalories": 793.7,
+              "caloricDeviation": -0.1,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of refried beans",
+                "Contains acceptable amount of taco sauce"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 12,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 30
+              },
+              "ingredients": [
+                "eggs",
+                "chorizo sausage",
+                "rotel tomatoes %26 chilies",
+                "cheddar cheese",
+                "refried beans",
+                "sour cream",
+                "black olives",
+                "salsa",
+                "taco sauce"
+              ]
+            },
+            {
+              "recipeId": 538687,
+              "recipeName": "Persian Herb Omelette Kuku",
+              "score": 37,
+              "caloriesPerServing": 404.6,
+              "recommendedServings": 1.5,
+              "scaledCalories": 606.9,
+              "caloricDeviation": -23.6,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 7,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 8,
+                "carbsFit": 0,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "leeks",
+                "flat leaf parsley",
+                "cilantro",
+                "scallions",
+                "dill",
+                "baby spinach",
+                "eggs",
+                "olive oil",
+                "salt",
+                "pepper",
+                "cumin",
+                "turmeric",
+                "ground coriander",
+                "coriander seed"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "lunch",
+          "slotCalorieBudget": 1060,
+          "candidates": [
+            {
+              "recipeId": 542216,
+              "recipeName": "Chilled Lentil Soup With Spinach",
+              "score": 40,
+              "caloriesPerServing": 579.8,
+              "recommendedServings": 1.5,
+              "scaledCalories": 869.7,
+              "caloricDeviation": -17.9,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of dried lentils"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 14,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "extra virgin olive oil",
+                "onion",
+                "celery",
+                "garlic",
+                "dried lentils",
+                "beef broth",
+                "frozen chopped spinach"
+              ]
+            },
+            {
+              "recipeId": 538456,
+              "recipeName": "Asparagus Avocado Tomato Salad",
+              "score": 52,
+              "caloriesPerServing": 607.3,
+              "recommendedServings": 1.5,
+              "scaledCalories": 911.0,
+              "caloricDeviation": -14.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 19,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "asparagus",
+                "avocado",
+                "tomatoes",
+                "vinaigrette dressing",
+                "salt",
+                "pepper"
+              ]
+            },
+            {
+              "recipeId": 542310,
+              "recipeName": "Garlic Shrimp With Basil \u0026amp; Tomatoes",
+              "score": 52,
+              "caloriesPerServing": 600.5,
+              "recommendedServings": 1.5,
+              "scaledCalories": 900.8,
+              "caloricDeviation": -15.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 17,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "grape tomatoes",
+                "fresh basil",
+                "kosher salt",
+                "fresh ground black pepper",
+                "olive oil",
+                "raw shrimp",
+                "garlic"
+              ]
+            },
+            {
+              "recipeId": 538441,
+              "recipeName": "Mediterranean Lentil Salad",
+              "score": 47,
+              "caloriesPerServing": 556.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 834.2,
+              "caloricDeviation": -21.3,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 10,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 0,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "brown lentils",
+                "water",
+                "bay leaves",
+                "dried thyme",
+                "garlic",
+                "sun-dried tomato",
+                "boiling water",
+                "celery",
+                "red bell pepper",
+                "red onion",
+                "fresh parsley",
+                "olive oil",
+                "red wine vinegar",
+                "ground fennel",
+                "dijon mustard",
+                "salt and pepper"
+              ]
+            },
+            {
+              "recipeId": 538911,
+              "recipeName": "Updated Potato Salad",
+              "score": 37,
+              "caloriesPerServing": 559.2,
+              "recommendedServings": 1.5,
+              "scaledCalories": 838.8,
+              "caloricDeviation": -20.8,
+              "matchedHealthTags": [
+                "low-fat"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [
+                "Contains acceptable amount of fingerling potatoes"
+              ],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 11,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 4,
+                "fatFit": 3,
+                "nutritionQuality": 1,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 15
+              },
+              "ingredients": [
+                "fingerling potatoes",
+                "plain low-fat yogurt",
+                "whole grain mustard",
+                "olive oil",
+                "red bell pepper",
+                "celery ribs",
+                "red onion"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        },
+        {
+          "mealType": "dinner",
+          "slotCalorieBudget": 795,
+          "candidates": [
+            {
+              "recipeId": 540700,
+              "recipeName": "Portuguese Chicken",
+              "score": 30,
+              "caloriesPerServing": 503.5,
+              "recommendedServings": 1.5,
+              "scaledCalories": 755.3,
+              "caloricDeviation": -5.0,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 29,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 7,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": -34,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "frying chickens",
+                "tomatoes",
+                "onion",
+                "bell peppers",
+                "black olives",
+                "garlic cloves",
+                "fresh parsley",
+                "salt and pepper",
+                "lemon",
+                "water"
+              ]
+            },
+            {
+              "recipeId": 539517,
+              "recipeName": "Lemon Garlic Chicken",
+              "score": 75,
+              "caloriesPerServing": 531.1,
+              "recommendedServings": 1.5,
+              "scaledCalories": 796.7,
+              "caloricDeviation": 0.2,
+              "matchedHealthTags": [],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 35,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 5,
+                "nutritionQuality": 0,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "chicken breasts",
+                "garlic cloves",
+                "lemons",
+                "salt",
+                "pepper",
+                "olive oil",
+                "butter"
+              ]
+            },
+            {
+              "recipeId": 540135,
+              "recipeName": "Turkey Mini Meatballs",
+              "score": 71,
+              "caloriesPerServing": 667.5,
+              "recommendedServings": 1.2,
+              "scaledCalories": 801.0,
+              "caloricDeviation": 0.8,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 34,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 2,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "parmesan cheese",
+                "egg",
+                "pepper",
+                "fresh basil",
+                "salt",
+                "olive oil",
+                "ground turkey",
+                "garlic clove",
+                "onion"
+              ]
+            },
+            {
+              "recipeId": 291758,
+              "recipeName": "American Sirloin Steaks",
+              "score": 70,
+              "caloriesPerServing": 710.4,
+              "recommendedServings": 1.1,
+              "scaledCalories": 781.4,
+              "caloricDeviation": -1.7,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 33,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 10,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "worcestershire sauce",
+                "vinegar",
+                "garlic cloves",
+                "salt",
+                "fresh black pepper",
+                "sirloin steaks"
+              ]
+            },
+            {
+              "recipeId": 459452,
+              "recipeName": "Grilleed Steak With Blue Cheese Butter",
+              "score": 67,
+              "caloriesPerServing": 907.5,
+              "recommendedServings": 0.9,
+              "scaledCalories": 816.8,
+              "caloricDeviation": 2.8,
+              "matchedHealthTags": [
+                "high-protein"
+              ],
+              "appliedNutritionThresholds": [
+                "sugars_g ≤ 10.0",
+                "total_carbs_g ≤ 45.0"
+              ],
+              "dietaryNotes": [],
+              "relaxations": [],
+              "scoreBreakdown": {
+                "calorieFit": 32,
+                "complexityMatch": 0,
+                "budgetMatch": 0,
+                "cookTime": 8,
+                "proteinFit": 15,
+                "carbsFit": 0,
+                "fatFit": 0,
+                "nutritionQuality": 2,
+                "variety": 10,
+                "vegProteinBonus": 0,
+                "softForbiddenPenalty": 0
+              },
+              "ingredients": [
+                "blue cheese",
+                "unsalted butter",
+                "fresh parsley",
+                "new york strip steaks",
+                "salt and pepper"
+              ]
+            }
+          ],
+          "lowCoverage": false,
+          "filteringNote": "Decided by ILP (Two-Phase v10)"
+        }
+      ],
+      "relaxationRate": 0.0
+    }
+  ]
+}

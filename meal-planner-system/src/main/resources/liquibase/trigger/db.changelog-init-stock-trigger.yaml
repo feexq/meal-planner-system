@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-stock-availability-trigger
+      author: feex
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              CREATE OR REPLACE FUNCTION update_availability_on_stock()
+              RETURNS TRIGGER AS $func$
+              BEGIN
+                NEW.is_available := (NEW.stock > 0);
+                RETURN NEW;
+              END;
+              $func$ LANGUAGE plpgsql;
+
+              CREATE TRIGGER trg_update_availability
+              BEFORE INSERT OR UPDATE OF stock
+              ON ingredients
+              FOR EACH ROW
+              EXECUTE FUNCTION update_availability_on_stock();
+
+      rollback:
+        - sql:
+            splitStatements: false
+            sql: |
+              DROP TRIGGER IF EXISTS trg_update_availability ON ingredients;
+              DROP FUNCTION IF EXISTS update_availability_on_stock();

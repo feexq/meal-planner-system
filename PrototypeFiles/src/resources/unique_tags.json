@@ -1,0 +1,1547 @@
+[
+    {
+        "name": ""
+    },
+    {
+        "name": "1-day-or-more"
+    },
+    {
+        "name": "15-minutes-or-less"
+    },
+    {
+        "name": "3-steps-or-less"
+    },
+    {
+        "name": "30-minutes-or-less"
+    },
+    {
+        "name": "4-hours-or-less"
+    },
+    {
+        "name": "5-ingredients-or-less"
+    },
+    {
+        "name": "60-minutes-or-less"
+    },
+    {
+        "name": "a1-sauce"
+    },
+    {
+        "name": "african"
+    },
+    {
+        "name": "american"
+    },
+    {
+        "name": "amish-mennonite"
+    },
+    {
+        "name": "angolan"
+    },
+    {
+        "name": "appetizer"
+    },
+    {
+        "name": "appetizers"
+    },
+    {
+        "name": "apples"
+    },
+    {
+        "name": "argentine"
+    },
+    {
+        "name": "artichoke"
+    },
+    {
+        "name": "asian"
+    },
+    {
+        "name": "asparagus"
+    },
+    {
+        "name": "atkins"
+    },
+    {
+        "name": "australian"
+    },
+    {
+        "name": "austrian"
+    },
+    {
+        "name": "avocado"
+    },
+    {
+        "name": "bacon"
+    },
+    {
+        "name": "baja"
+    },
+    {
+        "name": "baked"
+    },
+    {
+        "name": "baking"
+    },
+    {
+        "name": "bananas"
+    },
+    {
+        "name": "bar-cookies"
+    },
+    {
+        "name": "barbecue"
+    },
+    {
+        "name": "bass"
+    },
+    {
+        "name": "beans"
+    },
+    {
+        "name": "beef"
+    },
+    {
+        "name": "beef-kidney"
+    },
+    {
+        "name": "beef-liver"
+    },
+    {
+        "name": "beef-organ-meats"
+    },
+    {
+        "name": "beef-ribs"
+    },
+    {
+        "name": "beef-sausage"
+    },
+    {
+        "name": "beginner-cook"
+    },
+    {
+        "name": "beijing"
+    },
+    {
+        "name": "belgian"
+    },
+    {
+        "name": "berries"
+    },
+    {
+        "name": "beverages"
+    },
+    {
+        "name": "birthday"
+    },
+    {
+        "name": "biscotti"
+    },
+    {
+        "name": "bisques-cream-soups"
+    },
+    {
+        "name": "bizarre"
+    },
+    {
+        "name": "black-beans"
+    },
+    {
+        "name": "blueberries"
+    },
+    {
+        "name": "bok-choys"
+    },
+    {
+        "name": "braised"
+    },
+    {
+        "name": "brazilian"
+    },
+    {
+        "name": "bread"
+    },
+    {
+        "name": "bread-machine"
+    },
+    {
+        "name": "breads"
+    },
+    {
+        "name": "breakfast"
+    },
+    {
+        "name": "brewing"
+    },
+    {
+        "name": "british-columbian"
+    },
+    {
+        "name": "broccoli"
+    },
+    {
+        "name": "broil"
+    },
+    {
+        "name": "brown-bag"
+    },
+    {
+        "name": "brown-rice"
+    },
+    {
+        "name": "brownies"
+    },
+    {
+        "name": "brunch"
+    },
+    {
+        "name": "burgers"
+    },
+    {
+        "name": "cajun"
+    },
+    {
+        "name": "cake"
+    },
+    {
+        "name": "cake-fillings-and-frostings"
+    },
+    {
+        "name": "cakes"
+    },
+    {
+        "name": "californian"
+    },
+    {
+        "name": "cambodian"
+    },
+    {
+        "name": "camping"
+    },
+    {
+        "name": "canadian"
+    },
+    {
+        "name": "candy"
+    },
+    {
+        "name": "canning"
+    },
+    {
+        "name": "cantonese"
+    },
+    {
+        "name": "caribbean"
+    },
+    {
+        "name": "carrots"
+    },
+    {
+        "name": "casserole"
+    },
+    {
+        "name": "casseroles"
+    },
+    {
+        "name": "catfish"
+    },
+    {
+        "name": "cauliflower"
+    },
+    {
+        "name": "celebrity"
+    },
+    {
+        "name": "central-american"
+    },
+    {
+        "name": "chard"
+    },
+    {
+        "name": "cheese"
+    },
+    {
+        "name": "cheesecake"
+    },
+    {
+        "name": "cherries"
+    },
+    {
+        "name": "chick-peas-garbanzos"
+    },
+    {
+        "name": "chicken"
+    },
+    {
+        "name": "chicken-breasts"
+    },
+    {
+        "name": "chicken-livers"
+    },
+    {
+        "name": "chicken-thighs-legs"
+    },
+    {
+        "name": "chilean"
+    },
+    {
+        "name": "chili"
+    },
+    {
+        "name": "chinese"
+    },
+    {
+        "name": "chinese-new-year"
+    },
+    {
+        "name": "chocolate"
+    },
+    {
+        "name": "chocolate-chip-cookies"
+    },
+    {
+        "name": "chowders"
+    },
+    {
+        "name": "christmas"
+    },
+    {
+        "name": "chutneys"
+    },
+    {
+        "name": "cinco-de-mayo"
+    },
+    {
+        "name": "citrus"
+    },
+    {
+        "name": "clams"
+    },
+    {
+        "name": "clear-soups"
+    },
+    {
+        "name": "cobblers-and-crisps"
+    },
+    {
+        "name": "cocktails"
+    },
+    {
+        "name": "coconut"
+    },
+    {
+        "name": "cod"
+    },
+    {
+        "name": "coffee-cakes"
+    },
+    {
+        "name": "collard-greens"
+    },
+    {
+        "name": "college"
+    },
+    {
+        "name": "colombian"
+    },
+    {
+        "name": "comfort-food"
+    },
+    {
+        "name": "condiments-etc"
+    },
+    {
+        "name": "cookie"
+    },
+    {
+        "name": "cookies-and-brownies"
+    },
+    {
+        "name": "cooking-mixes"
+    },
+    {
+        "name": "copycat"
+    },
+    {
+        "name": "corn"
+    },
+    {
+        "name": "costa-rican"
+    },
+    {
+        "name": "course"
+    },
+    {
+        "name": "crab"
+    },
+    {
+        "name": "crawfish"
+    },
+    {
+        "name": "creole"
+    },
+    {
+        "name": "crock-pot-slow-cooker"
+    },
+    {
+        "name": "crusts-pastry-dough-2"
+    },
+    {
+        "name": "cuban"
+    },
+    {
+        "name": "cuisine"
+    },
+    {
+        "name": "cupcakes"
+    },
+    {
+        "name": "curries"
+    },
+    {
+        "name": "czech"
+    },
+    {
+        "name": "dairy-free"
+    },
+    {
+        "name": "danish"
+    },
+    {
+        "name": "deep-fry"
+    },
+    {
+        "name": "deer"
+    },
+    {
+        "name": "dehydrator"
+    },
+    {
+        "name": "dessert"
+    },
+    {
+        "name": "desserts"
+    },
+    {
+        "name": "diabetic"
+    },
+    {
+        "name": "diet"
+    },
+    {
+        "name": "dietary"
+    },
+    {
+        "name": "dinner"
+    },
+    {
+        "name": "dinner-party"
+    },
+    {
+        "name": "dips"
+    },
+    {
+        "name": "dips-lunch-snacks"
+    },
+    {
+        "name": "drink"
+    },
+    {
+        "name": "drop-cookies"
+    },
+    {
+        "name": "duck"
+    },
+    {
+        "name": "duck-breasts"
+    },
+    {
+        "name": "dutch"
+    },
+    {
+        "name": "easter"
+    },
+    {
+        "name": "easy"
+    },
+    {
+        "name": "ecuadorean"
+    },
+    {
+        "name": "egg-free"
+    },
+    {
+        "name": "eggplant"
+    },
+    {
+        "name": "eggs"
+    },
+    {
+        "name": "eggs-dairy"
+    },
+    {
+        "name": "egyptian"
+    },
+    {
+        "name": "elbow-macaroni"
+    },
+    {
+        "name": "english"
+    },
+    {
+        "name": "equipment"
+    },
+    {
+        "name": "ethiopian"
+    },
+    {
+        "name": "european"
+    },
+    {
+        "name": "fall"
+    },
+    {
+        "name": "fat-free"
+    },
+    {
+        "name": "fathers-day"
+    },
+    {
+        "name": "filipino"
+    },
+    {
+        "name": "fillings-and-frostings-chocolate"
+    },
+    {
+        "name": "finger-food"
+    },
+    {
+        "name": "finnish"
+    },
+    {
+        "name": "fish"
+    },
+    {
+        "name": "flat-shapes"
+    },
+    {
+        "name": "flourless"
+    },
+    {
+        "name": "food-processor-blender"
+    },
+    {
+        "name": "for-1-or-2"
+    },
+    {
+        "name": "for-large-groups"
+    },
+    {
+        "name": "free-of-something"
+    },
+    {
+        "name": "freezer"
+    },
+    {
+        "name": "french"
+    },
+    {
+        "name": "freshwater-fish"
+    },
+    {
+        "name": "from-scratch"
+    },
+    {
+        "name": "frozen-desserts"
+    },
+    {
+        "name": "fruit"
+    },
+    {
+        "name": "fudge"
+    },
+    {
+        "name": "garnishes"
+    },
+    {
+        "name": "gelatin"
+    },
+    {
+        "name": "german"
+    },
+    {
+        "name": "gifts"
+    },
+    {
+        "name": "gluten-free"
+    },
+    {
+        "name": "goose"
+    },
+    {
+        "name": "grain-free"
+    },
+    {
+        "name": "grains"
+    },
+    {
+        "name": "granola-and-porridge"
+    },
+    {
+        "name": "grapes"
+    },
+    {
+        "name": "greek"
+    },
+    {
+        "name": "green-yellow-beans"
+    },
+    {
+        "name": "greens"
+    },
+    {
+        "name": "grilling"
+    },
+    {
+        "name": "ground-beef"
+    },
+    {
+        "name": "guatemalan"
+    },
+    {
+        "name": "gumbo"
+    },
+    {
+        "name": "halibut"
+    },
+    {
+        "name": "halloween"
+    },
+    {
+        "name": "ham"
+    },
+    {
+        "name": "hand-formed-cookies"
+    },
+    {
+        "name": "hanukkah"
+    },
+    {
+        "name": "hawaiian"
+    },
+    {
+        "name": "healthy"
+    },
+    {
+        "name": "healthy-2"
+    },
+    {
+        "name": "heirloom-historical"
+    },
+    {
+        "name": "herb-and-spice-mixes"
+    },
+    {
+        "name": "hidden-valley-ranch"
+    },
+    {
+        "name": "high-calcium"
+    },
+    {
+        "name": "high-fiber"
+    },
+    {
+        "name": "high-in-something"
+    },
+    {
+        "name": "high-protein"
+    },
+    {
+        "name": "holiday-event"
+    },
+    {
+        "name": "honduran"
+    },
+    {
+        "name": "hunan"
+    },
+    {
+        "name": "hungarian"
+    },
+    {
+        "name": "ice-cream"
+    },
+    {
+        "name": "icelandic"
+    },
+    {
+        "name": "independence-day"
+    },
+    {
+        "name": "indian"
+    },
+    {
+        "name": "indonesian"
+    },
+    {
+        "name": "inexpensive"
+    },
+    {
+        "name": "infant-baby-friendly"
+    },
+    {
+        "name": "iranian-persian"
+    },
+    {
+        "name": "iraqi"
+    },
+    {
+        "name": "irish"
+    },
+    {
+        "name": "irish-st-patricks-day"
+    },
+    {
+        "name": "italian"
+    },
+    {
+        "name": "jams-and-preserves"
+    },
+    {
+        "name": "japanese"
+    },
+    {
+        "name": "jellies"
+    },
+    {
+        "name": "jewish-ashkenazi"
+    },
+    {
+        "name": "jewish-sephardi"
+    },
+    {
+        "name": "kid-friendly"
+    },
+    {
+        "name": "kiwifruit"
+    },
+    {
+        "name": "korean"
+    },
+    {
+        "name": "kosher"
+    },
+    {
+        "name": "kwanzaa"
+    },
+    {
+        "name": "labor-day"
+    },
+    {
+        "name": "lactose"
+    },
+    {
+        "name": "lactose-free"
+    },
+    {
+        "name": "lamb"
+    },
+    {
+        "name": "lamb-sheep"
+    },
+    {
+        "name": "laotian"
+    },
+    {
+        "name": "lasagna"
+    },
+    {
+        "name": "lebanese"
+    },
+    {
+        "name": "leftovers"
+    },
+    {
+        "name": "lemon"
+    },
+    {
+        "name": "lentils"
+    },
+    {
+        "name": "lettuces"
+    },
+    {
+        "name": "libyan"
+    },
+    {
+        "name": "light"
+    },
+    {
+        "name": "lime"
+    },
+    {
+        "name": "lobster"
+    },
+    {
+        "name": "long-grain-rice"
+    },
+    {
+        "name": "low-calorie"
+    },
+    {
+        "name": "low-carb"
+    },
+    {
+        "name": "low-cholesterol"
+    },
+    {
+        "name": "low-fat"
+    },
+    {
+        "name": "low-in-something"
+    },
+    {
+        "name": "low-protein"
+    },
+    {
+        "name": "low-saturated-fat"
+    },
+    {
+        "name": "low-sodium"
+    },
+    {
+        "name": "low-sugar"
+    },
+    {
+        "name": "lowfat"
+    },
+    {
+        "name": "lunch"
+    },
+    {
+        "name": "macaroni-and-cheese"
+    },
+    {
+        "name": "mahi-mahi"
+    },
+    {
+        "name": "main-dish"
+    },
+    {
+        "name": "main-ingredient"
+    },
+    {
+        "name": "malaysian"
+    },
+    {
+        "name": "mango"
+    },
+    {
+        "name": "manicotti"
+    },
+    {
+        "name": "mardi-gras-carnival"
+    },
+    {
+        "name": "marinades-and-rubs"
+    },
+    {
+        "name": "mashed-potatoes"
+    },
+    {
+        "name": "meat"
+    },
+    {
+        "name": "meatballs"
+    },
+    {
+        "name": "meatless"
+    },
+    {
+        "name": "meatloaf"
+    },
+    {
+        "name": "medium-grain-rice"
+    },
+    {
+        "name": "melons"
+    },
+    {
+        "name": "memorial-day"
+    },
+    {
+        "name": "mexican"
+    },
+    {
+        "name": "microwave"
+    },
+    {
+        "name": "middle-eastern"
+    },
+    {
+        "name": "midwestern"
+    },
+    {
+        "name": "mixer"
+    },
+    {
+        "name": "mongolian"
+    },
+    {
+        "name": "moroccan"
+    },
+    {
+        "name": "mothers-day"
+    },
+    {
+        "name": "muffins"
+    },
+    {
+        "name": "mushrooms"
+    },
+    {
+        "name": "mussels"
+    },
+    {
+        "name": "namibian"
+    },
+    {
+        "name": "native-american"
+    },
+    {
+        "name": "nepalese"
+    },
+    {
+        "name": "new-years"
+    },
+    {
+        "name": "new-zealand"
+    },
+    {
+        "name": "nigerian"
+    },
+    {
+        "name": "no-cook"
+    },
+    {
+        "name": "no-shell-fish"
+    },
+    {
+        "name": "non-alcoholic"
+    },
+    {
+        "name": "noodles"
+    },
+    {
+        "name": "north-american"
+    },
+    {
+        "name": "northeastern-united-states"
+    },
+    {
+        "name": "norwegian"
+    },
+    {
+        "name": "novelty"
+    },
+    {
+        "name": "number-of-servings"
+    },
+    {
+        "name": "nut-free"
+    },
+    {
+        "name": "nuts"
+    },
+    {
+        "name": "oamc-freezer-make-ahead"
+    },
+    {
+        "name": "oatmeal"
+    },
+    {
+        "name": "oaxacan"
+    },
+    {
+        "name": "occasion"
+    },
+    {
+        "name": "omelets-and-frittatas"
+    },
+    {
+        "name": "one-dish-meal"
+    },
+    {
+        "name": "onions"
+    },
+    {
+        "name": "ontario"
+    },
+    {
+        "name": "orange-roughy"
+    },
+    {
+        "name": "oranges"
+    },
+    {
+        "name": "oven"
+    },
+    {
+        "name": "oysters"
+    },
+    {
+        "name": "pacific-northwest"
+    },
+    {
+        "name": "pakistani"
+    },
+    {
+        "name": "palestinian"
+    },
+    {
+        "name": "pancakes-and-waffles"
+    },
+    {
+        "name": "papaya"
+    },
+    {
+        "name": "passover"
+    },
+    {
+        "name": "pasta"
+    },
+    {
+        "name": "pasta-rice-and-grains"
+    },
+    {
+        "name": "pasta-shells"
+    },
+    {
+        "name": "peaches"
+    },
+    {
+        "name": "peanut-butter"
+    },
+    {
+        "name": "pears"
+    },
+    {
+        "name": "penne"
+    },
+    {
+        "name": "pennsylvania-dutch"
+    },
+    {
+        "name": "peppers"
+    },
+    {
+        "name": "perch"
+    },
+    {
+        "name": "persian"
+    },
+    {
+        "name": "peruvian"
+    },
+    {
+        "name": "pet-food"
+    },
+    {
+        "name": "picnic"
+    },
+    {
+        "name": "pie"
+    },
+    {
+        "name": "pies"
+    },
+    {
+        "name": "pies-and-tarts"
+    },
+    {
+        "name": "pineapple"
+    },
+    {
+        "name": "pitted-fruit"
+    },
+    {
+        "name": "pizza"
+    },
+    {
+        "name": "plums"
+    },
+    {
+        "name": "polish"
+    },
+    {
+        "name": "polynesian"
+    },
+    {
+        "name": "pork"
+    },
+    {
+        "name": "pork-chops"
+    },
+    {
+        "name": "pork-loins"
+    },
+    {
+        "name": "pork-ribs"
+    },
+    {
+        "name": "pork-sausage"
+    },
+    {
+        "name": "portuguese"
+    },
+    {
+        "name": "pot-pie"
+    },
+    {
+        "name": "potatoes"
+    },
+    {
+        "name": "potluck"
+    },
+    {
+        "name": "poultry"
+    },
+    {
+        "name": "preparation"
+    },
+    {
+        "name": "presentation"
+    },
+    {
+        "name": "pressure-canning"
+    },
+    {
+        "name": "pressure-cooker"
+    },
+    {
+        "name": "pudding"
+    },
+    {
+        "name": "puddings-and-mousses"
+    },
+    {
+        "name": "puerto-rican"
+    },
+    {
+        "name": "pumpkin"
+    },
+    {
+        "name": "punch"
+    },
+    {
+        "name": "quebec"
+    },
+    {
+        "name": "quiche"
+    },
+    {
+        "name": "quick"
+    },
+    {
+        "name": "quick-breads"
+    },
+    {
+        "name": "rabbit"
+    },
+    {
+        "name": "ragu-recipe-contest"
+    },
+    {
+        "name": "ramadan"
+    },
+    {
+        "name": "raspberries"
+    },
+    {
+        "name": "ravioli-tortellini"
+    },
+    {
+        "name": "refrigerator"
+    },
+    {
+        "name": "reynolds-wrap"
+    },
+    {
+        "name": "rice"
+    },
+    {
+        "name": "roast"
+    },
+    {
+        "name": "roast-beef"
+    },
+    {
+        "name": "rolled-cookies"
+    },
+    {
+        "name": "rolls-biscuits"
+    },
+    {
+        "name": "romantic"
+    },
+    {
+        "name": "rosh-hashana"
+    },
+    {
+        "name": "rosh-hashanah"
+    },
+    {
+        "name": "russian"
+    },
+    {
+        "name": "salad"
+    },
+    {
+        "name": "salad-dressings"
+    },
+    {
+        "name": "salads"
+    },
+    {
+        "name": "salmon"
+    },
+    {
+        "name": "salsas"
+    },
+    {
+        "name": "saltwater-fish"
+    },
+    {
+        "name": "sandwich"
+    },
+    {
+        "name": "sandwiches"
+    },
+    {
+        "name": "sauces"
+    },
+    {
+        "name": "saudi-arabian"
+    },
+    {
+        "name": "savory"
+    },
+    {
+        "name": "savory-pies"
+    },
+    {
+        "name": "savory-sauces"
+    },
+    {
+        "name": "scallops"
+    },
+    {
+        "name": "scandinavian"
+    },
+    {
+        "name": "scones"
+    },
+    {
+        "name": "scottish"
+    },
+    {
+        "name": "seafood"
+    },
+    {
+        "name": "seasonal"
+    },
+    {
+        "name": "served-cold"
+    },
+    {
+        "name": "served-hot"
+    },
+    {
+        "name": "shakes"
+    },
+    {
+        "name": "shellfish"
+    },
+    {
+        "name": "short-grain-rice"
+    },
+    {
+        "name": "shrimp"
+    },
+    {
+        "name": "side"
+    },
+    {
+        "name": "side-dishes"
+    },
+    {
+        "name": "simply-potatoes"
+    },
+    {
+        "name": "small-appliance"
+    },
+    {
+        "name": "smoker"
+    },
+    {
+        "name": "smoothies"
+    },
+    {
+        "name": "snack"
+    },
+    {
+        "name": "snacks"
+    },
+    {
+        "name": "sole-and-flounder"
+    },
+    {
+        "name": "soul"
+    },
+    {
+        "name": "soup"
+    },
+    {
+        "name": "soups-stews"
+    },
+    {
+        "name": "south-african"
+    },
+    {
+        "name": "south-american"
+    },
+    {
+        "name": "south-west-pacific"
+    },
+    {
+        "name": "southern"
+    },
+    {
+        "name": "southern-united-states"
+    },
+    {
+        "name": "southwestern-united-states"
+    },
+    {
+        "name": "soy-tofu"
+    },
+    {
+        "name": "spaghetti"
+    },
+    {
+        "name": "spanish"
+    },
+    {
+        "name": "spicy"
+    },
+    {
+        "name": "spinach"
+    },
+    {
+        "name": "spreads"
+    },
+    {
+        "name": "spring"
+    },
+    {
+        "name": "squash"
+    },
+    {
+        "name": "squid"
+    },
+    {
+        "name": "st-patricks-day"
+    },
+    {
+        "name": "steak"
+    },
+    {
+        "name": "steaks"
+    },
+    {
+        "name": "steam"
+    },
+    {
+        "name": "stew"
+    },
+    {
+        "name": "stews"
+    },
+    {
+        "name": "stir-fry"
+    },
+    {
+        "name": "stocks"
+    },
+    {
+        "name": "stove-top"
+    },
+    {
+        "name": "strawberries"
+    },
+    {
+        "name": "stuffings-dressings"
+    },
+    {
+        "name": "sudanese"
+    },
+    {
+        "name": "sugar-free"
+    },
+    {
+        "name": "summer"
+    },
+    {
+        "name": "super-bowl"
+    },
+    {
+        "name": "superbowl"
+    },
+    {
+        "name": "swedish"
+    },
+    {
+        "name": "sweet"
+    },
+    {
+        "name": "sweet-sauces"
+    },
+    {
+        "name": "swiss"
+    },
+    {
+        "name": "szechuan"
+    },
+    {
+        "name": "tarts"
+    },
+    {
+        "name": "taste-mood"
+    },
+    {
+        "name": "technique"
+    },
+    {
+        "name": "tempeh"
+    },
+    {
+        "name": "tex-mex"
+    },
+    {
+        "name": "thai"
+    },
+    {
+        "name": "thanksgiving"
+    },
+    {
+        "name": "tilapia"
+    },
+    {
+        "name": "time-to-make"
+    },
+    {
+        "name": "to-go"
+    },
+    {
+        "name": "toddler-friendly"
+    },
+    {
+        "name": "tomatoes"
+    },
+    {
+        "name": "tropical-fruit"
+    },
+    {
+        "name": "trout"
+    },
+    {
+        "name": "tuna"
+    },
+    {
+        "name": "turkey"
+    },
+    {
+        "name": "turkey-breasts"
+    },
+    {
+        "name": "turkey-burgers"
+    },
+    {
+        "name": "turkish"
+    },
+    {
+        "name": "unprocessed-freezer"
+    },
+    {
+        "name": "valentines-day"
+    },
+    {
+        "name": "veal"
+    },
+    {
+        "name": "vegan"
+    },
+    {
+        "name": "vegetables"
+    },
+    {
+        "name": "vegetarian"
+    },
+    {
+        "name": "veggie-burgers"
+    },
+    {
+        "name": "venezuelan"
+    },
+    {
+        "name": "very-low-carbs"
+    },
+    {
+        "name": "vietnamese"
+    },
+    {
+        "name": "water-bath"
+    },
+    {
+        "name": "wedding"
+    },
+    {
+        "name": "weeknight"
+    },
+    {
+        "name": "welsh"
+    },
+    {
+        "name": "white-rice"
+    },
+    {
+        "name": "whitefish"
+    },
+    {
+        "name": "whole-chicken"
+    },
+    {
+        "name": "whole-duck"
+    },
+    {
+        "name": "whole-turkey"
+    },
+    {
+        "name": "wild-game"
+    },
+    {
+        "name": "wings"
+    },
+    {
+        "name": "winter"
+    },
+    {
+        "name": "yams-sweet-potatoes"
+    },
+    {
+        "name": "yeast"
+    },
+    {
+        "name": "zucchini"
+    }
+]

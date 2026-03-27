@@ -1,0 +1,36 @@
+package com.feex.mealplannersystem.repository.entity.ingredient;
+
+import com.feex.mealplannersystem.common.DietaryTagStatus;
+import com.feex.mealplannersystem.repository.entity.DietaryConditionEntity;
+import com.feex.mealplannersystem.repository.other.IngredientDietaryTagId;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "ingredient_dietary_tags")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class IngredientDietaryTagEntity {
+
+    @EmbeddedId
+    private IngredientDietaryTagId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("ingredientId")
+    @JoinColumn(name = "ingredient_id")
+    private IngredientEntity ingredient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("conditionId")
+    @JoinColumn(name = "condition_id")
+    private DietaryConditionEntity condition;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DietaryTagStatus status;
+}

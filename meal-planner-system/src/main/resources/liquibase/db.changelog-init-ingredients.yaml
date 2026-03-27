@@ -1,0 +1,95 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-ingredients-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: normalized_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: slug
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_available
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: ingredient_aliases
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: raw_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: ingredient_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: ingredient_aliases
+            baseColumnNames: ingredient_id
+            referencedTableName: ingredients
+            referencedColumnNames: id
+            constraintName: fk_alias_ingredient
+            onDelete: CASCADE
+
+        - createIndex:
+            tableName: ingredients
+            indexName: idx_ingredients_slug
+            columns:
+              - column:
+                  name: slug
+
+        - createIndex:
+            tableName: ingredient_aliases
+            indexName: idx_aliases_raw_name
+            columns:
+              - column:
+                  name: raw_name
+
+        - createIndex:
+            tableName: ingredient_aliases
+            indexName: idx_aliases_ingredient_id
+            columns:
+              - column:
+                  name: ingredient_id
+
+      rollback:
+        - dropTable:
+            tableName: ingredient_aliases
+        - dropTable:
+            tableName: ingredients

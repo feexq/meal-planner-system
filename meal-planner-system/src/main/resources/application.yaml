@@ -1,0 +1,53 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: meal-planner-system
+  jpa:
+    show-sql: true
+    open-in-view: true
+    properties:
+      hibernate:
+        time_zone: UTC
+        jdbc.batch_size: 15
+        order_inserts: true
+        order_updates: true
+        query.fail_on_pagination_over_collection_fetch: true
+        query.in_clause_parameter_padding: true
+        connection.provider_disables_autocommit: true
+        default_batch_fetch_size: 30
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      auto-commit: false
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      max-lifetime: 1800000
+  liquibase:
+    change-log: classpath:liquibase/changelog.yaml
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-expiration: 900000      # 15 хвилин в мілісекундах
+    refresh-expiration: 604800000  # 7 днів
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.authentication: TRACE
+    com.feex: DEBUG
+    org.springframework.security.web.context: DEBUG
+
+normalizer:
+  url: ${NORMALIZER_URL}
+  batch-size: 35

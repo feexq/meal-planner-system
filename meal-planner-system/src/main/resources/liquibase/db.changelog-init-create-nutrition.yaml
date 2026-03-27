@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-recipe-nutrition-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: recipe_nutrition
+            columns:
+              - column:
+                  name: recipe_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: serving_size
+                  type: VARCHAR(50)
+              - column:
+                  name: servings_per_recipe
+                  type: INTEGER
+              - column:
+                  name: calories
+                  type: DECIMAL(10,2)
+              - column:
+                  name: calories_from_fat
+                  type: DECIMAL(10,2)
+              - column:
+                  name: total_fat_g
+                  type: DECIMAL(10,2)
+              - column:
+                  name: saturated_fat_g
+                  type: DECIMAL(10,2)
+              - column:
+                  name: cholesterol_mg
+                  type: DECIMAL(10,2)
+              - column:
+                  name: sodium_mg
+                  type: DECIMAL(10,2)
+              - column:
+                  name: total_carbs_g
+                  type: DECIMAL(10,2)
+              - column:
+                  name: dietary_fiber_g
+                  type: DECIMAL(10,2)
+              - column:
+                  name: sugars_g
+                  type: DECIMAL(10,2)
+              - column:
+                  name: protein_g
+                  type: DECIMAL(10,2)
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_nutrition
+            baseColumnNames: recipe_id
+            referencedTableName: recipes
+            referencedColumnNames: id
+            constraintName: fk_recipe_nutrition_recipe
+            onDelete: CASCADE
+
+      rollback:
+        - dropTable:
+            tableName: recipe_nutrition

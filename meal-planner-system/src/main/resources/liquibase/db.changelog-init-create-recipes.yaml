@@ -1,0 +1,227 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-recipes-tables
+      author: feex
+      changes:
+        - createTable:
+            tableName: recipes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: slug
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: serving_size
+                  type: VARCHAR(50)
+              - column:
+                  name: servings
+                  type: INTEGER
+              - column:
+                  name: meal_type
+                  type: VARCHAR(50)
+              - column:
+                  name: meal_type_detailed
+                  type: VARCHAR(100)
+              - column:
+                  name: cook_time
+                  type: VARCHAR(20)
+              - column:
+                  name: cook_complexity
+                  type: VARCHAR(20)
+              - column:
+                  name: cook_budget
+                  type: VARCHAR(20)
+
+        - createTable:
+            tableName: recipe_steps
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recipe_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: step_number
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: recipe_ingredients
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recipe_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ingredient_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: raw_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            tableName: recipe_tags
+            columns:
+              - column:
+                  name: recipe_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: recipe_tags
+            columnNames: recipe_id, tag_id
+            constraintName: pk_recipe_tags
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_steps
+            baseColumnNames: recipe_id
+            referencedTableName: recipes
+            referencedColumnNames: id
+            constraintName: fk_recipe_steps_recipe
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_ingredients
+            baseColumnNames: recipe_id
+            referencedTableName: recipes
+            referencedColumnNames: id
+            constraintName: fk_recipe_ingredients_recipe
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_ingredients
+            baseColumnNames: ingredient_id
+            referencedTableName: ingredients
+            referencedColumnNames: id
+            constraintName: fk_recipe_ingredients_ingredient
+            onDelete: SET NULL
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_tags
+            baseColumnNames: recipe_id
+            referencedTableName: recipes
+            referencedColumnNames: id
+            constraintName: fk_recipe_tags_recipe
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_tags
+            baseColumnNames: tag_id
+            referencedTableName: tags
+            referencedColumnNames: id
+            constraintName: fk_recipe_tags_tag
+            onDelete: CASCADE
+
+        - createIndex:
+            tableName: recipes
+            indexName: idx_recipes_meal_type
+            columns:
+              - column:
+                  name: meal_type
+        - createIndex:
+            tableName: recipes
+            indexName: idx_recipes_cook_time
+            columns:
+              - column:
+                  name: cook_time
+        - createIndex:
+            tableName: recipes
+            indexName: idx_recipes_cook_complexity
+            columns:
+              - column:
+                  name: cook_complexity
+        - createIndex:
+            tableName: recipes
+            indexName: idx_recipes_cook_budget
+            columns:
+              - column:
+                  name: cook_budget
+        - createIndex:
+            tableName: recipe_ingredients
+            indexName: idx_recipe_ingredients_ingredient_id
+            columns:
+              - column:
+                  name: ingredient_id
+        - createIndex:
+            tableName: recipe_ingredients
+            indexName: idx_recipe_ingredients_recipe_id
+            columns:
+              - column:
+                  name: recipe_id
+
+      rollback:
+        - dropTable:
+            tableName: recipe_tags
+        - dropTable:
+            tableName: recipe_ingredients
+        - dropTable:
+            tableName: recipe_steps
+        - dropTable:
+            tableName: recipes

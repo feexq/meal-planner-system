@@ -1,0 +1,111 @@
+{
+  "contraindications": [
+    {
+      "id": "gastritis",
+      "name": "Gastritis",
+      "description": "Inflammation of the stomach lining. Avoid spicy, acidic, fried foods, alcohol, and caffeine."
+    },
+    {
+      "id": "diabetes",
+      "name": "Diabetes",
+      "description": "Metabolic disorder affecting blood sugar levels. Limit refined carbohydrates, sugars, and high-glycemic foods."
+    },
+    {
+      "id": "hypertension",
+      "name": "Hypertension (High Blood Pressure)",
+      "description": "Elevated blood pressure. Reduce sodium intake, processed meats, and salty foods."
+    },
+    {
+      "id": "high_cholesterol",
+      "name": "High Cholesterol",
+      "description": "Elevated blood cholesterol levels. Limit saturated fats, trans fats, and cholesterol-rich foods."
+    },
+    {
+      "id": "celiac_disease",
+      "name": "Celiac Disease",
+      "description": "Autoimmune disorder triggered by gluten. Avoid all foods containing wheat, barley, and rye."
+    },
+    {
+      "id": "lactose_intolerance",
+      "name": "Lactose Intolerance",
+      "description": "Inability to digest lactose in dairy products. Avoid milk, cheese, yogurt, and dairy-based ingredients."
+    },
+    {
+      "id": "nut_allergy",
+      "name": "Nut Allergy",
+      "description": "Allergic reaction to tree nuts and peanuts. Avoid all nut products and foods processed in facilities with nuts."
+    },
+    {
+      "id": "shellfish_allergy",
+      "name": "Shellfish Allergy",
+      "description": "Allergic reaction to crustaceans and mollusks. Avoid shrimp, crab, lobster, clams, and other shellfish."
+    },
+    {
+      "id": "fish_allergy",
+      "name": "Fish Allergy",
+      "description": "Allergic reaction to finned fish. Avoid all fish species and fish-derived ingredients."
+    },
+    {
+      "id": "kidney_disease",
+      "name": "Kidney Disease",
+      "description": "Impaired kidney function. Limit sodium, potassium, phosphorus, and protein intake."
+    },
+    {
+      "id": "gout",
+      "name": "Gout",
+      "description": "Arthritis caused by uric acid crystals. Avoid organ meats, certain seafood, alcohol, and high-purine foods."
+    },
+    {
+      "id": "pancreatitis",
+      "name": "Pancreatitis",
+      "description": "Inflammation of the pancreas. Avoid fatty foods, alcohol, and fried items."
+    },
+    {
+      "id": "gerd",
+      "name": "GERD (Gastroesophageal Reflux Disease)",
+      "description": "Chronic acid reflux. Avoid acidic foods, spicy foods, chocolate, mint, and caffeine."
+    },
+    {
+      "id": "ibs",
+      "name": "IBS (Irritable Bowel Syndrome)",
+      "description": "Digestive disorder causing abdominal pain and altered bowel habits. Limit high-FODMAP foods, beans, and certain vegetables."
+    }
+  ],
+  "diets": [
+    {
+      "id": "vegetarian",
+      "name": "Vegetarian",
+      "description": "Plant-based diet that excludes meat, poultry, and seafood but may include dairy and eggs."
+    },
+    {
+      "id": "vegan",
+      "name": "Vegan",
+      "description": "Strict plant-based diet that excludes all animal products including dairy, eggs, and honey."
+    },
+    {
+      "id": "keto",
+      "name": "Ketogenic (Keto)",
+      "description": "Very low-carb, high-fat diet that puts the body into ketosis for fat burning."
+    },
+    {
+      "id": "paleo",
+      "name": "Paleo",
+      "description": "Diet based on foods presumed to be available to Paleolithic humans. Excludes grains, legumes, dairy, and processed foods."
+    },
+    {
+      "id": "mediterranean",
+      "name": "Mediterranean",
+      "description": "Diet inspired by eating patterns of Mediterranean countries. Emphasizes fruits, vegetables, whole grains, olive oil, and fish."
+    },
+    {
+      "id": "low_calorie",
+      "name": "Low Calorie",
+      "description": "Diet focused on reducing caloric intake for weight management. Emphasizes nutrient-dense, low-calorie foods."
+    },
+    {
+      "id": "gluten_free",
+      "name": "Gluten-Free",
+      "description": "Diet that excludes gluten protein found in wheat, barley, and rye. Essential for celiac disease management."
+    }
+  ]
+}

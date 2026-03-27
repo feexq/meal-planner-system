@@ -1,0 +1,26 @@
+[
+  {
+    "userId": "user-001",
+    "gender": "MALE",
+    "age": 25,
+    "heightCm": 180,
+    "weightKg": 82,
+    "activityLevel": "MODERATE",
+    "goal": "WEIGHT_LOSS",
+    "goalIntensity": "NORMAL",
+    "dietType": "OMNIVORE",
+    "healthConditions": [
+      "hypertension",
+      "celiac_disease",
+      "ibs"
+    ],
+    "allergies": [],
+    "dislikedIngredients": [
+      "MUSHROOMS"
+    ],
+    "mealsPerDay": 3,
+    "cookingComplexity": "EASY",
+    "budgetLevel": "MEDIUM",
+    "zigzag": true
+  }
+]

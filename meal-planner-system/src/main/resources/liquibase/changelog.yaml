@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/db.changelog-init-users.yaml
+  - include:
+      file: liquibase/db.changelog-init-ingredients.yaml
+  - include:
+      file: liquibase/db.changelog-seed-ingredients.sql
+  - include:
+      file: liquibase/db.changelog-init-category.yaml
+  - include:
+      file: liquibase/db.changelog-init-dietary-conditions.yaml
+  - include:
+      file: liquibase/db.changelog-seed-dietary-conditions.sql
+  - include:
+      file: liquibase/db.changelog-init-create-recipes.yaml
+  - include:
+      file: liquibase/db.changelog-seed-tags.sql
+  - include:
+      file: liquibase/trigger/db.changelog-init-stock-trigger.yaml
+  - include:
+      file: liquibase/db.changelog-init-create-nutrition.yaml
+  - include:
+      file: liquibase/db.changelog-init-user-preferences.yaml
+  - include:
+      file: liquibase/db.changelog-changes-add-pk-to-collections-table.yaml

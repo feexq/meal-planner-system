@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-id-primary-key-to-health-conditions
+      author: feex
+      changes:
+        - addColumn:
+            tableName: user_health_conditions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+  - changeSet:
+      id: add-id-primary-key-to-allergies
+      author: feex
+      changes:
+        - addColumn:
+            tableName: user_allergies
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+  - changeSet:
+      id: add-id-primary-key-to-disliked-ingredients
+      author: feex
+      changes:
+        - addColumn:
+            tableName: user_disliked_ingredients
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
