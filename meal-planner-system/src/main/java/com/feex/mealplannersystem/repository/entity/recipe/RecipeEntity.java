@@ -6,17 +6,17 @@ import com.feex.mealplannersystem.common.survey.CookTime;
 import com.feex.mealplannersystem.common.MealType;
 import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipes")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -64,11 +64,11 @@ public class RecipeEntity {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("stepNumber ASC")
     @Builder.Default
-    private List<RecipeStepEntity> steps = new ArrayList<>();
+    private Set<RecipeStepEntity> steps = new HashSet<>();
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
-    private List<RecipeIngredientEntity> ingredients = new ArrayList<>();
+    private Set<RecipeIngredientEntity> ingredients = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -77,8 +77,8 @@ public class RecipeEntity {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @Builder.Default
-    private List<TagEntity> tags = new ArrayList<>();
+    private Set<TagEntity> tags = new HashSet<>();
 
-    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL)
     private RecipeNutritionEntity nutrition;
 }

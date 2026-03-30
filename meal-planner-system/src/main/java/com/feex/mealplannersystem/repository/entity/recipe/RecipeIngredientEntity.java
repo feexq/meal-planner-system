@@ -2,14 +2,12 @@ package com.feex.mealplannersystem.repository.entity.recipe;
 
 import com.feex.mealplannersystem.repository.entity.ingredient.IngredientEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "recipe_ingredients")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,10 +17,14 @@ public class RecipeIngredientEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Exclude // <--- ДОДАТИ ЦЕ
+    @ToString.Exclude          // <--- ДОДАТИ ЦЕ
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
     private RecipeEntity recipe;
 
+    @EqualsAndHashCode.Exclude // <--- ДОДАТИ ЦЕ
+    @ToString.Exclude          // <--- ДОДАТИ ЦЕ
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id")
     private IngredientEntity ingredient;

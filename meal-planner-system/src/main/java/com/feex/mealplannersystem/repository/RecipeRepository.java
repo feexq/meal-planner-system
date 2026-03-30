@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,6 +39,14 @@ public interface RecipeRepository extends JpaRepository<RecipeEntity, Long> {
             @Param("tag") String tag,
             Pageable pageable
     );
+
+    @Query("""
+            SELECT DISTINCT r FROM RecipeEntity r
+            LEFT JOIN FETCH r.nutrition
+            LEFT JOIN FETCH r.tags
+            LEFT JOIN FETCH r.ingredients
+            """)
+    List<RecipeEntity> findAllForGenerator();
 
     @Query("""
         SELECT DISTINCT r FROM RecipeEntity r

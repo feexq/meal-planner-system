@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -87,7 +88,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .price(request.getPrice())
                 .unit(request.getUnit())
                 .stock(request.getStock() != null ? request.getStock() : 0)
-                .aliases(new ArrayList<>())
+                .aliases(new HashSet<>())
                 .build();
 
         if (request.getCategoryId() != null) {

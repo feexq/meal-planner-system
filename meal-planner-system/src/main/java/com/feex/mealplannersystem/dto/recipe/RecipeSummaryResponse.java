@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,6 +23,6 @@ public class RecipeSummaryResponse {
     private String cookComplexity;
     private String cookBudget;
     private Integer servings;
-    private List<String> tags;
+    private Set<String> tags;
     private BigDecimal calories;
 }

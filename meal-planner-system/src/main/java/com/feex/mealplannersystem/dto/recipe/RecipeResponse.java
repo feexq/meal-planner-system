@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -24,8 +25,8 @@ public class RecipeResponse {
     private String cookBudget;
     private Integer servings;
     private String servingSize;
-    private List<String> steps;
-    private List<RecipeIngredientResponse> ingredients;
-    private List<String> tags;
+    private Set<String> steps;
+    private Set<RecipeIngredientResponse> ingredients;
+    private Set<String> tags;
     private RecipeNutritionResponse nutrition;
 }

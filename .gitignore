@@ -3,6 +3,10 @@
 #######################################
 /AlgorithmRecipe/
 /FoodParser/
+/mealplan/
+/meal-plan-integration.zip
+/meal-plan-integration-v2.zip
+/INTEGRATION_GUIDE.md
 
 #######################################
 # 🔐 Environment variables

@@ -1,14 +1,12 @@
 package com.feex.mealplannersystem.repository.entity.ingredient;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "ingredient_aliases")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -21,6 +19,8 @@ public class IngredientAliasEntity {
     @Column(name = "raw_name", nullable = false, unique = true)
     private String rawName;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id", nullable = false)
     private IngredientEntity ingredient;

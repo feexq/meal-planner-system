@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserPreferenceRepository extends JpaRepository<UserPreferenceEntity, String> {
+public interface UserPreferenceRepository extends JpaRepository<UserPreferenceEntity, Long> {
 
     Optional<UserPreferenceEntity> findByUserEmail(String email);
 

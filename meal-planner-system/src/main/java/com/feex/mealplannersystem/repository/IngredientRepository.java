@@ -30,4 +30,12 @@ public interface IngredientRepository extends JpaRepository<IngredientEntity, Lo
             @Param("categoryIds") List<Long> categoryIds,
             Pageable pageable
     );
+
+    @Query("""
+        SELECT DISTINCT i FROM IngredientEntity i
+        LEFT JOIN FETCH i.dietaryTags dt
+        LEFT JOIN FETCH dt.condition
+        LEFT JOIN FETCH i.aliases
+        """)
+    List<IngredientEntity> findAllWithDetails();
 }

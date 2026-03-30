@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface IngredientMapper {
@@ -22,7 +23,7 @@ public interface IngredientMapper {
     IngredientResponse toResponse(Ingredient ingredient);
     IngredientSummaryResponse toSummaryResponse(Ingredient ingredient);
 
-    default List<String> toAliasList(List<IngredientAliasEntity> aliases) {
+    default List<String> toAliasList(Set<IngredientAliasEntity> aliases) {
         if (aliases == null) return new ArrayList<>();
         return aliases.stream()
                 .map(IngredientAliasEntity::getRawName)

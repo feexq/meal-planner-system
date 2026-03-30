@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface RecipeMapper {
@@ -42,20 +44,20 @@ public interface RecipeMapper {
         return e != null ? e.name() : null;
     }
 
-    default List<String> mapTags(List<TagEntity> tags) {
-        return tags == null ? null : tags.stream().map(TagEntity::getName).toList();
+    default Set<String> mapTags(Set<TagEntity> tags) {
+        return tags == null ? null : tags.stream().map(TagEntity::getName).collect(Collectors.toSet());
     }
 
-    default List<String> mapSteps(List<RecipeStepEntity> steps) {
+    default Set<String> mapSteps(Set<RecipeStepEntity> steps) {
         return steps == null ? null : steps.stream()
                 .map(RecipeStepEntity::getDescription)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
-    default List<RecipeIngredientResponse> mapIngredients(List<RecipeIngredientEntity> ingredients) {
+    default Set<RecipeIngredientResponse> mapIngredients(Set<RecipeIngredientEntity> ingredients) {
         return ingredients == null ? null : ingredients.stream()
                 .map(this::mapIngredient)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     default RecipeIngredientResponse mapIngredient(RecipeIngredientEntity ri) {

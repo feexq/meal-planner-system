@@ -1,16 +1,14 @@
 package com.feex.mealplannersystem.repository.entity.recipe;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "recipe_nutrition")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,6 +17,8 @@ public class RecipeNutritionEntity {
     @Id
     private Long recipeId;
 
+    @EqualsAndHashCode.Exclude // <--- ДОДАТИ ЦЕ
+    @ToString.Exclude          // <--- ДОДАТИ ЦЕ
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "recipe_id")

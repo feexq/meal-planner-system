@@ -1,7 +1,12 @@
 package com.feex.mealplannersystem.common.survey;
 
 public enum CookTime {
-    MIN_15, MIN_30, MIN_60, HOURS_4, DAYS_1_PLUS;
+    MIN_15, MIN_30, MIN_60, HOURS_4, DAYS_1_PLUS,
+    FIFTEEN_MIN,
+    THIRTY_MIN,
+    SIXTY_MIN,
+    FOUR_HOURS,
+    ONE_PLUS_DAYS;
 
     public static CookTime fromString(String value) {
         return switch (value) {
