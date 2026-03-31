@@ -11,17 +11,10 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-/**
- * Spring port of prototype RecipeFilter.
- * All filtering logic is identical; DataLoader replaced by RecipeDataContext +
- * ClassificationContext.
- */
+
 @Component
 public class RecipeFilterService {
 
-    // -----------------------------------------------------------------------
-    // Public API
-    // -----------------------------------------------------------------------
     private static final java.util.concurrent.ConcurrentHashMap<String, Pattern> PATTERN_CACHE = new java.util.concurrent.ConcurrentHashMap<>();
 
     public FilterResult filterRecipes(RecipeDataContext data, ClassificationContext classification,
@@ -108,10 +101,6 @@ public class RecipeFilterService {
         return new FilterResult(result, note, counts);
     }
 
-    // -----------------------------------------------------------------------
-    // Severity
-    // -----------------------------------------------------------------------
-
     public enum ConditionSeverity { CRITICAL, HIGH, MODERATE, MILD }
 
     public static ConditionSeverity getConditionSeverity(String condition) {
@@ -122,10 +111,6 @@ public class RecipeFilterService {
             default                                                                    -> ConditionSeverity.MILD;
         };
     }
-
-    // -----------------------------------------------------------------------
-    // Thresholds (used by scorer)
-    // -----------------------------------------------------------------------
 
     public static List<String> getAppliedThresholds(List<String> userConditions) {
         List<String> t = new ArrayList<>();
@@ -141,9 +126,6 @@ public class RecipeFilterService {
         return t;
     }
 
-    // -----------------------------------------------------------------------
-    // Meal-type helpers (used by generator)
-    // -----------------------------------------------------------------------
 
     private static boolean matchesMealType(String recipeMealType, String slotMealType) {
         if (recipeMealType == null)
@@ -206,10 +188,6 @@ public class RecipeFilterService {
         return budgetLevel(recipeB) - budgetLevel(userB) > 1;
     }
 
-    // -----------------------------------------------------------------------
-    // Gluten check (used by filter internally)
-    // -----------------------------------------------------------------------
-
     private static final Set<String> GLUTEN_SAFE = Set.of(
             "corn tortilla","corn flour","rice flour","rice bread","gluten-free bread",
             "gluten-free flour","gluten-free pasta","gluten-free noodle","gluten-free cracker",
@@ -235,10 +213,6 @@ public class RecipeFilterService {
         }
         return false;
     }
-
-    // -----------------------------------------------------------------------
-    // Private helpers
-    // -----------------------------------------------------------------------
 
     private boolean hasClassifiedViolation(RecipeModel recipe, List<String> conditions,
                                             ClassificationContext ctx) {
@@ -320,10 +294,6 @@ public class RecipeFilterService {
                 "cook_time_exclude","side_dish_excluded").forEach(k -> m.put(k, 0));
         return m;
     }
-
-    // -----------------------------------------------------------------------
-    // Result
-    // -----------------------------------------------------------------------
 
     public record FilterResult(List<RecipeModel> recipes, String filteringNote,
                                 Map<String, Integer> eliminationCounts) {}

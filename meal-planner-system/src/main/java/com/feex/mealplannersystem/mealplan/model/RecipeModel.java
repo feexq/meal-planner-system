@@ -5,10 +5,6 @@ import lombok.Getter;
 
 import java.util.List;
 
-/**
- * Flat in-memory model used by filter/scorer logic.
- * Replaces the prototype's Recipe + parseIngredients() JSON approach.
- */
 @Getter
 @Builder
 public class RecipeModel {

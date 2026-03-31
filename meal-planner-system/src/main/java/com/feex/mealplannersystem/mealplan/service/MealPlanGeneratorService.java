@@ -24,16 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Spring port of MealPlanGeneratorVariant2.
- *
- * Flow:
- *  1. Load all recipes + nutrition from DB (RecipeDataAdapter)
- *  2. Load ingredient classification data (IngredientClassificationAdapter)
- *  3. Convert UserPreferenceEntity → UserProfileModel (caller's responsibility via UserProfileAdapter)
- *  4. For each of 7 days: filter → score → ILP select
- *  5. Return WeeklyMealPlanDto
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -49,10 +39,6 @@ public class MealPlanGeneratorService {
     private static final int TOP_N_CANDIDATES   = 500;
     private static final int BASE_PROTEIN_WEIGHT = 15;
 
-    // -----------------------------------------------------------------------
-    // Public entry point
-    // -----------------------------------------------------------------------
-
     public WeeklyMealPlanDto generatePlan(UserProfileModel user) {
         RecipeDataContext      data           = recipeDataAdapter.buildContext();
         ClassificationContext  classification = classificationAdapter.buildContext();
@@ -64,7 +50,6 @@ public class MealPlanGeneratorService {
         Map<String, Double> slotRatios = calorieCalculator.getSlotRatios(user.getMealsPerDay());
         MacroTarget macroTarget        = macroCalculator.calculateMacros(user, baseTarget);
 
-        // recipeId → slotType → [day numbers used]
         Map<Integer, Map<String, List<Integer>>> usageBySlotType = new HashMap<>();
 
         List<DayPlanDto> days = new ArrayList<>();
@@ -109,10 +94,6 @@ public class MealPlanGeneratorService {
                 days);
     }
 
-    // -----------------------------------------------------------------------
-    // Day builder (ILP with progressive tolerance relaxation)
-    // -----------------------------------------------------------------------
-
     private List<MealSlotDto> buildDayViaILP(
             int day, double dailyCalories,
             Map<String, Double> slotRatios,
@@ -136,7 +117,6 @@ public class MealPlanGeneratorService {
                     data, classification, usedToday, usageBySlotType, day);
             slotCandidates.put(slotName, candidates);
 
-            // pre-exclude top snack recipes so lunch/dinner don't repeat them
             if ("snack".equals(slotName)) {
                 candidates.stream().limit(50).forEach(c -> usedToday.add((int) c.getRecipeId()));
             }
@@ -144,7 +124,6 @@ public class MealPlanGeneratorService {
             log.debug("  Slot '{}': {} candidates", slotName, candidates.size());
         }
 
-        // Guard: if any slot is empty, ILP can't run
         for (Map.Entry<String, List<RecipeCandidateDto>> e : slotCandidates.entrySet()) {
             if (e.getValue().isEmpty()) {
                 log.warn("Slot '{}' has 0 candidates — returning empty fallback", e.getKey());
@@ -152,7 +131,6 @@ public class MealPlanGeneratorService {
             }
         }
 
-        // ILP with progressive tolerance
         double tolerance = 0.0;
         while (tolerance <= 0.60) {
             ExpressionsBasedModel model = new ExpressionsBasedModel();
@@ -171,7 +149,6 @@ public class MealPlanGeneratorService {
                 vars.put(slotName, recipeVars);
             }
 
-            // macro constraints with current tolerance
             double pMin = Math.max(0, macroTarget.proteinMinG     * (1.0 - tolerance));
             double pMax =             macroTarget.proteinMaxG     * (1.0 + tolerance);
             double cMin = Math.max(0, macroTarget.carbsAbsoluteMinG * (1.0 - tolerance));
@@ -221,10 +198,6 @@ public class MealPlanGeneratorService {
         return emptyFallback(slotRatios, dailyCalories, "ILP_FAILED");
     }
 
-    // -----------------------------------------------------------------------
-    // Candidate generation per slot
-    // -----------------------------------------------------------------------
-
     private List<RecipeCandidateDto> getTopCandidatesForSlot(
             String slotName, double slotBudget, MacroTarget macroTarget,
             UserProfileModel user, RecipeDataContext data,
@@ -238,6 +211,8 @@ public class MealPlanGeneratorService {
         RecipeFilterService.FilterResult fRes =
                 recipeFilter.filterRecipes(data, classification, user, effectiveSlot);
         List<RecipeModel> filtered = fRes.recipes();
+
+        logFilterStats(user.getUserId(), slotName, fRes, data.getRecipes().size());
 
         boolean relaxMealType = false;
         if (filtered.size() < 10) {
@@ -280,7 +255,6 @@ public class MealPlanGeneratorService {
                 if (totalUsage >= maxRepeats) continue;
             }
 
-            // gap enforcement
             final int MIN_SAME_SLOT_GAP = 5;
             final int MIN_GLOBAL_GAP    = 3;
             boolean gapViolation = false;
@@ -316,10 +290,6 @@ public class MealPlanGeneratorService {
         return candidates;
     }
 
-    // -----------------------------------------------------------------------
-    // Build final slot list from ILP result
-    // -----------------------------------------------------------------------
-
     private List<MealSlotDto> buildFinalSlots(
             Map<String, List<RecipeCandidateDto>> slotCandidates,
             Map<String, Double> slotBudgets,
@@ -354,7 +324,6 @@ public class MealPlanGeneratorService {
                     double pCals    = primary.getScaledCalories();
                     double pProtein = pn.getProteinG() * primary.getRecommendedServings();
 
-                    // add nutritionally-similar alternatives
                     List<RecipeCandidateDto> alts = new ArrayList<>();
                     for (RecipeCandidateDto c : slotCandidates.get(slotName)) {
                         if (c.getRecipeId() == primary.getRecipeId()) continue;
@@ -370,7 +339,6 @@ public class MealPlanGeneratorService {
                     alts.stream().limit(4).forEach(chosen::add);
                 }
 
-                // ensure at least 3 choices for the user
                 if (chosen.size() < 3) {
                     Set<Long> alreadyIn = new HashSet<>();
                     chosen.forEach(c -> alreadyIn.add(c.getRecipeId()));
@@ -391,10 +359,6 @@ public class MealPlanGeneratorService {
 
         return finalSlots;
     }
-
-    // -----------------------------------------------------------------------
-    // Daily macro summary
-    // -----------------------------------------------------------------------
 
     private EstimatedDailyMacrosDto computeDailyMacros(
             List<MealSlotDto> slots, MacroTarget mt, RecipeDataContext data) {
@@ -435,10 +399,6 @@ public class MealPlanGeneratorService {
                 cCov, cStatus, fCov, fStatus);
     }
 
-    // -----------------------------------------------------------------------
-    // Helpers
-    // -----------------------------------------------------------------------
-
     private static int slotOrder(String mealType) {
         return switch (mealType) {
             case "breakfast" -> 1; case "lunch" -> 2; case "dinner" -> 3;
@@ -453,5 +413,26 @@ public class MealPlanGeneratorService {
                 name, (int) Math.round(dailyCalories * ratio),
                 List.of(), true, "No candidates — " + reason)));
         return empty;
+    }
+
+    private void logFilterStats(String userId, String slotName,
+                                RecipeFilterService.FilterResult fRes,
+                                int totalRecipes) {
+        if (!log.isDebugEnabled()) return;
+
+        Map<String, Integer> elim = fRes.eliminationCounts();
+        int valid = fRes.recipes().size();
+
+        log.debug("=== Filter [user={} slot={}] valid={}/{} ===",
+                userId, slotName, valid, totalRecipes);
+
+        elim.entrySet().stream()
+                .filter(e -> e.getValue() > 0)
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEach(e -> log.debug("  {:35s} : {}", e.getKey(), e.getValue()));
+
+        if (fRes.filteringNote() != null) {
+            log.warn("  [WARNING] {}", fRes.filteringNote());
+        }
     }
 }

@@ -23,3 +23,5 @@ databaseChangeLog:
       file: liquibase/db.changelog-init-user-preferences.yaml
   - include:
       file: liquibase/db.changelog-changes-add-pk-to-collections-table.yaml
+  - include:
+      file: liquibase/db.changelog-init-create-orders-table.yaml

@@ -7,10 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Spring component wrapping prototype MacroRequirementCalculator.
- * calculateMacros() is the main entry; all inner logic is identical to the prototype.
- */
 @Component
 public class MacroRequirementService {
 
@@ -97,10 +93,6 @@ public class MacroRequirementService {
             };
         }
     }
-
-    // -----------------------------------------------------------------------
-    // Main calculation — logic identical to prototype
-    // -----------------------------------------------------------------------
 
     public MacroTarget calculateMacros(UserProfileModel user, double tdee) {
         String goal     = upper(user.getGoal(), "MAINTENANCE");
@@ -195,10 +187,6 @@ public class MacroRequirementService {
                 carbsTargetG, carbsAbsoluteMinG, lowCarbWarning,
                 meals, hasIbs);
     }
-
-    // -----------------------------------------------------------------------
-    // Static helpers used by RecipeScorerService
-    // -----------------------------------------------------------------------
 
     public static int calcCarbsFit(double recipeCarbsG, int carbsPerMealG, int dailyCarbsTargetG, String recipeName) {
         if (dailyCarbsTargetG > 150 && recipeCarbsG < 10) {

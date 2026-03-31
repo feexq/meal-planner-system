@@ -7,9 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Spring component wrapping the prototype CalorieCalculator logic.
- */
+
 @Component
 public class CalorieCalculatorService {
 

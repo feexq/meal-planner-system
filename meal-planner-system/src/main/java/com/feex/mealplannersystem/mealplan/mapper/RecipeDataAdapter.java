@@ -5,6 +5,7 @@ import com.feex.mealplannersystem.mealplan.model.RecipeModel;
 import com.feex.mealplannersystem.repository.RecipeRepository;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeNutritionEntity;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,18 +13,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Replaces prototype DataLoader.
- *
- * Uses RecipeRepository.findAllForGenerator() — already defined in your repo:
- *   SELECT DISTINCT r FROM RecipeEntity r
- *   LEFT JOIN FETCH r.nutrition
- *   LEFT JOIN FETCH r.tags
- *   LEFT JOIN FETCH r.ingredients
- *
- * No extra queries needed — your existing query fetches everything in one go.
- * ingredients and tags are Set<> in RecipeEntity, which avoids MultipleBagFetchException.
- */
 @Component
 @RequiredArgsConstructor
 public class RecipeDataAdapter {
@@ -46,10 +35,7 @@ public class RecipeDataAdapter {
         return new RecipeDataContext(recipes, nutritionMap);
     }
 
-    // -----------------------------------------------------------------------
-
     private RecipeModel toRecipeModel(RecipeEntity e) {
-        // ingredients: prefer resolved IngredientEntity.normalizedName, fall back to rawName
         List<String> ingredients = e.getIngredients().stream()
                 .map(i -> {
                     if (i.getIngredient() != null && i.getIngredient().getNormalizedName() != null)
@@ -68,8 +54,6 @@ public class RecipeDataAdapter {
                 .name(e.getName())
                 .description(e.getDescription())
                 .mealType(e.getMealType() != null ? e.getMealType().name().toLowerCase() : null)
-                // CookTime.name() returns enum constant like "THIRTY_MIN" —
-                // mapped to prototype strings in RecipeScorerService.scoreCookTime()
                 .cookTime(e.getCookTime() != null ? e.getCookTime().name() : null)
                 .cookComplexity(e.getCookComplexity() != null ? e.getCookComplexity().name() : null)
                 .cookBudget(e.getCookBudget() != null ? e.getCookBudget().name() : null)
@@ -81,7 +65,6 @@ public class RecipeDataAdapter {
     }
 
     private NutritionModel toNutritionModel(RecipeNutritionEntity n) {
-        // RecipeNutritionEntity uses BigDecimal — convert to double safely
         return NutritionModel.builder()
                 .recipeId(n.getRecipe().getId())
                 .calories(bd(n.getCalories()))
@@ -101,9 +84,8 @@ public class RecipeDataAdapter {
         return v != null ? v.doubleValue() : 0.0;
     }
 
-    // -----------------------------------------------------------------------
-
     public static class RecipeDataContext {
+        @Getter
         private final List<RecipeModel>         recipes;
         private final Map<Long, NutritionModel> nutritionMap;
 
@@ -112,7 +94,6 @@ public class RecipeDataAdapter {
             this.nutritionMap = Collections.unmodifiableMap(nutritionMap);
         }
 
-        public List<RecipeModel> getRecipes()                { return recipes; }
         public NutritionModel    getNutrition(long recipeId) { return nutritionMap.get(recipeId); }
     }
 }

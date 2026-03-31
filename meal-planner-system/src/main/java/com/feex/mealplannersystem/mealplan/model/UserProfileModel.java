@@ -5,10 +5,6 @@ import lombok.Getter;
 
 import java.util.List;
 
-/**
- * Internal model used by the meal-planning logic.
- * Mirrors the prototype UserProfile but uses Lombok and Spring conventions.
- */
 @Getter
 @Builder
 public class UserProfileModel {

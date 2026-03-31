@@ -2,6 +2,7 @@ import os
 import json
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from typing import Any
 from google import genai
 from google.genai import types
 import re
@@ -368,3 +369,202 @@ def classify_ingredients(req: ClassifyRequest):
         failed = still_failed
 
     return ClassifyResponse(results=valid, failed=failed)
+
+FINALIZE_SYSTEM_PROMPT = """You are a professional nutritionist AI assistant.
+You receive a weekly meal plan with candidate recipes for each meal slot.
+Your job is to select the single BEST recipe for each slot based on the user's profile.
+
+Rules:
+- Consider health conditions, allergies, dietary type, calorie targets, macro balance.
+- Never select a recipe that conflicts with hard dietary restrictions.
+- Prefer recipes with lower sodium for hypertension, lower carbs for diabetes, etc.
+- Return ONLY valid JSON. No markdown. No explanation outside JSON."""
+
+
+class NutritionTargets(BaseModel):
+    proteinTargetG: int
+    carbsTargetG: int
+    fatTargetG: int
+    proteinCoveragePercent: int | None = None
+    carbsStatus: str | None = None
+    fatStatus: str | None = None
+
+
+class CandidateItem(BaseModel):
+    recipeId: int
+    recipeName: str
+    score: int
+    caloriesPerServing: float
+    recommendedServings: float
+    scaledCalories: float
+    ingredients: list[str] = []
+
+
+class SlotItem(BaseModel):
+    mealType: str        # breakfast | lunch | dinner | snack | snack_2
+    slotCalorieBudget: int
+    candidates: list[CandidateItem]
+
+
+class DayItem(BaseModel):
+    day: int
+    dailyCalorieTarget: int
+    estimatedDailyMacros: dict[str, Any] = {}
+    slots: list[SlotItem]
+
+
+class UserProfileRequest(BaseModel):
+    gender: str
+    age: int
+    weightKg: float
+    heightCm: int
+    activityLevel: str
+    goal: str
+    dietType: str
+    healthConditions: list[str] = []
+    allergies: list[str] = []
+    dislikedIngredients: list[str] = []
+    mealsPerDay: int
+
+
+class FinalizeRequest(BaseModel):
+    userId: str
+    dailyCalorieTarget: int
+    weeklyCalorieTarget: int
+    days: list[DayItem]
+    userProfile: UserProfileRequest
+
+
+class FinalizedMeal(BaseModel):
+    recipeId: int
+    name: str
+
+
+class FinalizedDay(BaseModel):
+    day: int
+    breakfast: FinalizedMeal | None = None
+    lunch: FinalizedMeal | None = None
+    dinner: FinalizedMeal | None = None
+    snack: FinalizedMeal | None = None
+    snack_2: FinalizedMeal | None = None
+    notes: str
+
+
+class FinalizeResponse(BaseModel):
+    userId: str
+    days: list[FinalizedDay]
+
+
+def _build_slot_candidates(slot: SlotItem, top_k: int = 3) -> dict:
+    sorted_candidates = sorted(slot.candidates, key=lambda c: c.score, reverse=True)[:top_k]
+    return {
+        "mealType": slot.mealType,
+        "calorieBudget": slot.slotCalorieBudget,
+        "options": [
+            {
+                "id": c.recipeId,
+                "name": c.recipeName,
+                "score": c.score,
+                "scaledCalories": round(c.scaledCalories, 1),
+                "servings": c.recommendedServings,
+                "ingredients": c.ingredients[:15],  # cap to keep prompt small
+            }
+            for c in sorted_candidates
+        ]
+    }
+
+
+def _build_finalize_prompt(request: FinalizeRequest) -> str:
+    profile = request.userProfile
+
+    days_context = []
+    for day in request.days:
+        day_data = {"day": day.day, "slots": []}
+        for slot in day.slots:
+            if slot.candidates:
+                day_data["slots"].append(_build_slot_candidates(slot))
+        days_context.append(day_data)
+
+    return f"""
+You are a professional nutritionist AI.
+
+Select the BEST single recipe for EACH meal slot across all 7 days.
+
+User profile:
+{json.dumps(profile.model_dump(), indent=2)}
+
+Daily calorie target: {request.dailyCalorieTarget} kcal
+
+Meal candidates (top 3 per slot):
+{json.dumps(days_context, indent=2)}
+
+Return STRICT JSON ONLY — no text outside JSON, no markdown.
+
+Required format:
+{{
+  "days": [
+    {{
+      "day": 1,
+      "breakfast": {{"recipeId": 123, "name": "Recipe Name"}},
+      "lunch":     {{"recipeId": 456, "name": "Recipe Name"}},
+      "dinner":    {{"recipeId": 789, "name": "Recipe Name"}},
+      "snack":     {{"recipeId": 321, "name": "Recipe Name"}},
+      "notes": "3-4 sentences explaining why these meals fit this specific user."
+    }}
+  ]
+}}
+
+Rules:
+- Include only the slots that exist in the candidates (some days may have no snack).
+- notes MUST be 3-4 sentences, specific to the user's conditions/goals.
+- recipeId must come from the provided candidates — do NOT invent new IDs.
+"""
+
+
+@app.post("/finalize", response_model=FinalizeResponse)
+def finalize_meal_plan(request: FinalizeRequest):
+    if not GEMINI_API_KEY:
+        raise HTTPException(status_code=500, detail="GEMINI_API_KEY not set")
+
+    client = genai.Client(api_key=GEMINI_API_KEY)
+
+    prompt = _build_finalize_prompt(request)
+
+    response = client.models.generate_content(
+        model=MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            system_instruction=FINALIZE_SYSTEM_PROMPT,
+            temperature=0.2,
+            max_output_tokens=8000,
+            response_mime_type="application/json",
+        )
+    )
+
+    raw = response.text.strip()
+
+    if raw.startswith("```"):
+        lines = raw.splitlines()
+        raw = "\n".join(lines[1:-1] if lines[-1] == "```" else lines[1:])
+
+    parsed = json.loads(raw)
+
+    finalized_days = []
+    for day_data in parsed.get("days", []):
+        def to_meal(key):
+            m = day_data.get(key)
+            if m:
+                return FinalizedMeal(recipeId=m["recipeId"], name=m["name"])
+            return None
+
+        finalized_days.append(FinalizedDay(
+            day=day_data["day"],
+            breakfast=to_meal("breakfast"),
+            lunch=to_meal("lunch"),
+            dinner=to_meal("dinner"),
+            snack=to_meal("snack"),
+            snack_2=to_meal("snack_2"),
+            notes=day_data.get("notes", ""),
+        ))
+
+    return FinalizeResponse(userId=request.userId, days=finalized_days)

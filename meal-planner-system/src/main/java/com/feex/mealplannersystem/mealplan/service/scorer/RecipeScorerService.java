@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-/**
- * Spring port of prototype RecipeScorer.
- * All scoring math is identical; DataLoader replaced by context objects.
- */
 @Component
 public class RecipeScorerService {
 
@@ -87,10 +83,6 @@ public class RecipeScorerService {
                 matchedHealthTags, thresholds, dietaryNotes,
                 relaxations, breakdown, recipe.getParsedIngredients());
     }
-
-    // -----------------------------------------------------------------------
-    // Scoring sub-functions (identical to prototype)
-    // -----------------------------------------------------------------------
 
     private static int scoreCalorieFit(double scaledCalories, double budget) {
         if (budget <= 0) return 0;

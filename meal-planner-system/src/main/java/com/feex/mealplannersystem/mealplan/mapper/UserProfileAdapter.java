@@ -7,14 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Converts UserPreferenceEntity → UserProfileModel.
- *
- * Field mapping:
- *   UserHealthConditionEntity.conditionName  → healthConditions
- *   UserAllergyEntity.allergyName            → allergies
- *   UserDislikedIngredientEntity.ingredientName → dislikedIngredients
- */
 @Component
 public class UserProfileAdapter {
 

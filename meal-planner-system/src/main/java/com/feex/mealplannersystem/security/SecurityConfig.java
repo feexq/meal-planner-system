@@ -55,7 +55,9 @@ public class SecurityConfig {
                                 "/api/auth/refresh",
                                 "/api/cart/**",
                                 "/v3/**",
-                                "/swagger-ui/**").permitAll()
+                                "/swagger-ui/**",
+                                "/api/webhooks/**",
+                                "/api/delivery/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/ingredients").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
                         .anyRequest().authenticated()

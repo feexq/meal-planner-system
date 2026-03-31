@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.List;
 
-// ============================================================
-//  Response DTOs (mirrors prototype model.output.* classes)
-// ============================================================
-
 public class MealPlanDtos {
 
     @Getter @AllArgsConstructor

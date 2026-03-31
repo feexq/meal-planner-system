@@ -3,10 +3,6 @@ package com.feex.mealplannersystem.mealplan.model;
 import lombok.Builder;
 import lombok.Getter;
 
-/**
- * Flat nutrition data used by the scoring/filtering logic.
- * Replaces prototype NutritionEntry + NutritionInfo.
- */
 @Getter
 @Builder
 public class NutritionModel {

@@ -32,6 +32,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-liquibase:4.1.0-M2'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // Source: https://mvnrepository.com/artifact/com.stripe/stripe-java
+    implementation 'com.stripe:stripe-java:32.1.0-beta.1'
     // Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct
     implementation 'org.mapstruct:mapstruct:1.6.3'
     // Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api

@@ -34,12 +34,23 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
+  stripe:
+    api:
+      key: ${STRIPE_SECRET_KEY}
+    webhook:
+      secret: ${STRIPE_WEBHOOK_SECRET}
+  novaposhta:
+    api:
+      key: ${NOVA_API_KEY}
+      url: https://api.novaposhta.ua/v2.0/json/
 
 app:
   jwt:
     secret: ${JWT_SECRET}
     access-expiration: 900000      # 15 хвилин в мілісекундах
     refresh-expiration: 604800000  # 7 днів
+  frontend:
+    url: http://localhost:3000
 
 logging:
   level:
@@ -51,3 +62,6 @@ logging:
 normalizer:
   url: ${NORMALIZER_URL}
   batch-size: 35
+  service:
+    timeout-seconds: 90
+
