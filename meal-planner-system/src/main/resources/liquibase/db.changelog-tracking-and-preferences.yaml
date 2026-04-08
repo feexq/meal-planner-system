@@ -1,0 +1,285 @@
+databaseChangeLog:
+  - changeSet:
+      id: move-target-weight-to-preferences
+      author: feex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: user_preferences
+                columnName: target_weight_kg
+      changes:
+        - addColumn:
+            tableName: user_preferences
+            columns:
+              - column:
+                  name: target_weight_kg
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: create-user-profiles
+      author: feex
+      changes:
+        - createTable:
+            tableName: user_profiles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: avatar_url
+                  type: VARCHAR(512)
+              - column:
+                  name: timezone
+                  type: VARCHAR(64)
+                  defaultValue: "UTC"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_weight_kg
+                  type: DOUBLE PRECISION
+              - column:
+                  name: date_of_birth
+                  type: DATE
+              - column:
+                  name: bio
+                  type: VARCHAR(300)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: user_profiles
+            baseColumnNames: user_id
+            constraintName: fk_user_profiles_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: create-daily-nutrition-summary
+      author: feex
+      changes:
+        - createTable:
+            tableName: daily_nutrition_summary
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: summary_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_calories
+                  type: DOUBLE PRECISION
+                  defaultValueNumeric: 0.0
+              - column:
+                  name: total_protein_g
+                  type: DOUBLE PRECISION
+                  defaultValueNumeric: 0.0
+              - column:
+                  name: total_carbs_g
+                  type: DOUBLE PRECISION
+                  defaultValueNumeric: 0.0
+              - column:
+                  name: total_fat_g
+                  type: DOUBLE PRECISION
+                  defaultValueNumeric: 0.0
+              - column:
+                  name: planned_slots
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: eaten_slots
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completion_rate
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: calorie_target
+                  type: INT
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: daily_nutrition_summary
+            baseColumnNames: user_id
+            constraintName: fk_daily_summary_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addUniqueConstraint:
+            tableName: daily_nutrition_summary
+            columnNames: user_id, summary_date
+            constraintName: uq_daily_summary_user_date
+        - createIndex:
+            tableName: daily_nutrition_summary
+            indexName: idx_daily_summary_user_date
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: summary_date
+                  descending: true
+
+  - changeSet:
+      id: create-user-streak-meta
+      author: feex
+      changes:
+        - createTable:
+            tableName: user_streak_meta
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: current_streak
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: longest_streak
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_active_date
+                  type: DATE
+              - column:
+                  name: streak_type
+                  type: VARCHAR(50)
+                  defaultValue: "CASUAL"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: freezes_available
+                  type: INT
+                  defaultValueNumeric: 2
+                  constraints:
+                    nullable: false
+              - column:
+                  name: freezes_used_this_month
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_freeze_used_date
+                  type: DATE
+              - column:
+                  name: total_active_days
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: user_streak_meta
+            baseColumnNames: user_id
+            constraintName: fk_streak_meta_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: create-weight-history
+      author: feex
+      changes:
+        - createTable:
+            tableName: weight_history
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weight_kg
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recorded_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: note
+                  type: VARCHAR(200)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: weight_history
+            baseColumnNames: user_id
+            constraintName: fk_weight_history_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addUniqueConstraint:
+            tableName: weight_history
+            columnNames: user_id, recorded_date
+            constraintName: uq_weight_history_user_date
+        - createIndex:
+            tableName: weight_history
+            indexName: idx_weight_history_user_date
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: recorded_date
+                  descending: true

@@ -1,5 +1,6 @@
 package com.feex.mealplannersystem.mealplan.dto;
 
+import com.feex.mealplannersystem.service.impl.AdditionalRecipeService;
 import lombok.Builder;
 import lombok.Getter;
 import java.util.List;
@@ -15,8 +16,9 @@ public class FinalizeRequestDto {
     private String userId;
     private int dailyCalorieTarget;
     private int weeklyCalorieTarget;
-    private List<MealPlanDtos.DayPlanDto> days;   // reuse existing DayPlanDto
+    private List<MealPlanDtos.DayPlanDto> days;
     private UserProfilePayload userProfile;
+    private List<AdditionalRecipeService.AdditionalRecipeDto> additionalRecipes;
 
     @Getter
     @Builder

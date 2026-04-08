@@ -1,0 +1,279 @@
+databaseChangeLog:
+  - changeSet:
+      id: meal_plan_tracking
+      author: feexq
+      comments: Створення таблиць для адаптивного трекінгу харчування
+      changes:
+
+        - createSequence:
+            sequenceName: meal_plan_records_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createSequence:
+            sequenceName: meal_plan_slots_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createSequence:
+            sequenceName: food_logs_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: meal_plan_records
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  defaultValueSequenceNext: meal_plan_records_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_meal_plan_records
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_meal_plan_records_user
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    deleteCascade: true
+              - column:
+                  name: week_start_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: daily_calorie_target
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weekly_calorie_target
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: 'ACTIVE'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+
+        - sql:
+            sql: ALTER TABLE meal_plan_records ADD CONSTRAINT chk_meal_plan_status CHECK (status IN ('ACTIVE', 'COMPLETED', 'CANCELLED'));
+
+        - createIndex:
+            tableName: meal_plan_records
+            indexName: idx_meal_plan_records_user
+            columns:
+              - column:
+                  name: user_id
+
+        - sql:
+            sql: CREATE INDEX idx_meal_plan_records_active ON meal_plan_records(user_id, status) WHERE status = 'ACTIVE';
+
+        # ── meal_plan_slots ───────────────────────────────────────────────
+        - createTable:
+            tableName: meal_plan_slots
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  defaultValueSequenceNext: meal_plan_slots_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_meal_plan_slots
+                    nullable: false
+              - column:
+                  name: plan_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_meal_plan_slots_plan
+                    referencedTableName: meal_plan_records
+                    referencedColumnNames: id
+                    deleteCascade: true
+              - column:
+                  name: day_number
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: meal_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: slot_role
+                  type: VARCHAR(10)
+                  defaultValue: 'main'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recipe_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_meal_plan_slots_recipe
+                    referencedTableName: recipes
+                    referencedColumnNames: id
+              - column:
+                  name: recipe_name
+                  type: VARCHAR(500)
+              - column:
+                  name: target_calories
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actual_calories
+                  type: DOUBLE PRECISION
+              - column:
+                  name: recommended_servings
+                  type: DOUBLE PRECISION
+              - column:
+                  name: portion_note
+                  type: VARCHAR(500)
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: 'PLANNED'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: eaten_at
+                  type: TIMESTAMP
+
+        - sql:
+            sql: |
+              ALTER TABLE meal_plan_slots ADD CONSTRAINT chk_meal_plan_slots_day CHECK (day_number BETWEEN 1 AND 7);
+              ALTER TABLE meal_plan_slots ADD CONSTRAINT chk_meal_plan_slots_status CHECK (status IN ('PLANNED', 'EATEN', 'SKIPPED', 'REPLACED'));
+              ALTER TABLE meal_plan_slots ADD CONSTRAINT chk_slot_role CHECK (slot_role IN ('main', 'side'));
+
+        - createIndex:
+            tableName: meal_plan_slots
+            indexName: idx_meal_plan_slots_plan
+            columns:
+              - column:
+                  name: plan_id
+
+        - createIndex:
+            tableName: meal_plan_slots
+            indexName: idx_meal_plan_slots_day
+            columns:
+              - column:
+                  name: plan_id
+              - column:
+                  name: day_number
+
+        - createIndex:
+            tableName: meal_plan_slots
+            indexName: idx_meal_plan_slots_role
+            columns:
+              - column:
+                  name: plan_id
+              - column:
+                  name: day_number
+              - column:
+                  name: slot_role
+
+        - createTable:
+            tableName: food_logs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  defaultValueSequenceNext: food_logs_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_food_logs
+                    nullable: false
+              - column:
+                  name: plan_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_food_logs_plan
+                    referencedTableName: meal_plan_records
+                    referencedColumnNames: id
+                    deleteCascade: true
+              - column:
+                  name: day_number
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: raw_input
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parsed_items
+                  type: TEXT
+              - column:
+                  name: total_calories
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_protein_g
+                  type: DOUBLE PRECISION
+              - column:
+                  name: total_carbs_g
+                  type: DOUBLE PRECISION
+              - column:
+                  name: total_fat_g
+                  type: DOUBLE PRECISION
+              - column:
+                  name: confidence
+                  type: VARCHAR(10)
+              - column:
+                  name: logged_at
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+
+        - sql:
+            sql: |
+              ALTER TABLE food_logs ADD CONSTRAINT chk_food_logs_day CHECK (day_number BETWEEN 1 AND 7);
+              ALTER TABLE food_logs ADD CONSTRAINT chk_food_logs_confidence CHECK (confidence IN ('high', 'medium', 'low'));
+
+        - createIndex:
+            tableName: food_logs
+            indexName: idx_food_logs_plan
+            columns:
+              - column:
+                  name: plan_id
+
+        - createIndex:
+            tableName: food_logs
+            indexName: idx_food_logs_plan_day
+            columns:
+              - column:
+                  name: plan_id
+              - column:
+                  name: day_number
+
+      rollback:
+        - dropTable:
+            tableName: food_logs
+        - dropTable:
+            tableName: meal_plan_slots
+        - dropTable:
+            tableName: meal_plan_records
+        - dropSequence:
+            sequenceName: food_logs_id_seq
+        - dropSequence:
+            sequenceName: meal_plan_slots_id_seq
+        - dropSequence:
+            sequenceName: meal_plan_records_id_seq

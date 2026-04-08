@@ -29,6 +29,9 @@ public class UserPreferenceRequest {
     @NotNull @DecimalMin("30.0") @DecimalMax("300.0")
     private BigDecimal weightKg;
 
+    @DecimalMin("30.0") @DecimalMax("300.0")
+    private BigDecimal targetWeightKg;
+
     @NotNull
     private ActivityLevel activityLevel;
 

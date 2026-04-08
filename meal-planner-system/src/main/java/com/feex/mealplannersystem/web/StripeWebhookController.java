@@ -30,50 +30,44 @@ public class StripeWebhookController {
     public ResponseEntity<String> handleStripeWebhook(
             @RequestBody String payload,
                 @RequestHeader("Stripe-Signature") String sigHeader) throws EventDataObjectDeserializationException {
-
         Event event;
-
         try {
             event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
         } catch (SignatureVerificationException e) {
-            log.error("❌ Помилка підпису вебхуку Stripe", e);
+            log.error("Помилка підпису вебхуку Stripe", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid signature");
         } catch (Exception e) {
-            log.error("❌ Помилка парсингу вебхуку", e);
+            log.error("Помилка парсингу вебхуку", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid payload");
         }
 
-        log.info("📥 Отримано івент від Stripe: {}", event.getType());
+        log.info("Отримано івент від Stripe: {}", event.getType());
 
         if ("checkout.session.completed".equals(event.getType())) {
-            log.info("🔥 Зловили checkout.session.completed!");
+            log.info("Зловили checkout.session.completed!");
 
             EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
             StripeObject stripeObject;
 
-            // Якщо версії API збігаються
             if (dataObjectDeserializer.getObject().isPresent()) {
                 stripeObject = dataObjectDeserializer.getObject().get();
             } else {
-                // Якщо версії API НЕ збігаються (наш випадок)
-                log.warn("⚠️ Версії API не збігаються. Використовуємо deserializeUnsafe()");
+                log.warn("Версії API не збігаються. Використовуємо deserializeUnsafe()");
                 stripeObject = dataObjectDeserializer.deserializeUnsafe();
             }
 
             if (stripeObject instanceof Session session) {
-                log.info("✅ Сесія розпаршена. ID: {}", session.getId());
+                log.info("Сесія розпаршена. ID: {}", session.getId());
 
                 try {
                     orderService.processSuccessfulPayment(session.getId());
-                    log.info("✅ Замовлення успішно оновлено!");
+                    log.info("Замовлення успішно оновлено!");
                 } catch (Exception e) {
-                    log.error("❌ Помилка під час оновлення замовлення: {}", e.getMessage(), e);
-                    // Навіть якщо впала помилка БД, віддаємо Stripe 200,
-                    // щоб він не спамив нас цим івентом 3 дні
+                    log.error("Помилка під час оновлення замовлення: {}", e.getMessage(), e);
                 }
 
             } else {
-                log.error("❌ Об'єкт не є сесією Stripe!");
+                log.error("Об'єкт не є сесією Stripe!");
             }
         }
 

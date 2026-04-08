@@ -3,3 +3,5 @@ uvicorn==0.30.0
 inflect==7.5.0
 ingredient-parser-nlp==2.5.0
 google-genai==1.66.0
+redis>=5.0.0
+openai>=1.0.0

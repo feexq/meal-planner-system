@@ -7,6 +7,9 @@ import com.feex.mealplannersystem.common.MealType;
 import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,6 +71,8 @@ public class RecipeEntity {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
+    @Fetch(FetchMode.SUBSELECT)
+    @BatchSize(size = 100)
     private Set<RecipeIngredientEntity> ingredients = new HashSet<>();
 
     @ManyToMany
@@ -77,6 +82,8 @@ public class RecipeEntity {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @Builder.Default
+    @Fetch(FetchMode.SUBSELECT)
+    @BatchSize(size = 100)
     private Set<TagEntity> tags = new HashSet<>();
 
     @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL)

@@ -9,13 +9,13 @@ spring:
     properties:
       hibernate:
         time_zone: UTC
-        jdbc.batch_size: 15
+        jdbc.batch_size: 100
         order_inserts: true
         order_updates: true
         query.fail_on_pagination_over_collection_fetch: true
         query.in_clause_parameter_padding: true
         connection.provider_disables_autocommit: true
-        default_batch_fetch_size: 30
+        default_batch_fetch_size: 100
     hibernate:
       ddl-auto: none
   datasource:
@@ -43,6 +43,10 @@ spring:
     api:
       key: ${NOVA_API_KEY}
       url: https://api.novaposhta.ua/v2.0/json/
+  azure:
+    storage:
+      connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
+      container: ${IMAGE_CONTAINER_NAME}
 
 app:
   jwt:

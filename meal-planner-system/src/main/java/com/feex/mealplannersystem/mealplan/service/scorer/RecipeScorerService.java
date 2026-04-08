@@ -72,14 +72,22 @@ public class RecipeScorerService {
 
         double deviation = Math.round(((scaledCalories - slotBudget) / slotBudget * 100.0) * 10.0) / 10.0;
 
+
         List<String> thresholds = RecipeFilterService.getAppliedThresholds(
                 user.getHealthConditions() != null ? user.getHealthConditions() : List.of());
         List<String> dietaryNotes = buildDietaryNotes(recipe, user, softMatches);
+
+        double scaledProtein = nutrition.getProteinG() * scaledServings;
+        double scaledCarbs   = nutrition.getTotalCarbsG() * scaledServings;
+        double scaledFat     = nutrition.getTotalFatG() * scaledServings;
 
         return new RecipeCandidateDto(
                 recipe.getId(), recipe.getName(), breakdown.total(),
                 calsPerServing, scaledServings,
                 Math.round(scaledCalories * 10.0) / 10.0, deviation,
+                scaledProtein,
+                scaledCarbs,
+                scaledFat,
                 matchedHealthTags, thresholds, dietaryNotes,
                 relaxations, breakdown, recipe.getParsedIngredients());
     }

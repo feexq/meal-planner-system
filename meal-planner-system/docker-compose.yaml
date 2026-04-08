@@ -27,8 +27,20 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - REDIS_HOST=redis
       - PYTHONUNBUFFERED=1
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+
+  stripe-webhook:
+    image: stripe/stripe-cli
+    container_name: meal_planner_stripe
+    command: listen --forward-to http://host.docker.internal:8080/api/webhooks/stripe
+    environment:
+      - STRIPE_API_KEY=${STRIPE_SECRET_KEY}
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   postgres_data:

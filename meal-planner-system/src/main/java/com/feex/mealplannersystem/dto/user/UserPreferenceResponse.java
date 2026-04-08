@@ -20,6 +20,7 @@ public class UserPreferenceResponse {
     private Integer age;
     private Integer heightCm;
     private BigDecimal weightKg;
+    private BigDecimal targetWeightKg;
     private ActivityLevel activityLevel;
     private Goal goal;
     private GoalIntensity goalIntensity;

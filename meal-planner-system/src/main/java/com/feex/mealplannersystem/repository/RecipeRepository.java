@@ -40,12 +40,15 @@ public interface RecipeRepository extends JpaRepository<RecipeEntity, Long> {
             Pageable pageable
     );
 
-    @Query("""
-            SELECT DISTINCT r FROM RecipeEntity r
-            LEFT JOIN FETCH r.nutrition
-            LEFT JOIN FETCH r.tags
-            LEFT JOIN FETCH r.ingredients
-            """)
+//    @Query("""
+//            SELECT DISTINCT r FROM RecipeEntity r
+//            LEFT JOIN FETCH r.nutrition
+//            LEFT JOIN FETCH r.tags
+//            LEFT JOIN FETCH r.ingredients
+//            """)
+//    List<RecipeEntity> findAllForGenerator();
+
+    @Query("SELECT r FROM RecipeEntity r LEFT JOIN FETCH r.nutrition")
     List<RecipeEntity> findAllForGenerator();
 
     @Query("""

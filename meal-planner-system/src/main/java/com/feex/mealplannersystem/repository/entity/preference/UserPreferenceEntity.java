@@ -39,6 +39,9 @@ public class UserPreferenceEntity {
     @Column(name = "weight_kg", nullable = false)
     private Double weightKg;
 
+    @Column(name = "target_weight_kg")
+    private Double targetWeightKg;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "activity_level", nullable = false)
     private ActivityLevel activityLevel;

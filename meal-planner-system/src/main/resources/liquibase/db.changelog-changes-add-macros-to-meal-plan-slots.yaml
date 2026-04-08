@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-macros-to-meal-plan-slots
+      author: feex
+      changes:
+        - addColumn:
+            tableName: meal_plan_slots
+            columns:
+              - column:
+                  name: protein_g
+                  type: DOUBLE
+              - column:
+                  name: carbs_g
+                  type: DOUBLE
+              - column:
+                  name: fat_g
+                  type: DOUBLE

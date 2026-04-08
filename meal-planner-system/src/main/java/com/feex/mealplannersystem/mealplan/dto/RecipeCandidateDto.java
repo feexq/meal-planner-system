@@ -14,6 +14,9 @@ public class RecipeCandidateDto {
     private double recommendedServings;
     private double scaledCalories;
     private double caloricDeviation;
+    private double proteinG;
+    private double carbsG;
+    private double fatG;
     private List<String> matchedHealthTags;
     private List<String> appliedNutritionThresholds;
     private List<String> dietaryNotes;

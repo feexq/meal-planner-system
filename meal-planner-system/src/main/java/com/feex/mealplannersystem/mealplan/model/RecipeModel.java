@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -18,10 +19,6 @@ public class RecipeModel {
     private String cookBudget;
     private int servings;
     private String servingSize;
-
-    /** Ingredient names in lowercase, already parsed from RecipeIngredientEntity */
     private List<String> parsedIngredients;
-
-    /** Tag names in lowercase */
     private List<String> tags;
 }

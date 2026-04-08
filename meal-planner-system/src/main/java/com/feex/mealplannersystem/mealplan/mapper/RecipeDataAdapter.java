@@ -5,21 +5,46 @@ import com.feex.mealplannersystem.mealplan.model.RecipeModel;
 import com.feex.mealplannersystem.repository.RecipeRepository;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeNutritionEntity;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class RecipeDataAdapter {
 
     private final RecipeRepository recipeRepository;
+    private final TransactionTemplate transactionTemplate;
+
+    private RecipeDataContext cachedContext;
+
+    @PostConstruct
+    public void init() {
+        log.info("Починаю завантаження всіх рецептів у кеш пам'яті...");
+
+        transactionTemplate.executeWithoutResult(status -> {
+            refreshCache();
+        });
+
+        log.info("Рецепти успішно завантажено в кеш.");
+    }
 
     public RecipeDataContext buildContext() {
+        if (this.cachedContext == null) {
+            transactionTemplate.executeWithoutResult(status -> refreshCache());
+        }
+        return this.cachedContext;
+    }
+
+    public void refreshCache() {
         List<RecipeEntity> entities = recipeRepository.findAllForGenerator();
 
         List<RecipeModel>         recipes      = new ArrayList<>(entities.size());
@@ -32,7 +57,7 @@ public class RecipeDataAdapter {
             }
         }
 
-        return new RecipeDataContext(recipes, nutritionMap);
+        this.cachedContext = new RecipeDataContext(recipes, nutritionMap);
     }
 
     private RecipeModel toRecipeModel(RecipeEntity e) {

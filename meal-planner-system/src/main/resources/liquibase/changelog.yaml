@@ -25,3 +25,9 @@ databaseChangeLog:
       file: liquibase/db.changelog-changes-add-pk-to-collections-table.yaml
   - include:
       file: liquibase/db.changelog-init-create-orders-table.yaml
+  - include:
+      file: liquibase/db.changelog-init-create-meal-plan-tracking.yaml
+  - include:
+      file: liquibase/db.changelog-tracking-and-preferences.yaml
+  - include:
+      file: liquibase/db.changelog-changes-add-macros-to-meal-plan-slots.yaml

@@ -12,4 +12,6 @@ public interface UserPreferenceRepository extends JpaRepository<UserPreferenceEn
     boolean existsByUserEmail(String email);
 
     void deleteByUserEmail(String email);
+
+    Optional<UserPreferenceEntity> findByUserId(Long userId);
 }

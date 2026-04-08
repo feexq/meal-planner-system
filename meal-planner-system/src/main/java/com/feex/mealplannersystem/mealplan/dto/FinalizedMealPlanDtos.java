@@ -2,34 +2,50 @@ package com.feex.mealplannersystem.mealplan.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.util.List;
 
-/**
- * DTOs for the finalized meal plan returned by the Python /finalize endpoint.
- */
-public class FinalizedMealPlanDtos {
+public class FinalizedMealPlanDtos{
 
-    @Getter @AllArgsConstructor
+    @Getter @AllArgsConstructor @NoArgsConstructor
     public static class FinalizedMealPlanDto {
         private String userId;
         private List<FinalizedDayDto> days;
     }
 
-    @Getter @AllArgsConstructor
+    @Getter @AllArgsConstructor @NoArgsConstructor
     public static class FinalizedDayDto {
         private int day;
-        private FinalizedMealDto breakfast;
-        private FinalizedMealDto lunch;
-        private FinalizedMealDto dinner;
-        private FinalizedMealDto snack;
-        private FinalizedMealDto snack_2;
-        /** 3-4 sentence explanation from Gemini why this day fits the user */
+        private int dailyCalorieTarget;
+        private List<FinalizedSlotDto> slots;
+        private double dayTotalCalories;
+        private double dailyProteinG;
+        private double dailyCarbsG;
+        private double dailyFatG;
         private String notes;
     }
 
-    @Getter @AllArgsConstructor
-    public static class FinalizedMealDto {
+    @Getter @AllArgsConstructor @NoArgsConstructor
+    public static class FinalizedSlotDto {
+        private String mealType;
+        private int calorieBudget;
+        private MealItemDto main;
+        private MealItemDto side;
+        private double slotTotalCalories;
+        private double slotProteinG;
+        private double slotCarbsG;
+        private double slotFatG;
+    }
+
+    @Getter @AllArgsConstructor @NoArgsConstructor
+    public static class MealItemDto {
         private long recipeId;
         private String name;
+        private double servings;
+        private double estimatedCalories;
+        private String portionNote;
+        private double proteinG;
+        private double carbsG;
+        private double fatG;
     }
 }

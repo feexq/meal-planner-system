@@ -29,26 +29,26 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MealPlanGeneratorService {
 
-    private final RecipeDataAdapter          recipeDataAdapter;
+    private final RecipeDataAdapter recipeDataAdapter;
     private final IngredientClassificationAdapter classificationAdapter;
-    private final CalorieCalculatorService   calorieCalculator;
-    private final MacroRequirementService    macroCalculator;
-    private final RecipeFilterService        recipeFilter;
-    private final RecipeScorerService        recipeScorer;
+    private final CalorieCalculatorService calorieCalculator;
+    private final MacroRequirementService macroCalculator;
+    private final RecipeFilterService recipeFilter;
+    private final RecipeScorerService recipeScorer;
 
-    private static final int TOP_N_CANDIDATES   = 500;
+    private static final int TOP_N_CANDIDATES = 500;
     private static final int BASE_PROTEIN_WEIGHT = 15;
 
     public WeeklyMealPlanDto generatePlan(UserProfileModel user) {
-        RecipeDataContext      data           = recipeDataAdapter.buildContext();
-        ClassificationContext  classification = classificationAdapter.buildContext();
+        RecipeDataContext data = recipeDataAdapter.buildContext();
+        ClassificationContext classification = classificationAdapter.buildContext();
 
         double[] dailyTargets = calorieCalculator.getDailyTargets(user);
-        double   baseTarget   = calorieCalculator.adjustForGoal(user);
-        double   weeklyTotal  = calorieCalculator.getWeeklyTotal(dailyTargets);
+        double baseTarget = calorieCalculator.adjustForGoal(user);
+        double weeklyTotal = calorieCalculator.getWeeklyTotal(dailyTargets);
 
         Map<String, Double> slotRatios = calorieCalculator.getSlotRatios(user.getMealsPerDay());
-        MacroTarget macroTarget        = macroCalculator.calculateMacros(user, baseTarget);
+        MacroTarget macroTarget = macroCalculator.calculateMacros(user, baseTarget);
 
         Map<Integer, Map<String, List<Integer>>> usageBySlotType = new HashMap<>();
 
@@ -79,7 +79,7 @@ public class MealPlanGeneratorService {
         }
 
         int totalSlots = days.stream().mapToInt(dp -> dp.getSlots().size()).sum();
-        int totalRelaxed = days.stream().flatMap(dp -> dp.getSlots().stream())
+                int totalRelaxed = days.stream().flatMap(dp -> dp.getSlots().stream())
                 .filter(s -> !s.getCandidates().isEmpty() &&
                         s.getCandidates().get(0).getRelaxations().contains("mealTypeRelaxed"))
                 .mapToInt(s -> 1).sum();
@@ -92,6 +92,7 @@ public class MealPlanGeneratorService {
                 relaxRate,
                 relaxRate > 0.3,
                 days);
+//                sidePool);
     }
 
     private List<MealSlotDto> buildDayViaILP(
@@ -104,11 +105,11 @@ public class MealPlanGeneratorService {
             Map<Integer, Map<String, List<Integer>>> usageBySlotType) {
 
         Map<String, List<RecipeCandidateDto>> slotCandidates = new LinkedHashMap<>();
-        Map<String, Double>                   slotBudgets    = new LinkedHashMap<>();
-        Set<Integer>                          usedToday      = new HashSet<>();
+        Map<String, Double> slotBudgets = new LinkedHashMap<>();
+        Set<Integer> usedToday = new HashSet<>();
 
         for (Map.Entry<String, Double> entry : slotRatios.entrySet()) {
-            String slotName   = entry.getKey();
+            String slotName = entry.getKey();
             double slotBudget = dailyCalories * entry.getValue();
             slotBudgets.put(slotName, slotBudget);
 
@@ -149,18 +150,18 @@ public class MealPlanGeneratorService {
                 vars.put(slotName, recipeVars);
             }
 
-            double pMin = Math.max(0, macroTarget.proteinMinG     * (1.0 - tolerance));
-            double pMax =             macroTarget.proteinMaxG     * (1.0 + tolerance);
+            double pMin = Math.max(0, macroTarget.proteinMinG * (1.0 - tolerance));
+            double pMax = macroTarget.proteinMaxG * (1.0 + tolerance);
             double cMin = Math.max(0, macroTarget.carbsAbsoluteMinG * (1.0 - tolerance));
-            double fMin = Math.max(0, macroTarget.fatMinG         * (1.0 - tolerance));
-            double fMax =             macroTarget.fatMaxG         * (1.0 + tolerance);
+            double fMin = Math.max(0, macroTarget.fatMinG * (1.0 - tolerance));
+            double fMax = macroTarget.fatMaxG * (1.0 + tolerance);
             double calMin = dailyCalories * (0.85 - tolerance / 2);
             double calMax = dailyCalories * (1.15 + tolerance / 2);
 
             Expression protExpr = model.addExpression("Protein").lower(pMin).upper(pMax);
             Expression carbsExpr = model.addExpression("Carbs").lower(cMin).upper(9999.0);
-            Expression fatExpr   = model.addExpression("Fat").lower(fMin).upper(fMax);
-            Expression calExpr   = model.addExpression("Calories").lower(calMin).upper(calMax);
+            Expression fatExpr = model.addExpression("Fat").lower(fMin).upper(fMax);
+            Expression calExpr = model.addExpression("Calories").lower(calMin).upper(calMax);
 
             for (String slotName : slotCandidates.keySet()) {
                 for (RecipeCandidateDto c : slotCandidates.get(slotName)) {
@@ -168,10 +169,10 @@ public class MealPlanGeneratorService {
                     NutritionModel n = data.getNutrition(c.getRecipeId());
                     double srv = c.getRecommendedServings();
 
-                    protExpr.set(x,  n.getProteinG()    * srv);
+                    protExpr.set(x, n.getProteinG() * srv);
                     carbsExpr.set(x, n.getTotalCarbsG() * srv);
-                    fatExpr.set(x,   n.getTotalFatG()   * srv);
-                    calExpr.set(x,   c.getScaledCalories());
+                    fatExpr.set(x, n.getTotalFatG() * srv);
+                    calExpr.set(x, c.getScaledCalories());
                 }
             }
 
@@ -217,7 +218,7 @@ public class MealPlanGeneratorService {
         boolean relaxMealType = false;
         if (filtered.size() < 10) {
             relaxMealType = true;
-            fRes     = recipeFilter.filterRecipes(data, classification, user, "ALL");
+            fRes = recipeFilter.filterRecipes(data, classification, user, "ALL");
             filtered = fRes.recipes();
             log.debug("Slot '{}': <10 recipes, relaxing meal type (pool={})", slotName, filtered.size());
         }
@@ -256,7 +257,7 @@ public class MealPlanGeneratorService {
             }
 
             final int MIN_SAME_SLOT_GAP = 5;
-            final int MIN_GLOBAL_GAP    = 3;
+            final int MIN_GLOBAL_GAP = 3;
             boolean gapViolation = false;
             if (slotMap != null) {
                 List<Integer> sameSlotDays = slotMap.get(effectiveSlot);
@@ -301,8 +302,8 @@ public class MealPlanGeneratorService {
         List<MealSlotDto> finalSlots = new ArrayList<>();
 
         for (String slotName : slotCandidates.keySet()) {
-            List<RecipeCandidateDto> chosen    = new ArrayList<>();
-            RecipeCandidateDto       primary   = null;
+            List<RecipeCandidateDto> chosen = new ArrayList<>();
+            RecipeCandidateDto primary = null;
 
             for (RecipeCandidateDto c : slotCandidates.get(slotName)) {
                 Variable x = vars.get(slotName).get(String.valueOf(c.getRecipeId()));
@@ -321,7 +322,7 @@ public class MealPlanGeneratorService {
             if (primary != null) {
                 NutritionModel pn = data.getNutrition(primary.getRecipeId());
                 if (pn != null) {
-                    double pCals    = primary.getScaledCalories();
+                    double pCals = primary.getScaledCalories();
                     double pProtein = pn.getProteinG() * primary.getRecommendedServings();
 
                     List<RecipeCandidateDto> alts = new ArrayList<>();
@@ -329,9 +330,9 @@ public class MealPlanGeneratorService {
                         if (c.getRecipeId() == primary.getRecipeId()) continue;
                         NutritionModel cn = data.getNutrition(c.getRecipeId());
                         if (cn == null) continue;
-                        double cCals    = c.getScaledCalories();
+                        double cCals = c.getScaledCalories();
                         double cProtein = cn.getProteinG() * c.getRecommendedServings();
-                        boolean calClose  = Math.abs(cCals - pCals) / Math.max(1, pCals) <= 0.15;
+                        boolean calClose = Math.abs(cCals - pCals) / Math.max(1, pCals) <= 0.15;
                         boolean protClose = Math.abs(cProtein - pProtein) / Math.max(1, pProtein) <= 0.20;
                         if (calClose && protClose) alts.add(c);
                     }
@@ -370,9 +371,9 @@ public class MealPlanGeneratorService {
                 NutritionModel n = data.getNutrition(top.getRecipeId());
                 if (n != null) {
                     double srv = top.getRecommendedServings();
-                    protein += n.getProteinG()    * srv;
-                    carbs   += n.getTotalCarbsG() * srv;
-                    fat     += n.getTotalFatG()   * srv;
+                    protein += n.getProteinG() * srv;
+                    carbs += n.getTotalCarbsG() * srv;
+                    fat += n.getTotalFatG() * srv;
                 }
             }
         }
@@ -401,8 +402,12 @@ public class MealPlanGeneratorService {
 
     private static int slotOrder(String mealType) {
         return switch (mealType) {
-            case "breakfast" -> 1; case "lunch" -> 2; case "dinner" -> 3;
-            case "snack" -> 4; case "snack_2" -> 5; default -> 99;
+            case "breakfast" -> 1;
+            case "lunch" -> 2;
+            case "dinner" -> 3;
+            case "snack" -> 4;
+            case "snack_2" -> 5;
+            default -> 99;
         };
     }
 
@@ -435,4 +440,64 @@ public class MealPlanGeneratorService {
             log.warn("  [WARNING] {}", fRes.filteringNote());
         }
     }
+//
+//    private List<RecipeCandidateDto> buildSideDishPool(
+//            UserProfileModel user, RecipeDataContext data,
+//            ClassificationContext classification, MacroTarget macroTarget) {
+//
+//        RecipeFilterService.FilterResult fRes =
+//                recipeFilter.filterRecipes(data, classification, user, "all");
+//
+//        Map<String, List<RecipeCandidateDto>> buckets = new LinkedHashMap<>();
+//        buckets.put("breakfast", new ArrayList<>());
+//        buckets.put("lunch", new ArrayList<>());
+//        buckets.put("dinner", new ArrayList<>());
+//        buckets.put("snack", new ArrayList<>());
+//        buckets.put("beverage", new ArrayList<>());
+//
+//        for (RecipeModel recipe : fRes.recipes()) {
+//            NutritionModel nutrition = data.getNutrition(recipe.getId());
+//            if (nutrition == null) continue;
+//
+//            double cals = nutrition.getCalories();
+//            if (cals < 20 || cals > 250) continue;
+//
+//            RecipeCandidateDto candidate = recipeScorer.scoreRecipe(
+//                    recipe, user, 150.0, 1.0, cals,
+//                    Collections.emptyMap(), 1, macroTarget,
+//                    data, classification, List.of(), "snack",
+//                    15, RecipeScorerService.ScoringMode.FULL, fRes.recipes().size());
+//
+//            String mType = recipe.getMealType() != null ? recipe.getMealType().toLowerCase() : "snack";
+//
+//            if (mType.contains("beverage") || mType.contains("drink")) {
+//                buckets.get("beverage").add(candidate);
+//            } else if (mType.contains("breakfast")) {
+//                buckets.get("breakfast").add(candidate);
+//            } else if (mType.contains("lunch")) {
+//                buckets.get("lunch").add(candidate);
+//            } else if (mType.contains("dinner")) {
+//                buckets.get("dinner").add(candidate);
+//            } else if (mType.contains("side") || mType.contains("salad") || mType.contains("soup")) {
+//                // Салати, супи та гарніри ідеально підходять і для обіду, і для вечері
+//                buckets.get("lunch").add(candidate);
+//                buckets.get("dinner").add(candidate);
+//            } else {
+//                buckets.get("snack").add(candidate);
+//            }
+//        }
+//
+//        List<RecipeCandidateDto> finalPool = new ArrayList<>();
+//
+//        for (Map.Entry<String, List<RecipeCandidateDto>> entry : buckets.entrySet()) {
+//            List<RecipeCandidateDto> catList = entry.getValue();
+//
+//            catList.sort((a, b) -> Integer.compare(b.getScore(), a.getScore()));
+//
+//            int limit = Math.min(6, catList.size());
+//            finalPool.addAll(catList.subList(0, limit));
+//        }
+//
+//        return finalPool;
+//    }
 }
