@@ -26,8 +26,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductMapper mapper; // Інжект мапера
-    private final ProductMapper productMapper;
+    private final ProductMapper mapper;
 
     @GetMapping
     public ResponseEntity<Page<ProductSummaryResponse>> getAll(

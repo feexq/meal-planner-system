@@ -15,6 +15,7 @@ import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeTranslationEntity;
 import com.feex.mealplannersystem.repository.projection.RecipeMatchProjection;
 import com.feex.mealplannersystem.service.RecipeService;
+import com.feex.mealplannersystem.service.RecipeTranslationService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import com.feex.mealplannersystem.service.mapper.RecipeMapper;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeMapper recipeMapper;
     private final IngredientRepository ingredientRepository;
     private final RecipeTranslationRepository translationRepository;
-    private final RecipeTranslationServiceImpl translationService;
+    private final RecipeTranslationService translationService;
 
     @Override
     @Transactional(readOnly = true)

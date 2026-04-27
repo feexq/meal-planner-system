@@ -13,8 +13,8 @@ import com.feex.mealplannersystem.mealplan.service.MealPlanFinalizeService;
 import com.feex.mealplannersystem.mealplan.service.MealPlanService;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
-import com.feex.mealplannersystem.service.impl.FoodLogServiceImpl;
-import com.feex.mealplannersystem.service.impl.MealSwapServiceImpl;
+import com.feex.mealplannersystem.service.FoodLogService;
+import com.feex.mealplannersystem.service.MealSwapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,8 +28,8 @@ public class MealPlanController {
 
     private final MealPlanService mealPlanService;
     private final MealPlanFinalizeService finalizeService;
-    private final FoodLogServiceImpl foodLogService;
-    private final MealSwapServiceImpl mealSwapService;
+    private final FoodLogService foodLogService;
+    private final MealSwapService mealSwapService;
 
     @PostMapping("/generate")
     public ResponseEntity<WeeklyMealPlanDto> generate(

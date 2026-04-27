@@ -27,7 +27,10 @@ import com.feex.mealplannersystem.repository.UserPreferenceRepository;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
 import com.feex.mealplannersystem.repository.entity.preference.UserPreferenceEntity;
+import com.feex.mealplannersystem.service.AdditionalRecipeService;
 import com.feex.mealplannersystem.service.MealSwapService;
+import com.feex.mealplannersystem.service.RecipeTranslationService;
+import com.feex.mealplannersystem.service.WeeklyBalanceService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,12 +54,12 @@ public class MealSwapServiceImpl implements MealSwapService {
     private final RecipeFilterService recipeFilter;
     private final RecipeScorerService recipeScorer;
     private final MacroRequirementService macroCalculator;
-    private final WeeklyBalanceServiceImpl weeklyBalanceService;
+    private final WeeklyBalanceService weeklyBalanceService;
     private final UserPreferenceRepository userPreferenceRepository;
     private final UserProfileAdapter userProfileAdapter;
-    private final AdditionalRecipeServiceImpl additionalRecipeService;
+    private final AdditionalRecipeService additionalRecipeService;
     private final FinalizeClient nlpClient;
-    private final RecipeTranslationServiceImpl translationService;
+    private final RecipeTranslationService translationService;
 
     @Transactional
     public MealPlanSlotEntity swapMainSlot(Long slotId, String userEmail) {

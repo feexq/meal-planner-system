@@ -14,12 +14,13 @@ import com.feex.mealplannersystem.dto.mealplan.response.LogFoodResponse;
 import com.feex.mealplannersystem.dto.mealplan.status.DayStatusDto;
 import com.feex.mealplannersystem.dto.mealplan.status.PlanStatusDto;
 import com.feex.mealplannersystem.dto.mealplan.status.SlotStatusDto;
+import com.feex.mealplannersystem.dto.recipe.RecipeTranslationInfo;
 import com.feex.mealplannersystem.repository.*;
 import com.feex.mealplannersystem.repository.entity.mealplan.FoodLogEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
 import com.feex.mealplannersystem.repository.entity.profile.DailyNutritionSummaryEntity;
-import com.feex.mealplannersystem.service.FoodLogService;
+import com.feex.mealplannersystem.service.*;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +44,13 @@ public class FoodLogServiceImpl implements FoodLogService {
     private final MealPlanRecordRepository planRepository;
     private final MealPlanSlotRepository slotRepository;
     private final FoodLogRepository foodLogRepository;
-    private final FoodNutritionCacheServiceImpl cacheService;
-    private final WeeklyBalanceServiceImpl balanceService;
+    private final FoodNutritionCacheService cacheService;
+    private final WeeklyBalanceService balanceService;
     private final FinalizeClient nlpClient;
-    private final RecipeTranslationServiceImpl translationService;
+    private final RecipeTranslationService translationService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final DailyNutritionSummaryServiceImpl summaryService;
+    private final DailyNutritionSummaryService summaryService;
     private final StreakService streakService;
     private final UserProfileRepository userProfileRepository;
 
@@ -236,12 +237,12 @@ public class FoodLogServiceImpl implements FoodLogService {
                             .filter(Objects::nonNull)
                             .collect(Collectors.toSet());
 
-                    Map<Long, RecipeTranslationServiceImpl.RecipeTranslationInfo> info =
+                    Map<Long, RecipeTranslationInfo> info =
                             translationService.getTranslationInfo(recipeIds);
 
                     List<SlotStatusDto> slotDtos = daySlots.stream()
                             .map(s -> {
-                                RecipeTranslationServiceImpl.RecipeTranslationInfo t = info.get(s.getRecipeId());
+                                RecipeTranslationInfo t = info.get(s.getRecipeId());
                                 return SlotStatusDto.builder()
                                         .slotId(s.getId())
                                         .mealType(s.getMealType())

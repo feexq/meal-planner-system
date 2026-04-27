@@ -17,10 +17,10 @@ import com.feex.mealplannersystem.repository.UserPreferenceRepository;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.preference.UserPreferenceEntity;
+import com.feex.mealplannersystem.service.AdditionalRecipeService;
+import com.feex.mealplannersystem.service.MealPlanPersistenceService;
+import com.feex.mealplannersystem.service.RecipeTranslationService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
-import com.feex.mealplannersystem.service.impl.AdditionalRecipeServiceImpl;
-import com.feex.mealplannersystem.service.impl.MealPlanPersistenceServiceImpl;
-import com.feex.mealplannersystem.service.impl.RecipeTranslationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,12 +40,11 @@ public class MealPlanFinalizeService {
     private final UserProfileAdapter userProfileAdapter;
     private final MealPlanGeneratorService generator;
     private final FinalizeClient nlpClient;
-    private final MealPlanPersistenceServiceImpl persistenceService;
-    private final AdditionalRecipeServiceImpl additionalRecipeService;
-    private final RecipeDataAdapter recipeDataAdapter;
+    private final MealPlanPersistenceService persistenceService;
+    private final AdditionalRecipeService additionalRecipeService;
     private final RecipeDataCache recipeDataCache;
     private final IngredientClassificationAdapter classificationAdapter;
-    private final RecipeTranslationServiceImpl translationService;
+    private final RecipeTranslationService translationService;
 
     @Transactional
     public SavedPlanResult generateAndFinalize(String userEmail) {

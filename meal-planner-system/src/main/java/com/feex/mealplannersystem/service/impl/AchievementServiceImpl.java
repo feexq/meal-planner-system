@@ -15,6 +15,8 @@ import com.feex.mealplannersystem.repository.entity.profile.UserAchievementEntit
 import com.feex.mealplannersystem.repository.entity.profile.UserStreakMetaEntity;
 import com.feex.mealplannersystem.repository.entity.profile.WeightHistoryEntity;
 import com.feex.mealplannersystem.service.AchievementService;
+import com.feex.mealplannersystem.service.StreakService;
+import com.feex.mealplannersystem.service.WeightService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import com.feex.mealplannersystem.service.mapper.AchievementMapper;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,7 @@ public class AchievementServiceImpl implements AchievementService{
     private final UserAchievementRepository userAchievementRepository;
     private final MealPlanSlotRepository mealPlanSlotRepository;
     private final StreakService streakService;
-    private final WeightServiceImpl weightService;
+    private final WeightService weightService;
     private final UserPreferenceRepository preferenceRepository;
     private final AchievementMapper mapper;
 

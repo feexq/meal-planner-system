@@ -5,6 +5,7 @@ import com.feex.mealplannersystem.repository.UserStreakMetaRepository;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.profile.DailyNutritionSummaryEntity;
 import com.feex.mealplannersystem.repository.entity.profile.UserStreakMetaEntity;
+import com.feex.mealplannersystem.service.StreakService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StreakService {
+public class StreakServiceImpl implements StreakService {
 
     private static final int STRICT_COMPLETION_THRESHOLD = 80;
 

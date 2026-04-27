@@ -7,6 +7,7 @@ import com.feex.mealplannersystem.repository.FoodLogRepository;
 import com.feex.mealplannersystem.repository.MealPlanSlotRepository;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
+import com.feex.mealplannersystem.service.WeeklyBalanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WeeklyBalanceServiceImpl {
+public class WeeklyBalanceServiceImpl implements WeeklyBalanceService {
 
     private final FoodLogRepository foodLogRepository;
     private final MealPlanSlotRepository slotRepository;

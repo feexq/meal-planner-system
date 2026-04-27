@@ -3,6 +3,7 @@ package com.feex.mealplannersystem.service.impl;
 import com.feex.mealplannersystem.repository.WeightHistoryRepository;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.profile.WeightHistoryEntity;
+import com.feex.mealplannersystem.service.WeightService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WeightServiceImpl {
+public class WeightServiceImpl implements WeightService {
 
     private static final int DEFAULT_HISTORY_LIMIT = 30;
 

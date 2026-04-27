@@ -3,14 +3,13 @@ package com.feex.mealplannersystem.web;
 import com.feex.mealplannersystem.dto.profile.achievement.CreateAchievementRequest;
 import com.feex.mealplannersystem.dto.profile.achievement.UpdateAchievementRequest;
 import com.feex.mealplannersystem.repository.entity.profile.AchievementEntity;
-import com.feex.mealplannersystem.service.impl.AchievementServiceImpl;
+import com.feex.mealplannersystem.service.AchievementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
 @Tag(name = "Achievements")
 public class AchievementController {
 
-    private final AchievementServiceImpl achievementService;
+    private final AchievementService achievementService;
 
     @GetMapping
     @Operation(summary = "Get all achievements (Admin)")

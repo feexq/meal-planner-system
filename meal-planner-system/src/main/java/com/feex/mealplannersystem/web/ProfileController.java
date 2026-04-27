@@ -5,11 +5,7 @@ import com.feex.mealplannersystem.dto.profile.achievement.AchievementResponse;
 import com.feex.mealplannersystem.dto.profile.statistic.*;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.profile.WeightHistoryEntity;
-import com.feex.mealplannersystem.service.impl.AchievementServiceImpl;
-import com.feex.mealplannersystem.service.impl.StreakService;
-import com.feex.mealplannersystem.service.impl.UserProfileServiceImpl;
-import com.feex.mealplannersystem.service.impl.WeightServiceImpl;
-import com.feex.mealplannersystem.service.impl.UserStatisticsServiceImpl;
+import com.feex.mealplannersystem.service.*;
 import com.feex.mealplannersystem.service.mapper.WeightMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,11 +28,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfileController {
 
-    private final UserProfileServiceImpl profileService;
-    private final WeightServiceImpl weightService;
+    private final UserProfileService profileService;
+    private final WeightService weightService;
     private final StreakService streakService;
-    private final UserStatisticsServiceImpl statisticsService;
-    private final AchievementServiceImpl achievementService;
+    private final UserStatisticsService statisticsService;
+    private final AchievementService achievementService;
     private final WeightMapper weightMapper;
 
     @GetMapping("/me")

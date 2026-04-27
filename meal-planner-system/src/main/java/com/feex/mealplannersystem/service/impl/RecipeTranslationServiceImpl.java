@@ -3,6 +3,7 @@ package com.feex.mealplannersystem.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feex.mealplannersystem.dto.recipe.RecipeStepDetail;
+import com.feex.mealplannersystem.dto.recipe.RecipeTranslationInfo;
 import com.feex.mealplannersystem.repository.RecipeRepository;
 import com.feex.mealplannersystem.repository.RecipeTranslationRepository;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class RecipeTranslationServiceImpl implements RecipeTranslationService {
-
-    public record RecipeTranslationInfo(String name, String slug) {}
 
     private final RecipeRepository recipeRepository;
     private final RecipeTranslationRepository translationRepository;

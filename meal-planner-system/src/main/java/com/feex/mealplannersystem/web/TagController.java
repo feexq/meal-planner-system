@@ -5,8 +5,8 @@ import com.feex.mealplannersystem.dto.tag.ingredient.IngredientTagResponse;
 import com.feex.mealplannersystem.dto.tag.product.ProductTagCreateRequest;
 import com.feex.mealplannersystem.dto.tag.product.ProductTagResponse;
 import com.feex.mealplannersystem.dto.tag.product.ProductTagUpdateRequest;
+import com.feex.mealplannersystem.service.IngTagService;
 import com.feex.mealplannersystem.service.TagService;
-import com.feex.mealplannersystem.service.impl.IngTagServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagController {
 
-    private final IngTagServiceImpl tagService;
+    private final IngTagService tagService;
     private final TagService tagRecipeService;
 
     @GetMapping("/tags")

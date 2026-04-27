@@ -1,8 +1,8 @@
 package com.feex.mealplannersystem.service;
 
+import com.feex.mealplannersystem.dto.recipe.RecipeTranslationInfo;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeTranslationEntity;
-import com.feex.mealplannersystem.service.impl.RecipeTranslationServiceImpl.RecipeTranslationInfo;
 
 import java.util.Collection;
 import java.util.Map;

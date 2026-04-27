@@ -14,7 +14,10 @@ import com.feex.mealplannersystem.repository.entity.preference.UserPreferenceEnt
 import com.feex.mealplannersystem.repository.entity.profile.UserProfileEntity;
 import com.feex.mealplannersystem.repository.entity.profile.UserStreakMetaEntity;
 import com.feex.mealplannersystem.repository.entity.profile.WeightHistoryEntity;
+import com.feex.mealplannersystem.service.DailyNutritionSummaryService;
+import com.feex.mealplannersystem.service.StreakService;
 import com.feex.mealplannersystem.service.UserProfileService;
+import com.feex.mealplannersystem.service.WeightService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,9 +43,9 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     private final UserProfileRepository profileRepository;
     private final UserPreferenceRepository preferenceRepository;
-    private final WeightServiceImpl weightService;
+    private final WeightService weightService;
     private final StreakService streakService;
-    private final DailyNutritionSummaryServiceImpl summaryService;
+    private final DailyNutritionSummaryService summaryService;
     private final BlobServiceClient blobServiceClient;
 
     @Value("${spring.azure.storage.container}")
