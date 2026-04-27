@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.service;
 
-import com.feex.mealplannersystem.common.DietaryConditionType;
+import com.feex.mealplannersystem.common.mealplan.DietaryConditionType;
 import com.feex.mealplannersystem.dto.dietary.DietaryConditionResponse;
 import com.feex.mealplannersystem.dto.dietary.IngredientDietaryTagResponse;
 import com.feex.mealplannersystem.dto.dietary.UpdateDietaryTagsRequest;

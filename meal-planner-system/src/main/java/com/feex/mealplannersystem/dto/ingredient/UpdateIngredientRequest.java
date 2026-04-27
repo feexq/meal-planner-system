@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.dto.ingredient;
 
-import com.feex.mealplannersystem.common.Unit;
+import com.feex.mealplannersystem.common.product.Unit;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,18 +16,11 @@ public class UpdateIngredientRequest {
 
     @NotBlank
     private String normalizedName;
-
     private String imageUrl;
-
     private Boolean available;
-
     private BigDecimal price;
-
     private Unit unit;
-
     private Integer stock;
-
     private List<String> aliases;
-
     private Long categoryId;
 }

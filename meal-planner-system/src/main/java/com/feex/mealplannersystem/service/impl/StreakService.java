@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.common.StreakType;
+import com.feex.mealplannersystem.common.user.StreakType;
 import com.feex.mealplannersystem.repository.UserStreakMetaRepository;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.profile.DailyNutritionSummaryEntity;

@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CheckoutRequest {
 
-    @NotBlank(message = "Місто доставки є обов'язковим")
+    @NotBlank(message = "City is required")
     private String npCityRef;
 
-    @NotBlank(message = "Відділення доставки є обов'язковим")
+    @NotBlank(message = "Warehouse is required")
     private String npWarehouseRef;
 }

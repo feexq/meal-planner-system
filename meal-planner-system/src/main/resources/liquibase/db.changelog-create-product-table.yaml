@@ -1,0 +1,124 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-products-table
+      author: feex # або твоє ім'я/нікнейм
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name_uk
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: slug
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: price
+                  type: NUMERIC(10, 2)
+              - column:
+                  name: unit
+                  type: VARCHAR(50)
+              - column:
+                  name: stock
+                  type: INT
+                  defaultValueNumeric: 0
+              - column:
+                  name: is_available
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: calories
+                  type: NUMERIC(10, 2)
+              - column:
+                  name: protein_g
+                  type: NUMERIC(10, 2)
+              - column:
+                  name: fat_g
+                  type: NUMERIC(10, 2)
+              - column:
+                  name: carbs_g
+                  type: NUMERIC(10, 2)
+              - column:
+                  name: calorie_confidence
+                  type: FLOAT
+              - column:
+                  name: category_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_products_category
+                    references: categories(id)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: add-product-id-to-ingredients
+      author: feex
+      changes:
+        - addColumn:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: product_id
+                  type: BIGINT
+        - addForeignKeyConstraint:
+            baseTableName: ingredients
+            baseColumnNames: product_id
+            constraintName: fk_ingredients_product
+            referencedTableName: products
+            referencedColumnNames: id
+
+  - changeSet:
+      id: create-product-tags-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: product_tags
+            columns:
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: product_tags
+            columnNames: product_id, tag_id
+            constraintName: pk_product_tags
+        - addForeignKeyConstraint:
+            baseTableName: product_tags
+            baseColumnNames: product_id
+            constraintName: fk_product_tags_product
+            referencedTableName: products
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: product_tags
+            baseColumnNames: tag_id
+            constraintName: fk_product_tags_tag
+            referencedTableName: ing_tags
+            referencedColumnNames: id
+            onDelete: CASCADE

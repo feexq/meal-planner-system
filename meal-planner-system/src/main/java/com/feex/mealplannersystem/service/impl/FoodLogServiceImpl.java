@@ -2,15 +2,24 @@ package com.feex.mealplannersystem.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feex.mealplannersystem.config.normalizer.FinalizeClient;
-import com.feex.mealplannersystem.dto.mealplan.AdaptiveDtos;
-import com.feex.mealplannersystem.repository.FoodLogRepository;
-import com.feex.mealplannersystem.repository.MealPlanRecordRepository;
-import com.feex.mealplannersystem.repository.MealPlanSlotRepository;
-import com.feex.mealplannersystem.repository.UserProfileRepository;
+import com.feex.mealplannersystem.config.normalizer.dto.response.ParseFoodResponse;
+import com.feex.mealplannersystem.dto.mealplan.LoggedFoodDto;
+import com.feex.mealplannersystem.dto.mealplan.ParsedFoodItem;
+import com.feex.mealplannersystem.dto.mealplan.WeeklyBalanceDto;
+import com.feex.mealplannersystem.dto.mealplan.nutrition.CachedNutrition;
+import com.feex.mealplannersystem.dto.mealplan.request.LogFoodRequest;
+import com.feex.mealplannersystem.dto.mealplan.request.MarkSlotEatenRequest;
+import com.feex.mealplannersystem.dto.mealplan.response.AdaptedPlanResponse;
+import com.feex.mealplannersystem.dto.mealplan.response.LogFoodResponse;
+import com.feex.mealplannersystem.dto.mealplan.status.DayStatusDto;
+import com.feex.mealplannersystem.dto.mealplan.status.PlanStatusDto;
+import com.feex.mealplannersystem.dto.mealplan.status.SlotStatusDto;
+import com.feex.mealplannersystem.repository.*;
 import com.feex.mealplannersystem.repository.entity.mealplan.FoodLogEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
 import com.feex.mealplannersystem.repository.entity.profile.DailyNutritionSummaryEntity;
+import com.feex.mealplannersystem.service.FoodLogService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +30,15 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FoodLogServiceImpl {
+public class FoodLogServiceImpl implements FoodLogService {
 
     private final MealPlanRecordRepository planRepository;
     private final MealPlanSlotRepository slotRepository;
@@ -34,26 +46,27 @@ public class FoodLogServiceImpl {
     private final FoodNutritionCacheServiceImpl cacheService;
     private final WeeklyBalanceServiceImpl balanceService;
     private final FinalizeClient nlpClient;
+    private final RecipeTranslationServiceImpl translationService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final DailyNutritionSummaryService summaryService;
+    private final DailyNutritionSummaryServiceImpl summaryService;
     private final StreakService streakService;
     private final UserProfileRepository userProfileRepository;
 
     @Transactional
-    public AdaptiveDtos.LogFoodResponse logFood(Long userId, Long planId, AdaptiveDtos.LogFoodRequest request) {
+    public LogFoodResponse logFood(Long userId, LogFoodRequest request) {
 
         MealPlanRecordEntity plan = planRepository
-                .findByIdAndUserId(planId, userId)
-                .orElseThrow(() -> new CustomNotFoundException("Plan", planId.toString()));
+                .findActiveByUserId(userId)
+                .orElseThrow(() -> new CustomNotFoundException("User", userId.toString()));
 
-        FinalizeClient.ParseFoodResponse parsed =
+        ParseFoodResponse parsed =
                 nlpClient.parseFood(request.getFoodText());
 
-        for (FinalizeClient.ParsedFoodItem item : parsed.getItems()) {
+        for (ParsedFoodItem item : parsed.getItems()) {
             if (!item.isFromCache()) {
                 cacheService.put(item.getName(),
-                        FoodNutritionCacheServiceImpl.CachedNutrition.builder()
+                        CachedNutrition.builder()
                                 .calories(item.getCalories())
                                 .proteinG(item.getProteinG())
                                 .carbsG(item.getCarbsG())
@@ -64,7 +77,7 @@ public class FoodLogServiceImpl {
         }
 
         String minConfidence = parsed.getItems().stream()
-                .map(FinalizeClient.ParsedFoodItem::getConfidence)
+                .map(ParsedFoodItem::getConfidence)
                 .min((a, b) -> confidenceOrder(a) - confidenceOrder(b))
                 .orElse("medium");
 
@@ -82,21 +95,21 @@ public class FoodLogServiceImpl {
 
         foodLogRepository.save(foodLog);
         log.info("Logged {} kcal for plan={} day={} (confidence={})",
-                parsed.getTotalCalories(), planId, request.getDayNumber(), minConfidence);
+                parsed.getTotalCalories(), plan.getId(), request.getDayNumber(), minConfidence);
 
         triggerSummaryAndStreak(plan, request.getDayNumber());
 
         int currentDay = request.getDayNumber();
-        AdaptiveDtos.WeeklyBalanceDto balance = balanceService.buildBalance(plan, currentDay);
+        WeeklyBalanceDto balance = balanceService.buildBalance(plan, currentDay);
 
-        List<AdaptiveDtos.ParsedFoodItem> responsItems = parsed.getItems().stream()
-                .map(i -> new AdaptiveDtos.ParsedFoodItem(
+        List<ParsedFoodItem> responsItems = parsed.getItems().stream()
+                .map(i -> new ParsedFoodItem(
                         i.getName(), i.getOriginal(), i.getQuantityDescription(),
                         i.getCalories(), i.getProteinG(), i.getCarbsG(), i.getFatG(),
                         i.getConfidence(), i.isFromCache()))
                 .collect(Collectors.toList());
 
-        return new AdaptiveDtos.LogFoodResponse(
+        return new LogFoodResponse(
                 responsItems,
                 parsed.getTotalCalories(), parsed.getTotalProteinG(),
                 parsed.getTotalCarbsG(), parsed.getTotalFatG(),
@@ -104,14 +117,14 @@ public class FoodLogServiceImpl {
     }
 
     @Transactional
-    public AdaptiveDtos.AdaptedPlanResponse markSlotEaten(Long userId, Long planId, AdaptiveDtos.MarkSlotEatenRequest request) {
+    public AdaptedPlanResponse markSlotEaten(Long userId, MarkSlotEatenRequest request) {
 
         MealPlanRecordEntity plan = planRepository
-                .findByIdAndUserId(planId, userId)
-                .orElseThrow(() -> new CustomNotFoundException("Plan", planId.toString()));
+                .findActiveByUserId(userId)
+                .orElseThrow(() -> new CustomNotFoundException("User", userId.toString()));
 
         MealPlanSlotEntity slot = slotRepository.findById(request.getSlotId())
-                .filter(s -> s.getPlan().getId().equals(planId))
+                .filter(s -> s.getPlan().getId().equals(plan.getId()))
                 .orElseThrow(() -> new CustomNotFoundException("Slot", request.getSlotId().toString()));
 
         double actual = request.getActualCalories() != null
@@ -123,7 +136,7 @@ public class FoodLogServiceImpl {
         slot.setEatenAt(java.time.LocalDateTime.now());
         slotRepository.saveAndFlush(slot);
 
-        log.info("Slot {} marked EATEN ({} kcal), plan={}", slot.getId(), actual, planId);
+        log.info("Slot {} marked EATEN ({} kcal), plan={}", slot.getId(), actual, plan.getId());
 
         triggerSummaryAndStreak(plan, slot.getDayNumber());
 
@@ -149,7 +162,6 @@ public class FoodLogServiceImpl {
                     plan.getDailyCalorieTarget()
             );
 
-            // ТИМЧАСОВИЙ ЛОГ ДЛЯ ПЕРЕВІРКИ
             log.info("SUMMARY CHECK: day={}, calories={}", dayDate, summary.getTotalCalories());
 
             String timezone = userProfileRepository
@@ -170,20 +182,30 @@ public class FoodLogServiceImpl {
     }
 
     @Transactional(readOnly = true)
-    public AdaptiveDtos.PlanStatusDto getPlanStatus(Long userId, Long planId) {
+    public PlanStatusDto getPlanStatus(Long userId) {
 
         MealPlanRecordEntity plan = planRepository
-                .findByIdAndUserId(planId, userId)
-                .orElseThrow(() -> new CustomNotFoundException("Plan", planId.toString()));
+                .findActiveByUserId(userId)
+                .orElseThrow(() -> new CustomNotFoundException("Plan", userId.toString()));
+
+        Set<MealPlanSlotEntity> slots = plan.getSlots();
+        Set<FoodLogEntity> logs = plan.getFoodLogs();
 
         long daysBetween = ChronoUnit.DAYS.between(plan.getWeekStartDate(), LocalDate.now());
+
+        if (daysBetween >= 7) {
+            plan.setStatus(MealPlanRecordEntity.MealPlanStatus.COMPLETED);
+            planRepository.save(plan);
+            throw new CustomNotFoundException("Active plan", userId.toString());
+        }
+
         int currentDay = (int) daysBetween + 1;
         currentDay = Math.max(1, Math.min(7, currentDay));
 
-        AdaptiveDtos.AdaptedPlanResponse adapted = balanceService.recalculate(plan, currentDay);
-        List<AdaptiveDtos.DayStatusDto> days = buildDayStatuses(plan);
+        AdaptedPlanResponse adapted = balanceService.recalculate(plan, currentDay);
+        List<DayStatusDto> days = buildDayStatuses(plan);
 
-        return AdaptiveDtos.PlanStatusDto.builder()
+        return PlanStatusDto.builder()
                 .planId(plan.getId())
                 .weekStartDate(plan.getWeekStartDate().toString())
                 .weeklyBalance(adapted.getWeeklyBalance())
@@ -192,7 +214,7 @@ public class FoodLogServiceImpl {
                 .build();
     }
 
-    private List<AdaptiveDtos.DayStatusDto> buildDayStatuses(MealPlanRecordEntity plan) {
+    private List<DayStatusDto> buildDayStatuses(MealPlanRecordEntity plan) {
         return plan.getSlots().stream()
                 .collect(Collectors.groupingBy(MealPlanSlotEntity::getDayNumber))
                 .entrySet().stream()
@@ -209,25 +231,44 @@ public class FoodLogServiceImpl {
                     double extra = foodLogRepository
                             .sumExtraCaloriesByDay(plan.getId(), day);
 
-                    List<AdaptiveDtos.SlotStatusDto> slotDtos = daySlots.stream()
-                            .map(s -> AdaptiveDtos.SlotStatusDto.builder()
-                                    .slotId(s.getId())
-                                    .mealType(s.getMealType())
-                                    .recipeId(s.getRecipeId())
-                                    .recipeName(s.getRecipeName())
-                                    .targetCalories(s.getTargetCalories())
-                                    .actualCalories(s.getActualCalories())
-                                    .status(s.getStatus().name())
-                                    .eatenAt(s.getEatenAt())
-                                    .build())
+                    Set<Long> recipeIds = daySlots.stream()
+                            .map(MealPlanSlotEntity::getRecipeId)
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toSet());
+
+                    Map<Long, RecipeTranslationServiceImpl.RecipeTranslationInfo> info =
+                            translationService.getTranslationInfo(recipeIds);
+
+                    List<SlotStatusDto> slotDtos = daySlots.stream()
+                            .map(s -> {
+                                RecipeTranslationServiceImpl.RecipeTranslationInfo t = info.get(s.getRecipeId());
+                                return SlotStatusDto.builder()
+                                        .slotId(s.getId())
+                                        .mealType(s.getMealType())
+                                        .recipeId(s.getRecipeId())
+                                        .recipeName(t != null && t.name() != null ? t.name() : s.getRecipeName())
+                                        .recipeSlug(t != null ? t.slug() : null)
+                                        .targetCalories(s.getTargetCalories())
+                                        .actualCalories(s.getActualCalories())
+                                        .proteinG(s.getProteinG())
+                                        .fatG(s.getFatG())
+                                        .carbsG(s.getCarbsG())
+                                        .slotRole(s.getSlotRole())
+                                        .status(s.getStatus().name())
+                                        .eatenAt(s.getEatenAt())
+                                        .build();
+                            })
                             .collect(Collectors.toList());
 
-                    List<AdaptiveDtos.LoggedFoodDto> extraFood = plan.getFoodLogs().stream()
+                    List<LoggedFoodDto> extraFood = plan.getFoodLogs().stream()
                             .filter(f -> f.getDayNumber() == day)
-                            .map(f -> AdaptiveDtos.LoggedFoodDto.builder()
+                            .map(f -> LoggedFoodDto.builder()
                                     .logId(f.getId())
                                     .rawInput(f.getRawInput())
                                     .totalCalories(f.getTotalCalories())
+                                    .proteinG(f.getTotalProteinG())
+                                    .carbsG(f.getTotalCarbsG())
+                                    .fatG(f.getTotalFatG())
                                     .confidence(f.getConfidence())
                                     .loggedAt(f.getLoggedAt())
                                     .build())
@@ -236,7 +277,7 @@ public class FoodLogServiceImpl {
                     double targetForDay = daySlots.stream()
                             .mapToDouble(MealPlanSlotEntity::getTargetCalories).sum();
 
-                    return AdaptiveDtos.DayStatusDto.builder()
+                    return DayStatusDto.builder()
                             .dayNumber(day)
                             .targetCalories(targetForDay)
                             .plannedCalories(planned)

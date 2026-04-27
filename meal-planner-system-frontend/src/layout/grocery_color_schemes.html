@@ -1,0 +1,229 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1.5rem 0; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab { padding: 8px 18px; border-radius: 20px; border: 1.5px solid #ccc; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--color-text-secondary); transition: all 0.2s; }
+  .tab.active { color: #fff; border-color: transparent; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 10px; margin-top: 1.5rem; }
+  .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .swatch { border-radius: 10px; padding: 14px 10px 10px; min-width: 90px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .swatch-name { font-size: 11px; font-weight: 500; }
+  .swatch-hex { font-size: 11px; opacity: 0.75; font-family: var(--font-mono); }
+  .preview { border-radius: 14px; border: 0.5px solid var(--color-border-tertiary); overflow: hidden; margin-top: 1.5rem; }
+  .preview-nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; }
+  .preview-nav .logo { font-size: 18px; font-weight: 500; letter-spacing: -0.5px; }
+  .preview-nav .nav-links { display: flex; gap: 20px; font-size: 13px; }
+  .preview-hero { padding: 28px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .preview-hero h2 { font-size: 22px; font-weight: 500; line-height: 1.3; max-width: 260px; }
+  .preview-hero p { font-size: 13px; margin-top: 8px; opacity: 0.8; }
+  .btn-primary { display: inline-block; padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 500; margin-top: 14px; cursor: pointer; border: none; }
+  .btn-secondary { display: inline-block; padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; border: 2px solid; background: transparent; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px 20px 20px; }
+  .card { border-radius: 12px; padding: 14px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); }
+  .card-tag { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
+  .card-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .card-price { font-size: 15px; font-weight: 500; margin-top: 6px; }
+  .card-old { font-size: 11px; text-decoration: line-through; opacity: 0.5; margin-left: 4px; }
+  .badge { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 5px; display: inline-block; margin-left: 6px; vertical-align: middle; }
+  .hero-img { width: 80px; height: 80px; border-radius: 50%; opacity: 0.15; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+</style>
+
+<div class="wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-idx="0">🌿 FreshGreen</button>
+    <button class="tab" data-idx="1">🍊 WarmHarvest</button>
+    <button class="tab" data-idx="2">💜 ModernBerry</button>
+    <button class="tab" data-idx="3">🌊 CoolFresh</button>
+  </div>
+
+  <div id="palette-content"></div>
+</div>
+
+<script>
+const schemes = [
+  {
+    name: "FreshGreen",
+    desc: "Класичний фреш — як Сільпо. Асоціація зі свіжістю, здоров'ям, природою.",
+    primary: { name: "Primary", hex: "#1A9E5C", text: "#fff" },
+    primaryDark: { name: "Primary Dark", hex: "#0F7A43", text: "#fff" },
+    primaryLight: { name: "Primary Light", hex: "#E6F7EF", text: "#0F7A43" },
+    accent: { name: "Accent", hex: "#FF6B35", text: "#fff" },
+    accentLight: { name: "Accent Light", hex: "#FFF0EB", text: "#CC4A1A" },
+    neutral: { name: "Neutral", hex: "#F4F6F3", text: "#2C3E2D" },
+    text: { name: "Text", hex: "#1C2B1E", text: "#fff" },
+    textMuted: { name: "Muted", hex: "#6B7F6D", text: "#fff" },
+    navBg: "#fff", navBorder: "#E8EDE9",
+    heroBg: "#E6F7EF", heroText: "#0F7A43", heroSub: "#2C5C3A",
+    btnBg: "#1A9E5C", btnText: "#fff",
+    btn2Border: "#1A9E5C", btn2Text: "#1A9E5C",
+    tagBg: "#E6F7EF", tagText: "#0F7A43",
+    priceBg: "#FF6B35", priceText: "#fff",
+    cardPrice: "#1A9E5C",
+    logoBg: "#1A9E5C", logoColor: "#fff", logoText: "FoodMart"
+  },
+  {
+    name: "WarmHarvest",
+    desc: "Теплий і апетитний — як Maudau. Помаранчево-сонячна гама, відчуття домашнього тепла.",
+    primary: { name: "Primary", hex: "#F2720C", text: "#fff" },
+    primaryDark: { name: "Primary Dark", hex: "#C25700", text: "#fff" },
+    primaryLight: { name: "Primary Light", hex: "#FEF0E6", text: "#C25700" },
+    accent: { name: "Accent", hex: "#2EAA5E", text: "#fff" },
+    accentLight: { name: "Accent Light", hex: "#E8F7EF", text: "#1A7A42" },
+    neutral: { name: "Neutral", hex: "#FBF8F5", text: "#3A2A1A" },
+    text: { name: "Text", hex: "#2A1F0E", text: "#fff" },
+    textMuted: { name: "Muted", hex: "#8A7060", text: "#fff" },
+    navBg: "#fff", navBorder: "#F0E8DF",
+    heroBg: "#FFF4ED", heroText: "#C25700", heroSub: "#5C3D20",
+    btnBg: "#F2720C", btnText: "#fff",
+    btn2Border: "#F2720C", btn2Text: "#F2720C",
+    tagBg: "#FEF0E6", tagText: "#C25700",
+    priceBg: "#2EAA5E", priceText: "#fff",
+    cardPrice: "#F2720C",
+    logoBg: "#F2720C", logoColor: "#fff", logoText: "FoodMart"
+  },
+  {
+    name: "ModernBerry",
+    desc: "Сучасний і преміальний. Виділяється серед конкурентів — актуально для диплому.",
+    primary: { name: "Primary", hex: "#6C3FC5", text: "#fff" },
+    primaryDark: { name: "Primary Dark", hex: "#4E2A96", text: "#fff" },
+    primaryLight: { name: "Primary Light", hex: "#F0EAFE", text: "#4E2A96" },
+    accent: { name: "Accent", hex: "#F59C0A", text: "#fff" },
+    accentLight: { name: "Accent Light", hex: "#FEF6E4", text: "#A06700" },
+    neutral: { name: "Neutral", hex: "#F7F5FB", text: "#1A1030" },
+    text: { name: "Text", hex: "#1A1030", text: "#fff" },
+    textMuted: { name: "Muted", hex: "#7A6A90", text: "#fff" },
+    navBg: "#fff", navBorder: "#EAE4F5",
+    heroBg: "#F0EAFE", heroText: "#4E2A96", heroSub: "#2E1A5C",
+    btnBg: "#6C3FC5", btnText: "#fff",
+    btn2Border: "#6C3FC5", btn2Text: "#6C3FC5",
+    tagBg: "#F0EAFE", tagText: "#4E2A96",
+    priceBg: "#F59C0A", priceText: "#fff",
+    cardPrice: "#6C3FC5",
+    logoBg: "#6C3FC5", logoColor: "#fff", logoText: "FoodMart"
+  },
+  {
+    name: "CoolFresh",
+    desc: "Чистий і мінімалістичний. Блакитно-зелена гама — відчуття свіжості та довіри.",
+    primary: { name: "Primary", hex: "#0093C4", text: "#fff" },
+    primaryDark: { name: "Primary Dark", hex: "#006E96", text: "#fff" },
+    primaryLight: { name: "Primary Light", hex: "#E3F5FC", text: "#006E96" },
+    accent: { name: "Accent", hex: "#00B87A", text: "#fff" },
+    accentLight: { name: "Accent Light", hex: "#E0FAF1", text: "#007A50" },
+    neutral: { name: "Neutral", hex: "#F3F8FA", text: "#0C2A35" },
+    text: { name: "Text", hex: "#0C2A35", text: "#fff" },
+    textMuted: { name: "Muted", hex: "#5A7A85", text: "#fff" },
+    navBg: "#fff", navBorder: "#DCF0F7",
+    heroBg: "#E3F5FC", heroText: "#006E96", heroSub: "#0C3A50",
+    btnBg: "#0093C4", btnText: "#fff",
+    btn2Border: "#0093C4", btn2Text: "#0093C4",
+    tagBg: "#E3F5FC", tagText: "#006E96",
+    priceBg: "#00B87A", priceText: "#fff",
+    cardPrice: "#0093C4",
+    logoBg: "#0093C4", logoColor: "#fff", logoText: "FoodMart"
+  }
+];
+
+const products = [
+  { name: "Молоко 2.5%", weight: "1 л", price: "42", old: "48" },
+  { name: "Грецькі горіхи", weight: "200 г", price: "89", old: null },
+  { name: "Авокадо органік", weight: "1 шт", price: "67", old: "75" },
+];
+
+function render(idx) {
+  const s = schemes[idx];
+  const container = document.getElementById('palette-content');
+
+  const swatches = [
+    [s.primary, s.primaryDark, s.primaryLight],
+    [s.accent, s.accentLight, s.neutral],
+    [s.text, s.textMuted]
+  ];
+  const labels = ["Основний", "Акцент", "Нейтральний / Текст"];
+
+  let swatchHTML = '';
+  swatches.forEach((row, i) => {
+    swatchHTML += `<div class="section-label">${labels[i]}</div><div class="swatch-row">`;
+    row.forEach(sw => {
+      swatchHTML += `<div class="swatch" style="background:${sw.hex}; border: 0.5px solid ${sw.hex}20;">
+        <span class="swatch-name" style="color:${sw.text}">${sw.name}</span>
+        <span class="swatch-hex" style="color:${sw.text}">${sw.hex}</span>
+      </div>`;
+    });
+    swatchHTML += `</div>`;
+  });
+
+  const cardsHTML = products.map(p => `
+    <div class="card">
+      <span class="card-tag" style="background:${s.tagBg}; color:${s.tagText}">Свіже</span>
+      <div class="card-name">${p.name}</div>
+      <div style="font-size:11px; color:#888; margin-top:2px;">${p.weight}</div>
+      <div class="card-price" style="color:${s.cardPrice}">
+        ${p.price} ₴
+        ${p.old ? `<span class="card-old">${p.old} ₴</span>` : ''}
+        ${p.old ? `<span class="badge" style="background:${s.priceBg}; color:${s.priceText}">-${Math.round((1 - p.price/p.old)*100)}%</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:1rem;">${s.desc}</div>
+
+    ${swatchHTML}
+
+    <div class="section-label" style="margin-top:1.5rem;">Превʼю UI</div>
+    <div class="preview">
+      <div class="preview-nav" style="background:${s.navBg}; border-bottom: 0.5px solid ${s.navBorder};">
+        <div class="logo" style="color:${s.logoBg}">${s.logoText}</div>
+        <div class="preview-nav-links" style="display:flex; gap:18px; font-size:13px; color:var(--color-text-secondary);">
+          <span>Магазин</span><span>Рецепти</span><span>Раціон</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span style="font-size:13px; color:var(--color-text-secondary);">🛒 3</span>
+          <div style="width:30px; height:30px; border-radius:50%; background:${s.primary.hex}20; display:flex; align-items:center; justify-content:center; font-size:14px; color:${s.primary.hex};">У</div>
+        </div>
+      </div>
+
+      <div class="preview-hero" style="background:${s.heroBg};">
+        <div>
+          <div style="font-size:11px; font-weight:500; color:${s.accent.hex}; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Здорове харчування</div>
+          <h2 style="color:${s.heroText}; font-size:20px; font-weight:500; line-height:1.3; max-width:220px;">Свіжі продукти з доставкою</h2>
+          <p style="font-size:12px; color:${s.heroSub}; margin-top:6px; max-width:200px;">Органічні овочі, фрукти та готові страви</p>
+          <div style="display:flex; gap:10px; margin-top:14px;">
+            <button class="btn-primary" style="background:${s.btnBg}; color:${s.btnText}; border-radius:10px; padding:9px 20px; font-size:13px; font-weight:500; border:none; cursor:pointer;">Перейти до магазину</button>
+            <button class="btn-secondary" style="border: 1.5px solid ${s.btn2Border}; color:${s.btn2Text}; border-radius:10px; padding:9px 18px; font-size:13px; font-weight:500; background:transparent; cursor:pointer;">Рецепти</button>
+          </div>
+        </div>
+        <div style="width:90px; height:90px; border-radius:50%; background:${s.primary.hex}15; display:flex; align-items:center; justify-content:center; font-size:44px; flex-shrink:0;">🥗</div>
+      </div>
+
+      <div style="padding: 14px 20px 4px; font-size:13px; font-weight:500; color:var(--color-text-secondary);">Популярні товари</div>
+      <div class="cards">${cardsHTML}</div>
+    </div>
+  `;
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const idx = +btn.dataset.idx;
+  btn.style.background = schemes[idx].primary.hex;
+  btn.style.color = '#fff';
+  btn.style.borderColor = 'transparent';
+  document.querySelectorAll('.tab:not(.active)').forEach(t => {
+    t.style.background = '';
+    t.style.color = '';
+    t.style.borderColor = '';
+  });
+  render(idx);
+});
+
+// Init
+document.querySelector('.tab.active').style.background = schemes[0].primary.hex;
+document.querySelector('.tab.active').style.color = '#fff';
+document.querySelector('.tab.active').style.borderColor = 'transparent';
+render(0);
+</script>

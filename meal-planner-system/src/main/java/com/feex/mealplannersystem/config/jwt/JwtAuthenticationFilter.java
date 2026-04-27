@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        System.out.println("=== shouldNotFilter: " + path);
         return path.equals("/api/auth/login") ||
                 path.equals("/api/auth/register") ||
                 path.equals("/api/auth/refresh");
@@ -36,40 +35,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
-        System.out.println("=== doFilterInternal called for: " + request.getServletPath());
-        System.out.println("=== Authorization header: " + request.getHeader("Authorization"));
-
         String token = getTokenFromRequest(request);
-        System.out.println("=== Extracted token: " + token);
 
-        if (StringUtils.hasText(token)) {
-            System.out.println("=== JWT FILTER DEBUG ===");
-            System.out.println("Authorization header: " + request.getHeader("Authorization"));
-            System.out.println("Extracted token (first 50 chars): " + token.substring(0, Math.min(50, token.length())) + "...");
+        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+            try {
+                String email = jwtTokenProvider.getEmailFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            if (jwtTokenProvider.validateToken(token)) {
-                try {
-                    String email = jwtTokenProvider.getEmailFromToken(token);
-                    System.out.println("Token valid. Email from token: " + email);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities()
+                        );
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                    request.setAttribute(HttpServletRequestWrapper.class.getName(), authentication);
-                    System.out.println("✅ Authentication SUCCESSFULLY set for user: " + email);
-
-                } catch (Exception e) {
-                    System.out.println("❌ Error setting authentication: " + e.getMessage());
-                }
-            } else {
-                System.out.println("❌ Token validation failed");
+            } catch (Exception e) {
+                SecurityContextHolder.clearContext();
             }
         }
 

@@ -1,0 +1,1123 @@
+/* ─── Layout ────────────────────────────────── */
+.tracker-main {
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+/* ─── Dashboard Header ──────────────────────── */
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+
+.dash-title h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.dash-title p {
+    color: var(--text-muted);
+    font-size: 15px;
+}
+
+/* ─── Day Selector ──────────────────────────── */
+.day-selector {
+    display: flex;
+    gap: 6px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+}
+
+.day-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.day-btn:hover {
+    color: var(--primary);
+}
+
+.day-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* ─── Weekly Progress Card ──────────────────── */
+.weekly-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    border: 1px solid var(--border);
+}
+
+.progress-ring-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.progress-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.5s ease;
+}
+
+.progress-inner {
+    width: 90px;
+    height: 90px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-val {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    transition: color 0.4s;
+}
+
+.progress-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.weekly-stats {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.w-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.w-lbl {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.w-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.w-val span {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.w-val.alert {
+    color: var(--danger);
+}
+
+/* ─── AI Adjustment ─────────────────────────── */
+.ai-adjustment {
+    background: linear-gradient(135deg, #F0EAFE 0%, #EAE0FE 100%);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.ai-adj-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.ai-adj-text {
+    font-size: 14px;
+    color: var(--primary-dark);
+    line-height: 1.5;
+}
+
+.ai-adj-text strong {
+    font-weight: 700;
+}
+
+/* ─── Main Grid ─────────────────────────────── */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+}
+
+/* ─── Meal Cards ────────────────────────────── */
+.meal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.meal-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s;
+}
+
+.meal-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    border-color: var(--primary-light);
+}
+
+.meal-card.eaten {
+    background: var(--neutral);
+    border-color: var(--success-light, #D1FAE5);
+    opacity: 0.8;
+}
+
+.meal-info {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.meal-icon {
+    font-size: 28px;
+    width: 56px;
+    height: 56px;
+    background: var(--neutral);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.meal-card.eaten .meal-icon {
+    filter: grayscale(60%);
+    background: #D1FAE5;
+}
+
+.meal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.m-type {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ai-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.m-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.meal-card.eaten .m-name {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.m-cals {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.meal-card.eaten .m-cals {
+    color: var(--text-muted);
+}
+
+/* ─── Мета-інформація (Макроси та Ролі) ────────── */
+.m-meta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.role-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.role-badge.main {
+    background: #E0F2FE;
+    color: #0369A1;
+}
+
+.role-badge.side {
+    background: #F3F4F6;
+    color: #4B5563;
+}
+
+.m-macros {
+    display: flex;
+    gap: 4px;
+}
+
+.macro {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--neutral);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.macro.p {
+    color: #D97706;
+    background: #FEF3C7;
+}
+
+/* Білки - Жовтий */
+.macro.f {
+    color: #BE185D;
+    background: #FCE7F3;
+}
+
+/* Жири - Рожевий */
+.macro.c {
+    color: #047857;
+    background: #D1FAE5;
+}
+
+/* Вуглеводи - Зелений */
+
+/* ─── Meal Actions ──────────────────────────── */
+.meal-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.swap-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--neutral);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.swap-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.swap-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.status-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.2s;
+    color: transparent;
+}
+
+.status-btn:hover {
+    border-color: var(--success, #10B981);
+}
+
+.status-btn.checked {
+    background: #10B981;
+    border-color: #10B981;
+    color: #fff;
+}
+
+/* ─── Extra Food Panel ──────────────────────── */
+.extra-food-panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.extra-header {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.extra-badge {
+    background: #FEE2E2;
+    color: var(--danger, #EF4444);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.extra-input-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.extra-input-wrap input {
+    flex-grow: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.extra-input-wrap input:focus {
+    border-color: var(--primary);
+}
+
+.btn-add-extra {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 0 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn-add-extra:hover:not(:disabled) {
+    background: var(--primary);
+}
+
+.btn-add-extra:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.extra-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.extra-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--neutral);
+    border-radius: 12px;
+    border: 1px dashed var(--border);
+}
+
+.ei-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ei-cals {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--danger, #EF4444);
+    white-space: nowrap;
+}
+
+.ei-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ─── Responsive ────────────────────────────── */
+@media (max-width: 1024px) {
+    .weekly-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weekly-card {
+        flex-direction: column;
+        gap: 24px;
+        padding: 24px;
+        text-align: center;
+    }
+
+    .weekly-stats {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        width: 100%;
+        text-align: left;
+    }
+
+    .dash-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .extra-food-panel {
+        position: static;
+    }
+
+    /* ─── Extra Food Panel ──────────────────────── */
+    .extra-food-panel {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        position: sticky;
+        top: 100px;
+        /* Панель буде "прилипати" при скролі вниз */
+    }
+
+    .extra-header {
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text);
+    }
+
+    .extra-badge {
+        background: #FEE2E2;
+        /* Світло-червоний фон */
+        color: #EF4444;
+        /* Червоний текст */
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .extra-input-wrap {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .extra-input-wrap input {
+        flex-grow: 1;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s ease;
+        font-family: inherit;
+        background: var(--neutral);
+    }
+
+    .extra-input-wrap input:focus {
+        border-color: var(--primary);
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(108, 63, 197, 0.1);
+    }
+
+    .btn-add-extra {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 0 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        white-space: nowrap;
+    }
+
+    .btn-add-extra:hover:not(:disabled) {
+        background: var(--primary-dark);
+    }
+
+    .btn-add-extra:active:not(:disabled) {
+        transform: scale(0.97);
+    }
+
+    .btn-add-extra:disabled {
+        background: var(--border);
+        color: var(--text-muted);
+        cursor: not-allowed;
+    }
+}
+
+/* ─── Оновлення картки страви (MealCard) ───────────────── */
+.meal-card {
+    transition: box-shadow 0.2s, transform 0.2s;
+    overflow: hidden;
+}
+
+.meal-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.meal-card-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.meal-info.clickable {
+    cursor: pointer;
+    flex-grow: 1;
+    border-radius: 12px;
+    transition: background 0.2s;
+}
+
+.meal-info.clickable:hover {
+    background: rgba(108, 63, 197, 0.03);
+    /* Легкий фіолетовий фон при наведенні */
+}
+
+/* ─── Нова кнопка заміни (SVG) ───────────────────────── */
+.swap-btn-clean {
+    background: #f1f5f9;
+    color: #64748b;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.swap-btn-clean:hover:not(:disabled) {
+    background: #e2e8f0;
+    color: var(--primary);
+    transform: rotate(30deg);
+    /* Легкий ефект прокрутки при наведенні */
+}
+
+.swap-btn-clean:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ─── Форма підтвердження калорій ────────────────────── */
+.meal-confirm-panel {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    animation: slideDown 0.3s ease;
+}
+
+.confirm-row {
+    margin-bottom: 12px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+}
+
+.toggle-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.custom-cal-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.custom-cal-input input {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    text-align: center;
+}
+
+.custom-cal-input input:focus {
+    border-color: var(--primary);
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.btn-cancel:hover {
+    background: var(--neutral);
+    color: var(--text);
+}
+
+.btn-save {
+    background: var(--primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff;
+}
+
+.btn-save:hover {
+    background: var(--primary-dark);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── Grocery Modal (Спливаюче вікно) ───────────────────────────────────── */
+.grocery-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.grocery-modal-content {
+    background: #fff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.g-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.g-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.g-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.g-close-btn:hover {
+    color: var(--danger, #EF4444);
+}
+
+.g-modal-body {
+    padding: 16px 24px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.groc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.groc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 12px;
+    border-bottom: 1px dashed var(--border);
+    font-size: 15px;
+    margin-left: -12px;
+    margin-right: -12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.groc-item.clickable {
+    cursor: pointer;
+}
+
+.groc-item.clickable:hover {
+    background: rgba(108, 63, 197, 0.05);
+}
+
+.groc-item:last-child {
+    border-bottom: none;
+}
+
+.groc-name {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.groc-amount {
+    color: var(--primary);
+    font-weight: 700;
+    background: var(--primary-light, #F3E8FF);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.g-modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    background: #f8fafc;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ─── AI Adaptation Styles ──────────────────── */
+.meal-card.swap-suggested {
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.05);
+}
+
+.meal-card.swap-suggested .swap-btn-clean {
+    color: #EF4444;
+    background: #FEE2E2;
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+.m-cals-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.cals-old {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.cals-new {
+    font-size: 14px;
+    font-weight: 800;
+    color: #F59E0B;
+    /* Помаранчевий для адаптованих калорій */
+}
+
+/* ─── Банер "Кошик продуктів" ────────────────────────── */
+.day-grocery-banner {
+    background: linear-gradient(135deg, rgba(108, 63, 197, 0.05), rgba(78, 42, 150, 0.1));
+    border: 1px solid rgba(108, 63, 197, 0.2);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.grocery-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.grocery-info p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.grocery-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-grocery-view {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-grocery-view:hover {
+    background: var(--neutral);
+}
+
+.btn-grocery-cart {
+    background: var(--primary);
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-grocery-cart:hover {
+    background: var(--primary-dark);
+}
+
+/* ─── Додаткова їжа (Блокування та Бейджі) ─────────────── */
+.ei-badge-count {
+    background: var(--neutral);
+    color: var(--primary);
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 6px;
+    font-weight: 800;
+    border: 1px solid var(--border);
+}
+
+.extra-disabled-msg {
+    background: #FFFBEB;
+    border: 1px solid #FEF3C7;
+    color: #92400E;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.w-macros-summary {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.w-macro-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Кольори для БЖВ */
+.w-macro-tag.p {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+/* Білки - Жовтий */
+.w-macro-tag.f {
+    background: #FCE7F3;
+    color: #BE185D;
+}
+
+/* Жири - Рожевий */
+.w-macro-tag.c {
+    background: #D1FAE5;
+    color: #047857;
+}
+
+/* Вуглеводи - Зелений */
+
+/* Додатково: адаптивність для мобільних */
+@media (max-width: 600px) {
+    .w-macros-summary {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    .day-grocery-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .grocery-actions {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .btn-grocery-view,
+    .btn-grocery-cart {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .day-selector {
+        flex-wrap: wrap;
+    }
+
+    .dash-title h1 {
+        font-size: 24px;
+    }
+}

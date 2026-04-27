@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodMart | Розумний магазин та раціон</title>
+  <style>
+    /* Палітра ModernBerry */
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --accent-light: #FEF6E4;
+      --neutral: #F7F5FB; /* Світло-сірий/бузковий фон для чергування */
+      --text: #1A1030;
+      --text-muted: #7A6A90;
+      --border: #EAE4F5;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); background-color: #fff; line-height: 1.5; }
+    
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; }
+
+    /* --- Шапка сайту --- */
+    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; flex-shrink: 0; }
+    
+    .btn-catalog { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; flex-shrink: 0; transition: background 0.2s; }
+    .btn-catalog:hover { background: var(--primary-dark); }
+    
+    .search-bar { flex-grow: 1; max-width: 600px; display: flex; position: relative; }
+    .search-bar input { width: 100%; padding: 12px 20px 12px 40px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--neutral); transition: border-color 0.2s; outline: none; }
+    .search-bar input:focus { border-color: var(--primary); background: #fff; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
+    .nav-links { display: flex; gap: 20px; flex-shrink: 0; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+    
+    .header-actions { display: flex; gap: 16px; align-items: center; flex-shrink: 0; }
+    .cart-btn { background: none; border: none; cursor: pointer; position: relative; font-size: 22px; }
+    .cart-badge { position: absolute; top: -6px; right: -8px; background: var(--accent); color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 10px; }
+    .profile-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid var(--primary); }
+
+    /* --- Секції (Чергування фонів) --- */
+    .section { padding: 48px 0; }
+    .section-alt { background-color: var(--neutral); } /* Сірий фон */
+    
+    .section-title { font-size: 22px; font-weight: 700; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .view-all { font-size: 14px; color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    /* --- Hero Секція (Як на фото) --- */
+    .hero-wrapper { display: flex; gap: 20px; margin-bottom: 20px; }
+    
+    /* Лівий великий банер */
+    .hero-banner { flex: 2; background: linear-gradient(135deg, var(--primary-light) 0%, #E2D4FD 100%); border-radius: 20px; padding: 40px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; min-height: 280px; }
+    .hero-banner h1 { color: var(--primary-dark); font-size: 32px; margin-bottom: 12px; line-height: 1.2; max-width: 60%; position: relative; z-index: 2; }
+    .hero-banner p { color: var(--text-muted); font-size: 16px; max-width: 50%; position: relative; z-index: 2; }
+    .hero-discount { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); background: var(--primary); color: #fff; width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; transform: translateY(-50%) rotate(-10deg); box-shadow: 0 10px 20px rgba(108, 63, 197, 0.3); }
+    .hero-discount span:first-child { font-size: 14px; font-weight: 500; opacity: 0.9; }
+    .hero-discount span:last-child { font-size: 32px; font-weight: 800; line-height: 1; }
+    .hero-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; background: rgba(255,255,255,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; z-index: 3; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .hero-prev { left: 16px; }
+    .hero-next { right: 16px; }
+
+    /* Права сітка (4 картки) */
+    .hero-quick-links { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 16px; }
+    .quick-link-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+    .quick-link-card:hover { border-color: var(--primary-light); box-shadow: 0 8px 24px rgba(108, 63, 197, 0.08); transform: translateY(-2px); }
+    .quick-link-title { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; max-width: 80%; }
+    .quick-link-icon { align-self: flex-end; width: 48px; height: 48px; background: var(--neutral); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-top: 10px; }
+
+    /* --- Каруселі та Сітки (як у попередньому варіанті) --- */
+    .carousel { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 16px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel > * { scroll-snap-align: start; flex-shrink: 0; }
+
+    .category-card { width: 130px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .category-card:hover { border-color: var(--primary); background: var(--primary-light); }
+    .category-icon { font-size: 36px; margin-bottom: 12px; }
+    .category-name { font-size: 14px; font-weight: 600; }
+
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .product-card { width: 220px; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; position: relative; background: #fff; transition: box-shadow 0.2s; }
+    .products-grid .product-card { width: auto; }
+    .product-card:hover { box-shadow: 0 8px 24px rgba(108, 63, 197, 0.08); border-color: var(--primary-light); }
+    .product-img { height: 150px; background: var(--neutral); border-radius: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 56px; }
+    .product-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); line-height: 1.3; }
+    .product-weight { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .product-price { font-size: 18px; font-weight: 700; color: var(--primary); }
+    .btn-add { background: var(--primary-light); color: var(--primary); border: none; width: 40px; height: 40px; border-radius: 10px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .btn-add:hover { background: var(--primary); color: #fff; }
+
+    /* --- Адаптивність --- */
+    @media (max-width: 1024px) {
+      .hero-wrapper { flex-direction: column; }
+      .hero-quick-links { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr; }
+      .search-bar { max-width: 300px; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 768px) {
+      .header-inner { flex-wrap: wrap; }
+      .search-bar { order: 3; min-width: 100%; margin-top: 12px; }
+      .hero-quick-links { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+      .hero-banner { min-height: 200px; }
+      .hero-discount { width: 80px; height: 80px; right: 20px; }
+      .hero-discount span:last-child { font-size: 24px; }
+      .hero-banner h1 { font-size: 24px; max-width: 80%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">FoodMart</a>
+      
+      <button class="btn-catalog">
+        ☰ Каталог
+      </button>
+
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Пошук продуктів, рецептів чи категорій...">
+      </div>
+
+      <nav class="nav-links">
+        <a href="#" class="active">Магазин</a>
+        <a href="#">Мій раціон</a>
+        <a href="#">Статистика</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="cart-btn">
+          🛒 <span class="cart-badge">3</span>
+        </button>
+        <div class="profile-avatar">О</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section bg-white">
+      <div class="container">
+        <div class="hero-wrapper">
+          <div class="hero-banner">
+            <button class="hero-nav hero-prev">❮</button>
+            <button class="hero-nav hero-next">❯</button>
+            <h1>Свіжі продукти для ідеального раціону</h1>
+            <p>Довірся ШІ для створення меню на тиждень</p>
+            <div class="hero-discount">
+              <span>Знижки до</span>
+              <span>-50%</span>
+            </div>
+          </div>
+          
+          <div class="hero-quick-links">
+            <div class="quick-link-card">
+              <div class="quick-link-title">Товари тижня</div>
+              <div class="quick-link-icon" style="background: #E8F7EF; color: #1A9E5C;">🥬</div>
+            </div>
+            <div class="quick-link-card">
+              <div class="quick-link-title">Всі акції</div>
+              <div class="quick-link-icon" style="background: #FEF0E6; color: #F2720C;">%</div>
+            </div>
+            <div class="quick-link-card">
+              <div class="quick-link-title">Гарячі ціни</div>
+              <div class="quick-link-icon" style="background: #FFF4ED; color: #D14343;">🔥</div>
+            </div>
+            <div class="quick-link-card">
+              <div class="quick-link-title">Рецепти та раціон</div>
+              <div class="quick-link-icon" style="background: var(--primary-light); color: var(--primary);">🥗</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-title">Категорії</div>
+        <div class="carousel">
+          <div class="category-card"><div class="category-icon">🍎</div><div class="category-name">Фрукти</div></div>
+          <div class="category-card"><div class="category-icon">🥬</div><div class="category-name">Овочі</div></div>
+          <div class="category-card"><div class="category-icon">🥩</div><div class="category-name">М'ясо</div></div>
+          <div class="category-card"><div class="category-icon">🥛</div><div class="category-name">Молочне</div></div>
+          <div class="category-card"><div class="category-icon">🍞</div><div class="category-name">Випічка</div></div>
+          <div class="category-card"><div class="category-icon">🐟</div><div class="category-name">Риба</div></div>
+          <div class="category-card"><div class="category-icon">🌾</div><div class="category-name">Бакалія</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-white">
+      <div class="container">
+        <div class="section-title">
+          Популярні товари
+          <a href="#" class="view-all">Дивитись всі →</a>
+        </div>
+        <div class="products-grid">
+          <div class="product-card">
+            <div class="product-img">🥑</div>
+            <div class="product-name">Авокадо Хасс органік</div>
+            <div class="product-weight">1 шт</div>
+            <div class="product-footer">
+              <div class="product-price">67 ₴</div>
+              <button class="btn-add">+</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-img">🥩</div>
+            <div class="product-name">Філе куряче охолоджене</div>
+            <div class="product-weight">1 кг</div>
+            <div class="product-footer">
+              <div class="product-price">145 ₴</div>
+              <button class="btn-add">+</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-img">🥛</div>
+            <div class="product-name">Молоко 2.5%</div>
+            <div class="product-weight">900 г</div>
+            <div class="product-footer">
+              <div class="product-price">42 ₴</div>
+              <button class="btn-add">+</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-img">🥦</div>
+            <div class="product-name">Броколі свіжа</div>
+            <div class="product-weight">500 г</div>
+            <div class="product-footer">
+              <div class="product-price">89 ₴</div>
+              <button class="btn-add">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-title">
+          Рекомендовано для вас
+          <a href="#" class="view-all">Всі рецепти →</a>
+        </div>
+        <p style="color: var(--text-muted);">Тут будуть рецепти, підібрані LLM на основі вашого кошика...</p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

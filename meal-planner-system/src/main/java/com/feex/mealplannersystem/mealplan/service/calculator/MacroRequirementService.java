@@ -10,196 +10,134 @@ import java.util.List;
 @Component
 public class MacroRequirementService {
 
-    @Getter
-    public static class MacroTarget {
-        public final int proteinTargetG, proteinMinG, proteinMaxG;
-        public final int fatTargetG, fatMinG, fatMaxG, saturatedFatMaxG;
-        public final int carbsTargetG, carbsAbsoluteMinG;
-        public final boolean lowCarbWarning;
-        public final int proteinPerMealG, fatPerMealG, carbsPerMealG;
-        public final int proteinPerBreakfastG, proteinPerLunchG, proteinPerDinnerG, proteinPerSnackG;
-        public final int carbsPerBreakfastG, carbsPerLunchG, carbsPerDinnerG, carbsPerSnackG;
-        public final boolean recommendSmallerPortions;
+    public MacroTarget calculateMacros(UserProfileModel user, double tdee) {
+        double effectiveTdee = Math.max(tdee, 800.0);
+        List<String> conditions = extractConditions(user);
 
-        public MacroTarget(int proteinTargetG, int proteinMinG, int proteinMaxG,
-                           int fatTargetG, int fatMinG, int fatMaxG, int saturatedFatMaxG,
-                           int carbsTargetG, int carbsAbsoluteMinG, boolean lowCarbWarning,
-                           int mealsPerDay, boolean recommendSmallerPortions) {
-            this.proteinTargetG = proteinTargetG;
-            this.proteinMinG = proteinMinG;
-            this.proteinMaxG = proteinMaxG;
-            this.fatTargetG = fatTargetG;
-            this.fatMinG = fatMinG;
-            this.fatMaxG = fatMaxG;
-            this.saturatedFatMaxG = saturatedFatMaxG;
-            this.carbsTargetG = carbsTargetG;
-            this.carbsAbsoluteMinG = carbsAbsoluteMinG;
-            this.lowCarbWarning = lowCarbWarning;
-            this.recommendSmallerPortions = recommendSmallerPortions;
+        double[] proteinRange = resolveProteinRange(user, conditions);
+        int[] proteinTargets = calculateProteinTargets(user, effectiveTdee, proteinRange);
+        int[] fatAndCarbs = calculateFatAndCarbs(user, effectiveTdee, conditions, proteinTargets[0]);
+        fatAndCarbs = adjustCarbsMinimum(fatAndCarbs, conditions);
 
-            int meals = mealsPerDay > 0 ? mealsPerDay : 3;
-            this.proteinPerMealG = (int) Math.round((double) proteinTargetG / meals);
-            this.fatPerMealG     = (int) Math.round((double) fatTargetG / meals);
-            this.carbsPerMealG   = (int) Math.round((double) carbsTargetG / meals);
-
-            double[] pw = mealWeights(meals);
-            this.proteinPerBreakfastG = (int) Math.round(proteinTargetG * pw[0]);
-            this.proteinPerLunchG     = (int) Math.round(proteinTargetG * pw[1]);
-            this.proteinPerDinnerG    = (int) Math.round(proteinTargetG * pw[2]);
-            this.proteinPerSnackG     = meals >= 4 ? (int) Math.round(proteinTargetG * pw[3]) : 0;
-
-            double[] cw = carbWeights(meals);
-            this.carbsPerBreakfastG = (int) Math.round(carbsTargetG * cw[0]);
-            this.carbsPerLunchG     = (int) Math.round(carbsTargetG * cw[1]);
-            this.carbsPerDinnerG    = (int) Math.round(carbsTargetG * cw[2]);
-            this.carbsPerSnackG     = meals >= 4 ? (int) Math.round(carbsTargetG * cw[3]) : 0;
-        }
-
-        public int getProteinTargetForSlot(String slotType) {
-            if (slotType == null) return proteinPerMealG;
-            return switch (slotType.toLowerCase()) {
-                case "breakfast" -> proteinPerBreakfastG;
-                case "lunch"     -> proteinPerLunchG;
-                case "dinner"    -> proteinPerDinnerG;
-                case "snack", "snack_2" -> proteinPerSnackG > 0 ? proteinPerSnackG : proteinPerMealG;
-                default          -> proteinPerMealG;
-            };
-        }
-
-        public int getCarbsTargetForSlot(String slotType) {
-            if (slotType == null) return carbsPerMealG;
-            return switch (slotType.toLowerCase()) {
-                case "breakfast" -> carbsPerBreakfastG;
-                case "lunch"     -> carbsPerLunchG;
-                case "dinner"    -> carbsPerDinnerG;
-                case "snack", "snack_2" -> carbsPerSnackG > 0 ? carbsPerSnackG : carbsPerMealG;
-                default          -> carbsPerMealG;
-            };
-        }
-
-        private static double[] mealWeights(int meals) {
-            return switch (meals) {
-                case 4  -> new double[]{0.20, 0.35, 0.30, 0.15};
-                case 5  -> new double[]{0.18, 0.30, 0.28, 0.12, 0.12};
-                default -> new double[]{0.25, 0.40, 0.35};
-            };
-        }
-
-        private static double[] carbWeights(int meals) {
-            return switch (meals) {
-                case 4  -> new double[]{0.25, 0.35, 0.28, 0.12};
-                case 5  -> new double[]{0.22, 0.30, 0.25, 0.12, 0.11};
-                default -> new double[]{0.30, 0.40, 0.30};
-            };
-        }
+        return buildMacroTarget(proteinTargets, fatAndCarbs, effectiveTdee, conditions, user.getMealsPerDay());
     }
 
-    public MacroTarget calculateMacros(UserProfileModel user, double tdee) {
-        String goal     = upper(user.getGoal(), "MAINTENANCE");
+    private List<String> extractConditions(UserProfileModel user) {
+        if (user.getHealthConditions() == null) return List.of();
+        return user.getHealthConditions().stream()
+                .map(String::toUpperCase)
+                .toList();
+    }
+
+    private double[] resolveProteinRange(UserProfileModel user, List<String> conditions) {
+        String goal = upper(user.getGoal(), "MAINTENANCE");
         String activity = upper(user.getActivityLevel(), "SEDENTARY");
-        String diet     = upper(user.getDietType(), "OMNIVORE");
-        int age         = user.getAge();
-        double weightKg = user.getWeightKg();
-        int meals       = user.getMealsPerDay() > 0 ? user.getMealsPerDay() : 3;
+        String diet = upper(user.getDietType(), "OMNIVORE");
 
-        List<String> conditions = new ArrayList<>();
-        if (user.getHealthConditions() != null)
-            user.getHealthConditions().forEach(c -> conditions.add(c.toUpperCase()));
-
-        boolean hasIbs = conditions.contains("IBS");
-
-        double proteinLo, proteinHi;
+        double lo, hi;
         switch (goal) {
             case "WEIGHT_LOSS" -> {
-                if ("ACTIVE".equals(activity) || "VERY_ACTIVE".equals(activity)) { proteinLo = 1.6; proteinHi = 2.4; }
-                else if ("MODERATE".equals(activity))                             { proteinLo = 1.6; proteinHi = 2.0; }
-                else                                                              { proteinLo = 1.2; proteinHi = 1.5; }
+                if ("ACTIVE".equals(activity) || "VERY_ACTIVE".equals(activity)) { lo = 1.6; hi = 2.4; }
+                else if ("MODERATE".equals(activity)) { lo = 1.6; hi = 2.0; }
+                else { lo = 1.2; hi = 1.5; }
             }
-            case "WEIGHT_GAIN" -> { proteinLo = 1.6; proteinHi = 2.4; }
+            case "WEIGHT_GAIN" -> { lo = 1.6; hi = 2.4; }
             default -> {
-                if ("SEDENTARY".equals(activity))                                                { proteinLo = 1.0; proteinHi = 1.2; }
-                else if ("LIGHT".equals(activity))                                               { proteinLo = 1.2; proteinHi = 1.6; }
-                else if ("MODERATE".equals(activity) || "ACTIVE".equals(activity))              { proteinLo = 1.4; proteinHi = 2.0; }
-                else                                                                             { proteinLo = 1.6; proteinHi = 2.2; }
+                if ("SEDENTARY".equals(activity)) { lo = 1.0; hi = 1.2; }
+                else if ("LIGHT".equals(activity)) { lo = 1.2; hi = 1.6; }
+                else if ("MODERATE".equals(activity) || "ACTIVE".equals(activity)) { lo = 1.4; hi = 2.0; }
+                else { lo = 1.6; hi = 2.2; }
             }
         }
-        if (age >= 50) {
-            proteinLo = Math.max(proteinLo, 1.5);
-            proteinHi = Math.max(proteinHi, 2.2);
-            if ("WEIGHT_GAIN".equals(goal)) proteinLo = Math.max(proteinLo, 1.7);
+
+        if (user.getAge() >= 50) {
+            lo = Math.max(lo, 1.5);
+            hi = Math.max(hi, 2.2);
+            if ("WEIGHT_GAIN".equals(goal)) lo = Math.max(lo, 1.7);
         }
+
         double multiplier = switch (diet) {
-            case "VEGETARIAN"             -> 1.15;
-            case "VEGAN", "PLANT_BASED"   -> 1.20;
-            default                       -> 1.0;
+            case "VEGETARIAN" -> 1.15;
+            case "VEGAN", "PLANT_BASED" -> 1.20;
+            default -> 1.0;
         };
-        proteinLo *= multiplier;
-        proteinHi *= multiplier;
 
-        double effectiveTdee = Math.max(tdee, 800.0);
-        int proteinTargetG = (int) Math.round(weightKg * ((proteinLo + proteinHi) / 2.0));
-        int proteinMinG    = (int) Math.round(weightKg * proteinLo);
-        int proteinMaxG    = (int) Math.round(weightKg * proteinHi);
-        int maxProteinCals = (int) (effectiveTdee * 0.50);
-        if (proteinTargetG * 4 > maxProteinCals) proteinTargetG = Math.max(maxProteinCals / 4, 1);
-        proteinMinG = Math.min(proteinMinG, proteinTargetG);
-        proteinMaxG = Math.max(proteinMaxG, proteinTargetG);
-
-        int proteinCalories = proteinTargetG * 4;
-        int remaining = Math.max((int) Math.round(effectiveTdee) - proteinCalories, 0);
-
-        int fatTargetG, carbsTargetG;
-        if (conditions.contains("DIABETES")) {
-            int carbsCals = Math.min((int) Math.round(effectiveTdee * 0.40), remaining);
-            carbsTargetG = carbsCals / 4;
-            fatTargetG   = Math.max((remaining - carbsTargetG * 4) / 9, 0);
-        } else {
-            double fatPct = "WEIGHT_LOSS".equals(goal) ? 0.25 : 0.30;
-            if (conditions.contains("HIGH_CHOLESTEROL")) fatPct = Math.min(fatPct, 0.25);
-            if (hasIbs) fatPct = Math.min(fatPct, 0.25);
-            int fatCals   = Math.min((int) Math.round(effectiveTdee * fatPct), remaining);
-            fatTargetG    = fatCals / 9;
-            carbsTargetG  = Math.max((remaining - fatTargetG * 9) / 4, 0);
-        }
-
-        final int carbsAbsoluteMinG = 130;
-        boolean lowCarbWarning = carbsTargetG < carbsAbsoluteMinG;
-        if (!conditions.contains("DIABETES") && carbsTargetG < carbsAbsoluteMinG) {
-            int missing = carbsAbsoluteMinG - carbsTargetG;
-            int steal   = missing * 4;
-            if (fatTargetG * 9 >= steal) {
-                fatTargetG  -= steal / 9;
-                carbsTargetG = carbsAbsoluteMinG;
-                lowCarbWarning = false;
-            }
-        }
-
-        int fatMinG          = (int) Math.round((effectiveTdee * 0.20) / 9.0);
-        int fatMaxG          = (int) Math.round((effectiveTdee * 0.35) / 9.0);
-        fatTargetG           = Math.max(fatTargetG, fatMinG);
-        int saturatedFatMaxG = conditions.contains("HIGH_CHOLESTEROL")
-                ? (int) Math.round((effectiveTdee * 0.07) / 9.0)
-                : (int) Math.round((effectiveTdee * 0.10) / 9.0);
-
-        return new MacroTarget(
-                proteinTargetG, proteinMinG, proteinMaxG,
-                fatTargetG, fatMinG, fatMaxG, saturatedFatMaxG,
-                carbsTargetG, carbsAbsoluteMinG, lowCarbWarning,
-                meals, hasIbs);
+        return new double[]{ lo * multiplier, hi * multiplier };
     }
 
-    public static int calcCarbsFit(double recipeCarbsG, int carbsPerMealG, int dailyCarbsTargetG, String recipeName) {
-        if (dailyCarbsTargetG > 150 && recipeCarbsG < 10) {
-            String nl = recipeName != null ? recipeName.toLowerCase() : "";
-            if (nl.contains("low carb") || nl.contains("keto") || nl.contains("zero carb")) return 0;
+    private int[] calculateProteinTargets(UserProfileModel user, double tdee, double[] range) {
+        double lo = range[0], hi = range[1];
+        double weightKg = user.getWeightKg();
+
+        int target = (int) Math.round(weightKg * ((lo + hi) / 2.0));
+        int min = (int) Math.round(weightKg * lo);
+        int max = (int) Math.round(weightKg * hi);
+
+        int maxProteinCals = (int) (tdee * 0.50);
+        if (target * 4 > maxProteinCals) target = Math.max(maxProteinCals / 4, 1);
+        min = Math.min(min, target);
+        max = Math.max(max, target);
+
+        return new int[]{ target, min, max };
+    }
+
+    private int[] calculateFatAndCarbs(UserProfileModel user, double tdee,
+                                       List<String> conditions, int proteinTargetG) {
+        String goal = upper(user.getGoal(), "MAINTENANCE");
+        boolean hasIbs = conditions.contains("IBS");
+
+        int remaining = Math.max((int) Math.round(tdee) - proteinTargetG * 4, 0);
+
+        if (conditions.contains("DIABETES")) {
+            int carbsCals = Math.min((int) Math.round(tdee * 0.40), remaining);
+            int carbsTarget = carbsCals / 4;
+            int fatTarget = Math.max((remaining - carbsTarget * 4) / 9, 0);
+            return new int[]{ fatTarget, carbsTarget };
         }
-        if (carbsPerMealG <= 0) return 5;
-        double ratio = recipeCarbsG / (double) carbsPerMealG;
-        if (ratio >= 0.85) return 10;
-        if (ratio >= 0.60) return 7;
-        if (ratio >= 0.35) return 4;
-        if (ratio >= 0.15) return 2;
-        return 0;
+
+        double fatPct = "WEIGHT_LOSS".equals(goal) ? 0.25 : 0.30;
+        if (conditions.contains("HIGH_CHOLESTEROL")) fatPct = Math.min(fatPct, 0.25);
+        if (hasIbs) fatPct = Math.min(fatPct, 0.25);
+
+        int fatTarget = (int) Math.round(tdee * fatPct) / 9;
+        int carbsTarget = Math.max((remaining - fatTarget * 9) / 4, 0);
+        return new int[]{ fatTarget, carbsTarget };
+    }
+
+    private int[] adjustCarbsMinimum(int[] fatAndCarbs, List<String> conditions) {
+        final int CARBS_MIN = 130;
+        int fat = fatAndCarbs[0];
+        int carbs = fatAndCarbs[1];
+
+        if (!conditions.contains("DIABETES") && carbs < CARBS_MIN) {
+            int steal = (CARBS_MIN - carbs) * 4;
+            if (fat * 9 >= steal) {
+                fat -= steal / 9;
+                carbs = CARBS_MIN;
+            }
+        }
+        return new int[]{ fat, carbs };
+    }
+
+    private MacroTarget buildMacroTarget(int[] protein, int[] fatCarbs,
+                                         double tdee, List<String> conditions, int meals) {
+        int fatTarget  = fatCarbs[0];
+        int carbsTarget = fatCarbs[1];
+
+        int fatMin = (int) Math.round((tdee * 0.20) / 9.0);
+        int fatMax = (int) Math.round((tdee * 0.35) / 9.0);
+        fatTarget = Math.max(fatTarget, fatMin);
+        int saturatedFatMax = conditions.contains("HIGH_CHOLESTEROL")
+                ? (int) Math.round((tdee * 0.07) / 9.0)
+                : (int) Math.round((tdee * 0.10) / 9.0);
+
+        boolean lowCarbWarning = carbsTarget < 130;
+
+        return new MacroTarget(
+                protein[0], protein[1], protein[2],
+                fatTarget, fatMin, fatMax, saturatedFatMax,
+                carbsTarget, 130, lowCarbWarning,
+                meals, conditions.contains("IBS"));
     }
 
     public static int calcFatFit(double recipeFatG, int fatPerMealG) {

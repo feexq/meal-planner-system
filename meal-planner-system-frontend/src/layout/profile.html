@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мій Профіль | FoodMart</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --neutral: #F7F8FA; 
+      --surface: #FFFFFF;
+      --text: #1A1030;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --success: #10B981;
+      --danger: #EF4444;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; color: var(--text); 
+      background-color: var(--neutral); -webkit-font-smoothing: antialiased; padding-bottom: 60px;
+    }
+    
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 4%; }
+
+    /* --- Шапка --- */
+    header { padding: 12px 0; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    .profile-avatar-sm { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
+
+    /* --- Софт Банер --- */
+    .survey-banner { 
+      background: var(--primary-light); border: 1px dashed var(--primary); border-radius: var(--radius-md); 
+      padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-top: 24px; 
+    }
+    .banner-text h3 { font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
+    .banner-text p { font-size: 12px; color: var(--primary-dark); opacity: 0.8; margin: 0; }
+    .btn-banner { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; font-size: 12px; cursor: pointer; transition: background 0.2s; text-decoration: none; white-space: nowrap; }
+    .btn-banner:hover { background: var(--primary-dark); }
+
+    /* --- Основна сітка профілю --- */
+    .profile-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; margin-top: 24px; align-items: start; }
+
+    /* --- БІЧНЕ МЕНЮ --- */
+    .sidebar { background: #fff; border-radius: var(--radius-lg); padding: 20px 12px; border: 1px solid var(--border); position: sticky; top: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .nav-menu { display: flex; flex-direction: column; gap: 4px; list-style: none; }
+    .nav-item a { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 13px; transition: all 0.2s; border: 1px solid transparent; }
+    .nav-item a:hover { background: var(--neutral); color: var(--text); border-color: var(--border); }
+    .nav-item a.active { background: var(--primary-light); color: var(--primary-dark); border-color: #D6C2F9; }
+    .nav-icon { font-size: 18px; }
+
+    /* --- Контентна частина --- */
+    .content-area { display: flex; flex-direction: column; gap: 24px; }
+
+    /* Картка: Головна інфо */
+    .profile-card { 
+      background: #fff; border-radius: var(--radius-lg); padding: 24px; 
+      border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); 
+      position: relative; display: flex; flex-direction: row; gap: 20px; align-items: center;
+    }
+    
+    .avatar-large { flex-shrink: 0; width: 80px; height: 80px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(108, 63, 197, 0.15); position: relative; }
+    .avatar-edit { position: absolute; bottom: 0px; right: -4px; width: 24px; height: 24px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 1px solid var(--border); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+    .avatar-edit:hover { transform: scale(1.1); }
+    
+    .user-details { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; min-width: 0; }
+    .user-details h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-meta { color: var(--text-muted); font-size: 12px; display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+    .user-bio { font-size: 12px; color: var(--text); background: var(--neutral); padding: 6px 10px; border-radius: var(--radius-sm); display: inline-block; border: 1px solid var(--border); width: fit-content; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .btn-edit { position: absolute; top: 20px; right: 20px; background: #fff; border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s; color: var(--text-muted); display: flex; align-items: center; gap: 4px; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .btn-edit:hover { background: var(--neutral); color: var(--text); border-color: #D1D5DB; }
+
+    /* Грід для віджетів (Верхній ряд) */
+    .widgets-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+
+    /* Картка: Streak (Вогник) */
+    .streak-card { background: linear-gradient(135deg, #FFF9F0 0%, #FFF0D4 100%); border: 1px solid #FDE6B5; position: relative; overflow: hidden; padding: 20px; border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: space-between; }
+    .bg-fire { position: absolute; right: -10px; top: -10px; font-size: 80px; opacity: 0.15; transform: rotate(15deg); pointer-events: none; }
+    
+    .streak-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; position: relative; z-index: 2; }
+    .streak-title { font-size: 14px; font-weight: 800; color: #B45309; display: flex; align-items: center; gap: 6px; }
+    .streak-type { font-size: 9px; font-weight: 800; text-transform: uppercase; background: #FEF3C7; color: #D97706; padding: 4px 6px; border-radius: 4px; border: 1px solid #FDE68A; }
+    
+    .streak-main { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; position: relative; z-index: 2; }
+    .streak-days { font-size: 36px; font-weight: 800; color: #D97706; line-height: 1; letter-spacing: -1px; }
+    .streak-lbl { font-size: 13px; font-weight: 600; color: #B45309; }
+    
+    .streak-footer { display: flex; gap: 16px; margin-bottom: 12px; position: relative; z-index: 2; }
+    .s-stat { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(253, 230, 138, 0.5); }
+    .s-stat-val { font-size: 12px; font-weight: 800; color: #92400E; }
+    .s-stat-lbl { font-size: 10px; font-weight: 600; color: #B45309; text-transform: uppercase; }
+    
+    .streak-tiers { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px dashed rgba(217, 119, 6, 0.2); position: relative; z-index: 2; }
+    .tier { display: flex; flex-direction: column; align-items: center; gap: 2px; opacity: 0.4; filter: grayscale(100%); transition: all 0.3s; }
+    .tier.completed { opacity: 1; filter: grayscale(0%); }
+    .t-icon { font-size: 16px; background: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15); border: 2px solid transparent; }
+    .tier.completed .t-icon { border-color: #FDE68A; }
+    .t-days { font-size: 9px; font-weight: 800; color: #B45309; text-transform: uppercase; }
+    .tier-line { flex-grow: 1; height: 3px; background: rgba(217, 119, 6, 0.15); margin: 0 4px; transform: translateY(-7px); border-radius: 2px; }
+    .tier-line.completed { background: #FCD34D; }
+
+    /* Картка: Прогрес ваги */
+    .weight-card { display: flex; flex-direction: column; justify-content: space-between; padding: 24px; background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .w-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .w-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .w-btn { color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; padding: 4px 10px; border-radius: 20px; background: var(--primary-light); transition: background 0.2s; }
+    .w-btn:hover { background: #E0D4FC; }
+    
+    .w-vals { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+    .w-current { font-size: 26px; font-weight: 800; line-height: 1; }
+    .w-current span { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+    .w-target { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+    .w-target span { color: var(--text); font-weight: 700; }
+    
+    .progress-bar-wrap { width: 100%; height: 8px; background: var(--neutral); border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+    .progress-bar { height: 100%; background: var(--primary); border-radius: 4px; transition: width 1s ease; }
+    .w-percent { font-size: 11px; font-weight: 600; color: var(--primary); text-align: right; }
+
+
+    /* =========================================
+       🔥 НОВЕ: HEATMAP (ІСТОРІЯ АКТИВНОСТІ) 
+       ========================================= */
+    .heatmap-card { 
+      background: #fff; border-radius: var(--radius-lg); padding: 24px; 
+      border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); 
+    }
+    .hm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .hm-title { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    
+    .hm-scroll-container { width: 100%; overflow-x: auto; padding-bottom: 8px; }
+    /* Ховаємо скролбар для краси */
+    .hm-scroll-container::-webkit-scrollbar { height: 6px; }
+    .hm-scroll-container::-webkit-scrollbar-track { background: var(--neutral); border-radius: 4px; }
+    .hm-scroll-container::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+
+    .hm-grid { 
+      display: grid; 
+      grid-template-rows: repeat(7, 1fr); 
+      grid-auto-flow: column; 
+      gap: 4px; 
+      width: max-content; /* Щоб грід не стискався */
+    }
+    
+    .hm-cell { 
+      width: 12px; height: 12px; border-radius: 3px; 
+      background: var(--neutral); transition: transform 0.1s; cursor: pointer;
+    }
+    .hm-cell:hover { transform: scale(1.2); }
+    
+    /* Відтінки фіолетового для Heatmap */
+    .hm-cell[data-level="1"] { background: #E0D4FC; } /* Дуже світлий */
+    .hm-cell[data-level="2"] { background: #B388FF; } /* Світлий */
+    .hm-cell[data-level="3"] { background: var(--primary); } /* Основний */
+    .hm-cell[data-level="4"] { background: var(--primary-dark); } /* Найтемніший */
+
+    .hm-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 11px; color: var(--text-muted); font-weight: 600; }
+    .hm-legend { display: flex; align-items: center; gap: 6px; }
+    .hm-legend-cells { display: flex; gap: 4px; }
+    /* ========================================= */
+
+
+    /* --- НИЖНІ ВІДЖЕТИ --- */
+    .bottom-widgets { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; }
+
+    /* ВІДЖЕТ 3: Тижневі показники */
+    .stats-card { 
+      padding: 24px; display: flex; flex-direction: column; justify-content: space-between; 
+      background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); 
+    }
+    .st-header { font-size: 14px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .st-title-wrap { display: flex; align-items: center; gap: 6px; }
+    .st-link { font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+    .st-link:hover { opacity: 0.8; }
+    
+    .st-overview { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .st-main-item { background: var(--neutral); padding: 12px 8px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; display: flex; flex-direction: column; justify-content: center; }
+    .st-main-val { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 2px; line-height: 1; }
+    .st-main-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; line-height: 1.2; }
+    
+    .st-macros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: auto; }
+    .macro-col { display: flex; flex-direction: column; gap: 6px; }
+    .m-top { display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 11px; font-weight: 600; gap: 4px; }
+    .m-top span { white-space: nowrap; }
+    .m-bar-bg { width: 100%; height: 6px; background: var(--neutral); border-radius: 3px; overflow: hidden; }
+    .m-bar { height: 100%; border-radius: 3px; }
+
+    /* ВІДЖЕТ 4: Останнє замовлення */
+    .order-card { padding: 24px; display: flex; flex-direction: column; background: #FAFAFA; justify-content: space-between; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .ord-header { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
+    .ord-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .ord-link { font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none; }
+    .ord-status { background: #E8F5E9; color: #047857; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; display: inline-block; margin-bottom: 12px; border: 1px solid #A7F3D0; width: fit-content; letter-spacing: 0.05em; }
+    .ord-details { font-size: 13px; color: var(--text); margin-bottom: 4px; font-weight: 700; }
+    .ord-date { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+    
+    .ord-box { width: 100%; padding: 16px; background: #fff; border: 2px dashed var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 36px; transition: border-color 0.2s; flex-grow: 1; }
+    .ord-box:hover { border-color: var(--primary-light); }
+
+    /* --- АДАПТИВНІСТЬ --- */
+    @media (max-width: 900px) {
+      .profile-layout { grid-template-columns: 1fr; gap: 20px; }
+      .sidebar { position: static; padding: 16px; }
+      .nav-menu { flex-direction: row; overflow-x: auto; padding-bottom: 8px; }
+      .nav-item { flex-shrink: 0; }
+      .widgets-grid, .bottom-widgets { grid-template-columns: 1fr; }
+      
+      .profile-card { flex-direction: column; text-align: center; gap: 16px; padding: 24px 20px; }
+      .btn-edit { position: static; margin-top: 8px; justify-content: center; }
+      .user-meta { justify-content: center; }
+      .user-bio { max-width: 100%; white-space: normal; }
+      
+      .st-overview { grid-template-columns: 1fr; gap: 8px; }
+      .st-macros { grid-template-columns: 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">FoodMart</a>
+      <nav class="nav-links">
+        <a href="#">Магазин</a>
+        <a href="#">Трекер Раціону</a>
+      </nav>
+      <div class="profile-avatar-sm">ВМ</div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <div class="survey-banner">
+      <div class="banner-text">
+        <h3>⚠️ Ви ще не налаштували свій раціон</h3>
+        <p>Пройдіть коротке опитування, щоб ШІ-асистент зміг підібрати ідеальне меню.</p>
+      </div>
+      <a href="/survey.html" class="btn-banner">Пройти опитування</a>
+    </div>
+
+    <div class="profile-layout">
+      
+      <aside class="sidebar">
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="#" class="active"><span class="nav-icon">👤</span> Особисті дані</a></li>
+          <li class="nav-item"><a href="orders.html"><span class="nav-icon">🛍️</span> Мої замовлення</a></li>
+          <li class="nav-item"><a href="preferences.html"><span class="nav-icon">📝</span> Параметри раціону</a></li>
+          <li class="nav-item"><a href="#"><span class="nav-icon">📊</span> Статистика</a></li>
+          <li class="nav-item" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 8px;"><a href="#" style="color: var(--danger);"><span class="nav-icon">🚪</span> Вийти</a></li>
+        </ul>
+      </aside>
+
+      <div class="content-area">
+
+        <div class="profile-card">
+          <button class="btn-edit">✏️ Редагувати</button>
+          
+          <div class="avatar-large">
+            👨‍💻
+            <div class="avatar-edit" title="Змінити аватар">📷</div>
+          </div>
+          
+          <div class="user-details">
+            <h2>Mozol V.O.</h2>
+            <div class="user-meta">
+              <span>✉️ v.mozol@kpi.ua</span>
+              <span>🌍 Europe/Kyiv</span>
+              <span>🎂 20 років</span>
+            </div>
+            <div class="user-bio">Студент ФІОТ, розробник Meal Planner System 🚀</div>
+          </div>
+        </div>
+
+        <div class="widgets-grid">
+          
+          <div class="streak-card">
+            <div class="bg-fire">🔥</div>
+            <div class="streak-header">
+              <div class="streak-title">🔥 Активність</div>
+              <div class="streak-type">Гнучкий режим</div>
+            </div>
+            
+            <div class="streak-main">
+              <div class="streak-days">12</div>
+              <div class="streak-lbl">днів поспіль!</div>
+            </div>
+
+            <div class="streak-footer">
+              <div class="s-stat" title="Всього активних днів">
+                <span class="s-stat-val">45</span>
+                <span class="s-stat-lbl">Днів всього</span>
+              </div>
+              <div class="s-stat" title="Доступні заморозки">
+                <span class="s-stat-val">❄️ 2</span>
+                <span class="s-stat-lbl">Заморозки</span>
+              </div>
+            </div>
+
+            <div class="streak-tiers">
+              <div class="tier completed" title="Новачок">
+                <span class="t-icon">🌱</span>
+                <span class="t-days">1 дн</span>
+              </div>
+              <div class="tier-line completed"></div>
+              <div class="tier completed" title="Втягуємось">
+                <span class="t-icon">🔥</span>
+                <span class="t-days">5 дн</span>
+              </div>
+              <div class="tier-line completed"></div>
+              <div class="tier completed" title="Стабільність (Поточний)">
+                <span class="t-icon" style="transform: scale(1.15); box-shadow: 0 0 10px rgba(245, 156, 10, 0.4);">☄️</span>
+                <span class="t-days">10 дн</span>
+              </div>
+              <div class="tier-line"></div>
+              <div class="tier" title="Легенда">
+                <span class="t-icon">🌋</span>
+                <span class="t-days">30 дн</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="weight-card">
+            <div>
+              <div class="w-header">
+                <div class="w-title">⚖️ Цільова вага</div>
+                <a href="#" class="w-btn">+ Записати</a>
+              </div>
+              <div class="w-vals">
+                <div class="w-current">76.5 <span>кг зараз</span></div>
+                <div class="w-target">Мета: <span>70.0 кг</span></div>
+              </div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" style="width: 45%;"></div>
+              </div>
+              <div class="w-percent">Пройдено 45% шляху</div>
+            </div>
+            <div style="margin-top: 16px; font-size: 11px; color: var(--text-muted); background: var(--neutral); padding: 8px 10px; border-radius: var(--radius-sm);">
+              Останній запис: <strong>Сьогодні, 09:00</strong>. Ви втратили 0.5 кг за тиждень.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="heatmap-card">
+          <div class="hm-header">
+            <div class="hm-title"><span>🗓️</span> Історія харчування за останні півроку</div>
+            <div style="font-size: 12px; color: var(--text-muted);">45 днів дотримання плану</div>
+          </div>
+          
+          <div class="hm-scroll-container">
+            <div class="hm-grid" id="heatmapGrid">
+              </div>
+          </div>
+
+          <div class="hm-footer">
+            <div>Всього відслідковано: 180 днів</div>
+            <div class="hm-legend">
+              Менше
+              <div class="hm-legend-cells">
+                <div class="hm-cell" data-level="0"></div>
+                <div class="hm-cell" data-level="1"></div>
+                <div class="hm-cell" data-level="2"></div>
+                <div class="hm-cell" data-level="3"></div>
+                <div class="hm-cell" data-level="4"></div>
+              </div>
+              Більше
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-widgets">
+          
+          <div class="stats-card">
+            <div class="st-header">
+              <div class="st-title-wrap"><span>📊</span> Тижнева статистика</div>
+              <a href="#" class="st-link">Детальніше →</a>
+            </div>
+            
+            <div class="st-overview">
+              <div class="st-main-item">
+                <div class="st-main-val">1,850</div>
+                <div class="st-main-lbl">Середні Ккал</div>
+              </div>
+              <div class="st-main-item">
+                <div class="st-main-val" style="color: var(--success);">85%</div>
+                <div class="st-main-lbl">Виконання</div>
+              </div>
+              <div class="st-main-item">
+                <div class="st-main-val" style="color: var(--accent);">5</div>
+                <div class="st-main-lbl">Чистих днів</div>
+              </div>
+            </div>
+
+            <div class="st-macros">
+              <div class="macro-col">
+                <div class="m-top"><span style="color:var(--text-muted)">Білки</span> <span>120 г</span></div>
+                <div class="m-bar-bg"><div class="m-bar" style="width: 80%; background: #3B82F6;"></div></div>
+              </div>
+              <div class="macro-col">
+                <div class="m-top"><span style="color:var(--text-muted)">Жири</span> <span>65 г</span></div>
+                <div class="m-bar-bg"><div class="m-bar" style="width: 60%; background: #F59E0B;"></div></div>
+              </div>
+              <div class="macro-col">
+                <div class="m-top"><span style="color:var(--text-muted)">Вуглеводи</span> <span>180 г</span></div>
+                <div class="m-bar-bg"><div class="m-bar" style="width: 70%; background: #10B981;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div>
+              <div class="ord-header">
+                <div class="ord-title">🛒 Доставка</div>
+                <a href="orders.html" class="ord-link">Всі →</a>
+              </div>
+              <div class="ord-status">В дорозі (In Transit)</div>
+              <div class="ord-details">Замовлення #ORD-2045</div>
+              <div class="ord-date">Очікується: Завтра, 14:00</div>
+            </div>
+            <div class="ord-box">📦</div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- ГЕНЕРАЦІЯ HEATMAP (Останні 180 днів / ~26 тижнів) ---
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById('heatmapGrid');
+      const totalDays = 182; // 26 тижнів * 7 днів
+      
+      // Створюємо масив з випадковою активністю, але останні 12 днів робимо "гарячими", 
+      // щоб це відповідало нашому Стріку (12 днів поспіль)
+      for(let i = 0; i < totalDays; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'hm-cell';
+        
+        let level = 0;
+        if (i >= totalDays - 12) {
+          // Останні 12 днів - гарантовано виконано (Стрік!)
+          level = Math.floor(Math.random() * 2) + 3; // Рівень 3 або 4
+        } else {
+          // Випадкова історія для попередніх днів
+          if (Math.random() > 0.6) {
+            level = Math.floor(Math.random() * 4) + 1;
+          }
+        }
+        
+        cell.setAttribute('data-level', level);
+        
+        // Додаємо тултип (Дату можна вираховувати динамічно, тут просто для демо)
+        let text = "Немає записів";
+        if (level === 1) text = "1 прийом їжі";
+        if (level === 2) text = "2 прийоми їжі";
+        if (level === 3) text = "Майже ідеально";
+        if (level === 4) text = "План виконано (4/4)";
+        cell.title = text;
+        
+        grid.appendChild(cell);
+      }
+    });
+  </script>
+
+</body>
+</html>

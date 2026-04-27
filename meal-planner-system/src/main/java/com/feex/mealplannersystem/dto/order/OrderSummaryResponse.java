@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.dto.order;
 
-import com.feex.mealplannersystem.common.OrderStatus;
+import com.feex.mealplannersystem.common.order.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

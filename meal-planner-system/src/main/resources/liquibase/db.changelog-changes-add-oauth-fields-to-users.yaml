@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-oauth-fields-to-users
+      author: feex
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: provider
+                  type: VARCHAR(50)
+                  defaultValue: LOCAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider_id
+                  type: VARCHAR(255)
+
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: password
+            columnDataType: VARCHAR(255)

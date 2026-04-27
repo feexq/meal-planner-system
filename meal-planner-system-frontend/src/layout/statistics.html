@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Статистика | FoodMart</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --neutral: #F7F8FA; 
+      --surface: #FFFFFF;
+      --text: #1A1030;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --success: #10B981;
+      --warning: #F59C0A;
+      --danger: #EF4444;
+      --blue: #3B82F6;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background-color: var(--neutral); -webkit-font-smoothing: antialiased; padding-bottom: 80px; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 4%; }
+
+    /* --- Header --- */
+    header { padding: 12px 0; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    .profile-avatar-sm { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
+
+    /* --- Layout --- */
+    .profile-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; margin-top: 32px; align-items: start; }
+    .sidebar { background: #fff; border-radius: var(--radius-lg); padding: 20px 12px; border: 1px solid var(--border); position: sticky; top: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .nav-menu { display: flex; flex-direction: column; gap: 4px; list-style: none; }
+    .nav-item a { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 13px; transition: all 0.2s; border: 1px solid transparent; }
+    .nav-item a:hover { background: var(--neutral); color: var(--text); border-color: var(--border); }
+    .nav-item a.active { background: var(--primary-light); color: var(--primary-dark); border-color: #D6C2F9; }
+    .nav-icon { font-size: 18px; }
+
+    /* --- Content --- */
+    .content-area { display: flex; flex-direction: column; gap: 24px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .page-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .page-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+
+    /* --- Period selector --- */
+    .period-tabs { display: flex; background: var(--neutral); padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--border); gap: 2px; }
+    .period-tab { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; border: none; background: transparent; transition: all 0.2s; }
+    .period-tab.active { background: #fff; color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+    /* --- Cards --- */
+    .card { background: #fff; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .card-title { font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .chart-container { position: relative; height: 250px; width: 100%; }
+    .badge-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: var(--neutral); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* ======================
+       ROW 1: КPI Summary
+    ======================= */
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .kpi-card { background: #fff; border-radius: var(--radius-md); padding: 18px 20px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .kpi-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+    .kpi-delta { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+    .delta-up { background: #D1FAE5; color: #065F46; }
+    .delta-down { background: #FEE2E2; color: #991B1B; }
+    .delta-neutral { background: var(--neutral); color: var(--text-muted); }
+
+    /* ======================
+       ROW 2: Weight + Goal
+    ======================= */
+    .row-goals { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+    .goal-widget { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .goal-donut { width: 140px; height: 140px; position: relative; margin-bottom: 16px; }
+    .goal-text-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .goal-text-inner strong { font-size: 24px; font-weight: 800; color: var(--primary); line-height: 1; }
+    .goal-text-inner span { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 4px; }
+    .goal-motivation { background: var(--primary-light); color: var(--primary-dark); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-top: 12px; }
+    .goal-stats-row { display: flex; gap: 16px; margin-top: 14px; width: 100%; }
+    .goal-stat { flex: 1; text-align: center; background: var(--neutral); padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .goal-stat-val { font-size: 14px; font-weight: 800; }
+    .goal-stat-lbl { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
+    .prediction-chip { display: inline-flex; align-items: center; gap: 6px; background: #EEF2FF; color: #4338CA; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; margin-top: 10px; border: 1px solid #C7D2FE; }
+
+    /* ======================
+       ROW 3: Zig-Zag + Radar
+    ======================= */
+    .row-ai { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .radar-legend { display: flex; gap: 12px; font-size: 11px; font-weight: 600; }
+    .radar-legend span { display: flex; align-items: center; gap: 4px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+    /* ======================
+       ROW 4: Macro Weekly Bar
+    ======================= */
+    .macro-tabs { display: flex; gap: 8px; }
+    .macro-tab { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
+    .macro-tab.protein.active, .macro-tab.protein:hover { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+    .macro-tab.fat.active, .macro-tab.fat:hover { background: #FFFBEB; color: #B45309; border-color: #FDE68A; }
+    .macro-tab.carbs.active, .macro-tab.carbs:hover { background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }
+
+    /* ======================
+       ROW 5: Calorie Heatmap (Calendar)
+    ======================= */
+    .hm-calendar-wrap { overflow-x: auto; }
+    .hm-calendar { display: flex; gap: 4px; min-width: 700px; }
+    .hm-week-col { display: flex; flex-direction: column; gap: 4px; }
+    .hm-cell-sq { width: 16px; height: 16px; border-radius: 3px; cursor: pointer; transition: transform 0.1s; }
+    .hm-cell-sq:hover { transform: scale(1.3); }
+    .hm-month-labels { display: flex; gap: 4px; font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; min-width: 700px; }
+    .hm-day-labels { display: flex; flex-direction: column; gap: 4px; padding-top: 20px; margin-right: 6px; }
+    .hm-day-lbl { font-size: 10px; color: var(--text-muted); font-weight: 600; height: 16px; display: flex; align-items: center; }
+    .hm-full { display: flex; }
+    .hm-legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); margin-top: 12px; }
+    .hm-legend-cells { display: flex; gap: 3px; }
+    .hm-legend-sq { width: 12px; height: 12px; border-radius: 2px; }
+    /* Colors: 0=empty, 1=green(norm), 2=yellow(over), 3=red(much over), 4=blue(under) */
+    .hm-l0 { background: var(--border); }
+    .hm-l1 { background: #10B981; }
+    .hm-l2 { background: #F59C0A; }
+    .hm-l3 { background: #EF4444; }
+    .hm-l4 { background: #93C5FD; }
+    .hm-stat-row { display: flex; gap: 20px; margin-bottom: 16px; }
+    .hm-stat { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--text); }
+    .hm-stat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ======================
+       ROW 6: Streak + Achievements
+    ======================= */
+    .row-gamification { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    
+    /* Streak card */
+    .streak-full-card { background: linear-gradient(135deg, #FFF9F0 0%, #FFF0D4 100%); border: 1px solid #FDE6B5; border-radius: var(--radius-lg); padding: 24px; position: relative; overflow: hidden; }
+    .bg-fire { position: absolute; right: -15px; top: -15px; font-size: 100px; opacity: 0.12; transform: rotate(15deg); pointer-events: none; }
+    .streak-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
+    .streak-title { font-size: 15px; font-weight: 800; color: #B45309; display: flex; align-items: center; gap: 6px; }
+    .streak-type-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; background: #FEF3C7; color: #D97706; padding: 4px 8px; border-radius: 4px; border: 1px solid #FDE68A; }
+    .streak-main-num { font-size: 56px; font-weight: 800; color: #D97706; line-height: 1; letter-spacing: -2px; position: relative; z-index: 2; }
+    .streak-main-lbl { font-size: 14px; font-weight: 600; color: #B45309; margin-bottom: 16px; position: relative; z-index: 2; }
+    .streak-stats { display: flex; gap: 12px; margin-bottom: 20px; position: relative; z-index: 2; }
+    .s-stat { display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.6); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(253,230,138,0.6); flex: 1; }
+    .s-stat-val { font-size: 18px; font-weight: 800; color: #92400E; }
+    .s-stat-lbl { font-size: 10px; font-weight: 600; color: #B45309; text-transform: uppercase; margin-top: 2px; }
+    .streak-tiers { display: flex; align-items: center; padding-top: 16px; border-top: 1px dashed rgba(217,119,6,0.3); position: relative; z-index: 2; }
+    .tier { display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: 0.35; filter: grayscale(100%); transition: all 0.3s; }
+    .tier.done { opacity: 1; filter: grayscale(0%); }
+    .tier.current { opacity: 1; filter: grayscale(0%); }
+    .t-icon { font-size: 18px; background: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(217,119,6,0.2); border: 2px solid transparent; }
+    .tier.done .t-icon, .tier.current .t-icon { border-color: #FDE68A; }
+    .tier.current .t-icon { box-shadow: 0 0 0 3px rgba(251,191,36,0.3); }
+    .t-days { font-size: 9px; font-weight: 800; color: #B45309; text-transform: uppercase; }
+    .tier-line { flex-grow: 1; height: 3px; background: rgba(217,119,6,0.15); margin: 0 4px; transform: translateY(-10px); border-radius: 2px; }
+    .tier-line.done { background: #FCD34D; }
+    .freeze-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; position: relative; z-index: 2; font-size: 12px; font-weight: 600; color: #B45309; }
+    .freeze-icon { font-size: 14px; }
+    .freeze-chips { display: flex; gap: 4px; }
+    .freeze-chip { width: 20px; height: 20px; border-radius: 50%; background: #BAE6FD; border: 2px solid #7DD3FC; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+    .freeze-chip.used { background: var(--border); border-color: var(--border); }
+
+    /* Achievements */
+    .achievements-card { background: #fff; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .achievements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .badge { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 8px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--neutral); cursor: pointer; transition: all 0.2s; text-align: center; }
+    .badge:hover { border-color: var(--primary); background: var(--primary-light); }
+    .badge.locked { opacity: 0.35; filter: grayscale(100%); }
+    .badge-icon { font-size: 28px; }
+    .badge-name { font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .badge-progress { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+    .badge.earned { border-color: #FDE68A; background: #FFFBEB; }
+    .badge.earned .badge-name { color: #B45309; }
+
+    /* ======================
+       ROW 7: Food Top + Word Cloud
+    ======================= */
+    .row-food { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .top-list { display: flex; flex-direction: column; gap: 10px; }
+    .top-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--neutral); border-radius: var(--radius-md); border: 1px solid var(--border); transition: border-color 0.2s; }
+    .top-item:hover { border-color: var(--primary); }
+    .top-item-info { display: flex; align-items: center; gap: 12px; }
+    .top-rank { width: 26px; height: 26px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--text-muted); box-shadow: 0 2px 4px rgba(0,0,0,0.06); flex-shrink: 0; }
+    .rank-1 { background: #FEF08A; color: #B45309; }
+    .rank-2 { background: #E5E7EB; color: #374151; }
+    .rank-3 { background: #FFEDD5; color: #92400E; }
+    .top-name { font-size: 13px; font-weight: 700; }
+    .top-count { font-size: 12px; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 4px 8px; border-radius: 12px; white-space: nowrap; }
+    .top-bar-wrap { width: 60px; height: 4px; background: var(--border); border-radius: 2px; margin-top: 4px; }
+    .top-bar-fill { height: 100%; background: var(--primary); border-radius: 2px; }
+    
+    .word-cloud { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; padding: 16px; text-align: center; min-height: 200px; }
+    .word { font-weight: 800; color: var(--primary); transition: all 0.2s; cursor: default; line-height: 1; }
+    .word:hover { color: var(--accent); transform: scale(1.1); }
+    .w-huge { font-size: 34px; opacity: 1; }
+    .w-large { font-size: 26px; opacity: 0.9; }
+    .w-medium { font-size: 18px; opacity: 0.8; }
+    .w-small { font-size: 13px; opacity: 0.55; color: var(--text-muted); }
+
+    /* ======================
+       ROW 8: Plan Completion + Budget
+    ======================= */
+    .row-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .completion-bar-list { display: flex; flex-direction: column; gap: 10px; }
+    .comp-item { }
+    .comp-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .comp-label { font-size: 13px; font-weight: 600; }
+    .comp-val { font-size: 13px; font-weight: 700; }
+    .comp-bar-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .comp-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+    /* Budget spend */
+    .budget-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-icon { font-size: 20px; width: 36px; height: 36px; background: var(--neutral); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+    .budget-info { flex: 1; margin-left: 10px; }
+    .budget-name { font-size: 13px; font-weight: 700; }
+    .budget-date { font-size: 11px; color: var(--text-muted); }
+    .budget-amount { font-size: 14px; font-weight: 800; }
+
+    /* ======================
+       Tooltip custom
+    ======================= */
+    [title] { cursor: help; }
+
+    /* ======================
+       Responsive
+    ======================= */
+    @media (max-width: 900px) {
+      .profile-layout { grid-template-columns: 1fr; gap: 20px; }
+      .sidebar { position: static; }
+      .nav-menu { flex-direction: row; overflow-x: auto; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .row-goals, .row-ai, .row-food, .row-extra, .row-gamification { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">FoodMart</a>
+      <nav class="nav-links">
+        <a href="#">Магазин</a>
+        <a href="#">Трекер Раціону</a>
+      </nav>
+      <div class="profile-avatar-sm">ВМ</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="profile-layout">
+      
+      <aside class="sidebar">
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="profile.html"><span class="nav-icon">👤</span> Особисті дані</a></li>
+          <li class="nav-item"><a href="orders.html"><span class="nav-icon">🛍️</span> Мої замовлення</a></li>
+          <li class="nav-item"><a href="preferences.html"><span class="nav-icon">📝</span> Параметри раціону</a></li>
+          <li class="nav-item"><a href="#" class="active"><span class="nav-icon">📊</span> Статистика</a></li>
+        </ul>
+      </aside>
+
+      <div class="content-area">
+        
+        <!-- Page Header -->
+        <div>
+          <div class="page-header">
+            <h1 class="page-title">Аналітика та Прогрес</h1>
+            <div class="period-tabs">
+              <button class="period-tab active" onclick="switchPeriod(this, '7')">7 днів</button>
+              <button class="period-tab" onclick="switchPeriod(this, '30')">30 днів</button>
+              <button class="period-tab" onclick="switchPeriod(this, '90')">3 місяці</button>
+            </div>
+          </div>
+          <p class="page-subtitle">Оновлено сьогодні, 09:15 • На основі ваших даних з Трекеру Раціону</p>
+        </div>
+
+        <!-- ========================
+             KPI Summary Row
+        ========================= -->
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-label">Середні Ккал/день</div>
+            <div class="kpi-value" style="color: var(--primary);">1 850</div>
+            <div class="kpi-sub"><span class="kpi-delta delta-up">↓ −50 ккал</span> vs. попередній тиждень</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Виконання плану</div>
+            <div class="kpi-value" style="color: var(--success);">85%</div>
+            <div class="kpi-sub"><span class="kpi-delta delta-up">↑ +8%</span> покращення</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Чистих днів</div>
+            <div class="kpi-value" style="color: var(--accent);">5/7</div>
+            <div class="kpi-sub"><span class="kpi-delta delta-neutral">≈ однаково</span> в нормі ±5%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Поточний стрік</div>
+            <div class="kpi-value" style="color: #D97706;">🔥 12</div>
+            <div class="kpi-sub">Рекорд: <strong>21</strong> день</div>
+          </div>
+        </div>
+
+        <!-- ========================
+             WEIGHT + GOAL
+        ========================= -->
+        <div class="row-goals">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📉 Динаміка ваги</div>
+              <span class="badge-tag">WeightHistory</span>
+            </div>
+            <div class="chart-container"><canvas id="weightChart"></canvas></div>
+            <div style="display: flex; gap: 16px; margin-top: 12px; font-size: 12px; font-weight: 600;">
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 12px; height: 3px; background: var(--primary); border-radius: 2px;"></span> Фактична вага</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 12px; height: 3px; border-top: 2px dashed #F59C0A;"></span> Прогноз (тренд)</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 12px; height: 3px; border-top: 2px dashed var(--success);"></span> Ціль</span>
+            </div>
+          </div>
+
+          <div class="card goal-widget">
+            <div class="card-header" style="width: 100%;"><div class="card-title">🎯 Прогрес до цілі</div></div>
+            <div class="goal-donut">
+              <canvas id="goalChart"></canvas>
+              <div class="goal-text-inner">
+                <strong>75%</strong>
+                <span>Пройдено</span>
+              </div>
+            </div>
+            <div class="goal-motivation">✨ Залишилось 2.5 кг!</div>
+            <div class="goal-stats-row">
+              <div class="goal-stat">
+                <div class="goal-stat-val">80 кг</div>
+                <div class="goal-stat-lbl">Початок</div>
+              </div>
+              <div class="goal-stat">
+                <div class="goal-stat-val" style="color:var(--primary);">72.5 кг</div>
+                <div class="goal-stat-lbl">Зараз</div>
+              </div>
+              <div class="goal-stat">
+                <div class="goal-stat-val" style="color:var(--success);">70 кг</div>
+                <div class="goal-stat-lbl">Ціль</div>
+              </div>
+            </div>
+            <div class="prediction-chip">🔮 Мета ~ за 3 тижні</div>
+          </div>
+        </div>
+
+        <!-- ========================
+             ZIG-ZAG + RADAR
+        ========================= -->
+        <div class="row-ai">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 Калорії: План vs Факт</div>
+              <span class="badge-tag">DailyNutrition</span>
+            </div>
+            <div class="chart-container"><canvas id="zigzagChart"></canvas></div>
+            <div style="display: flex; gap: 12px; margin-top: 12px; font-size: 12px; font-weight: 600;">
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 10px; height: 10px; background: var(--primary); border-radius: 2px;"></span> Факт</span>
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 10px; height: 10px; background: var(--danger); border-radius: 2px;"></span> Перевищення</span>
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 12px; height: 2px; border-top: 2px dashed var(--success);"></span> Норма ШІ</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🕸️ Баланс БЖВ (Радар)</div>
+              <div class="radar-legend">
+                <span><span class="dot" style="background: rgba(108,63,197,0.6);"></span> Факт</span>
+                <span><span class="dot" style="background: rgba(16,185,129,0.4);"></span> План</span>
+              </div>
+            </div>
+            <div class="chart-container"><canvas id="radarChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- ========================
+             MACRO WEEKLY BAR
+        ========================= -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">⚖️ Тижневий звіт макронутрієнтів</div>
+            <div class="macro-tabs">
+              <span class="macro-tab protein active" onclick="toggleMacro('protein', this)">Білки 🥩</span>
+              <span class="macro-tab fat" onclick="toggleMacro('fat', this)">Жири 🧈</span>
+              <span class="macro-tab carbs" onclick="toggleMacro('carbs', this)">Вуглеводи 🌾</span>
+            </div>
+          </div>
+          <div class="chart-container" style="height: 220px;"><canvas id="macroChart"></canvas></div>
+          <div style="display: flex; gap: 16px; margin-top: 10px; font-size: 12px; font-weight: 600;">
+            <span style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 10px; height: 10px; background: #3B82F6; border-radius: 2px;"></span> Факт</span>
+            <span style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 10px; height: 10px; border: 2px dashed #3B82F6; border-radius: 2px;"></span> Норма</span>
+          </div>
+        </div>
+
+        <!-- ========================
+             CALORIE HEATMAP (Calendar)
+        ========================= -->
+        <div class="card">
+          <div class="card-header" style="margin-bottom: 12px;">
+            <div class="card-title">🗓️ Календар дисципліни (Останні 6 місяців)</div>
+            <div style="font-size: 12px; color: var(--text-muted);">45 днів виконання</div>
+          </div>
+          
+          <div class="hm-stat-row">
+            <div class="hm-stat"><span class="hm-stat-dot" style="background: var(--success);"></span> В нормі (±5%): <strong style="margin-left: 4px;">45 днів</strong></div>
+            <div class="hm-stat"><span class="hm-stat-dot" style="background: var(--warning);"></span> Легке відхилення: <strong style="margin-left: 4px;">28 днів</strong></div>
+            <div class="hm-stat"><span class="hm-stat-dot" style="background: var(--danger);"></span> Зрив (>15%): <strong style="margin-left: 4px;">12 днів</strong></div>
+            <div class="hm-stat"><span class="hm-stat-dot" style="background: #93C5FD;"></span> Недоїдання: <strong style="margin-left: 4px;">8 днів</strong></div>
+          </div>
+
+          <div class="hm-calendar-wrap">
+            <div style="overflow-x: auto;">
+              <div id="hm-month-labels" class="hm-month-labels"></div>
+              <div class="hm-full">
+                <div class="hm-day-labels">
+                  <div class="hm-day-lbl">Пн</div>
+                  <div class="hm-day-lbl">Вт</div>
+                  <div class="hm-day-lbl">Ср</div>
+                  <div class="hm-day-lbl">Чт</div>
+                  <div class="hm-day-lbl">Пт</div>
+                  <div class="hm-day-lbl">Сб</div>
+                  <div class="hm-day-lbl">Нд</div>
+                </div>
+                <div class="hm-calendar" id="hmCalendar"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hm-legend-row">
+            Менше
+            <div class="hm-legend-cells">
+              <div class="hm-legend-sq hm-l0"></div>
+              <div class="hm-legend-sq hm-l4"></div>
+              <div class="hm-legend-sq hm-l1"></div>
+              <div class="hm-legend-sq hm-l2"></div>
+              <div class="hm-legend-sq hm-l3"></div>
+            </div>
+            Більше
+          </div>
+        </div>
+
+        <!-- ========================
+             STREAK + ACHIEVEMENTS
+        ========================= -->
+        <div class="row-gamification">
+          
+          <div class="streak-full-card">
+            <div class="bg-fire">🔥</div>
+            <div class="streak-title-row">
+              <div class="streak-title">🔥 Поточний стрік</div>
+              <div class="streak-type-badge">CASUAL</div>
+            </div>
+            <div class="streak-main-num">12</div>
+            <div class="streak-main-lbl">днів поспіль</div>
+            <div class="streak-stats">
+              <div class="s-stat">
+                <div class="s-stat-val">21</div>
+                <div class="s-stat-lbl">Рекорд</div>
+              </div>
+              <div class="s-stat">
+                <div class="s-stat-val">47</div>
+                <div class="s-stat-lbl">Всього днів</div>
+              </div>
+              <div class="s-stat">
+                <div class="s-stat-val">2 ❄️</div>
+                <div class="s-stat-lbl">Заморозки</div>
+              </div>
+            </div>
+            
+            <div class="streak-tiers">
+              <div class="tier done" title="3 дні — завершено">
+                <div class="t-icon">🌱</div>
+                <div class="t-days">3 дні</div>
+              </div>
+              <div class="tier-line done"></div>
+              <div class="tier done" title="7 днів — завершено">
+                <div class="t-icon">⚡</div>
+                <div class="t-days">7 днів</div>
+              </div>
+              <div class="tier-line done"></div>
+              <div class="tier current" title="14 днів — ти майже тут!">
+                <div class="t-icon">🔥</div>
+                <div class="t-days">14 днів</div>
+              </div>
+              <div class="tier-line"></div>
+              <div class="tier" title="30 днів — попереду">
+                <div class="t-icon">💎</div>
+                <div class="t-days">30 днів</div>
+              </div>
+              <div class="tier-line"></div>
+              <div class="tier" title="100 днів — легенда">
+                <div class="t-icon">👑</div>
+                <div class="t-days">100 днів</div>
+              </div>
+            </div>
+
+            <div class="freeze-row">
+              <span class="freeze-icon">❄️</span>
+              Заморозки (доступно 2 з 3):
+              <div class="freeze-chips">
+                <div class="freeze-chip">❄️</div>
+                <div class="freeze-chip">❄️</div>
+                <div class="freeze-chip used" title="Використано">✓</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="achievements-card">
+            <div class="card-header" style="margin-bottom: 16px;">
+              <div class="card-title">🏅 Досягнення</div>
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">4 / 9 отримано</span>
+            </div>
+            <div class="achievements-grid">
+              <div class="badge earned" title="Перший тиждень планування">
+                <div class="badge-icon">🌱</div>
+                <div class="badge-name">Перший тиждень</div>
+                <div class="badge-progress" style="color: var(--success);">✓ Отримано</div>
+              </div>
+              <div class="badge earned" title="7 днів поспіль">
+                <div class="badge-icon">⚡</div>
+                <div class="badge-name">Тижневий воїн</div>
+                <div class="badge-progress" style="color: var(--success);">✓ Отримано</div>
+              </div>
+              <div class="badge earned" title="Досягнення 50% цілі по вазі">
+                <div class="badge-icon">⚖️</div>
+                <div class="badge-name">Половина шляху</div>
+                <div class="badge-progress" style="color: var(--success);">✓ Отримано</div>
+              </div>
+              <div class="badge earned" title="Спробовано 10 різних рецептів">
+                <div class="badge-icon">👨‍🍳</div>
+                <div class="badge-name">Шеф-початківець</div>
+                <div class="badge-progress" style="color: var(--success);">✓ Отримано</div>
+              </div>
+              <div class="badge" title="14 днів поспіль — ще 2 дні!">
+                <div class="badge-icon">🔥</div>
+                <div class="badge-name">Полум'яний</div>
+                <div class="badge-progress">12/14 днів</div>
+              </div>
+              <div class="badge locked" title="Місяць без пропусків">
+                <div class="badge-icon">🏆</div>
+                <div class="badge-name">Місяць дисципліни</div>
+                <div class="badge-progress">12/30 днів</div>
+              </div>
+              <div class="badge locked" title="Ідеальний баланс БЖВ 7 днів">
+                <div class="badge-icon">🧬</div>
+                <div class="badge-name">Ідеальний баланс</div>
+                <div class="badge-progress">3/7 днів</div>
+              </div>
+              <div class="badge locked" title="Досягнення цілі по вазі">
+                <div class="badge-icon">🎯</div>
+                <div class="badge-name">Ціль досягнуто!</div>
+                <div class="badge-progress">2.5 кг до цілі</div>
+              </div>
+              <div class="badge locked" title="50 різних рецептів">
+                <div class="badge-icon">📚</div>
+                <div class="badge-name">Гурман</div>
+                <div class="badge-progress">23/50 рецептів</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================
+             TOP-5 + WORD CLOUD
+        ========================= -->
+        <div class="row-food">
+          <div class="card">
+            <div class="card-header"><div class="card-title">🏆 Топ-5 улюблених страв</div><span class="badge-tag">FoodLog</span></div>
+            <div class="top-list">
+              <div class="top-item">
+                <div class="top-item-info">
+                  <div class="top-rank rank-1">1</div>
+                  <div>
+                    <div class="top-name">Вівсянка з протеїном і бананом</div>
+                    <div class="top-bar-wrap"><div class="top-bar-fill" style="width: 100%;"></div></div>
+                  </div>
+                </div>
+                <div class="top-count">12 разів</div>
+              </div>
+              <div class="top-item">
+                <div class="top-item-info">
+                  <div class="top-rank rank-2">2</div>
+                  <div>
+                    <div class="top-name">Куряча грудка Су-від з кіноа</div>
+                    <div class="top-bar-wrap"><div class="top-bar-fill" style="width: 75%;"></div></div>
+                  </div>
+                </div>
+                <div class="top-count">9 разів</div>
+              </div>
+              <div class="top-item">
+                <div class="top-item-info">
+                  <div class="top-rank rank-3">3</div>
+                  <div>
+                    <div class="top-name">Грецький йогурт з медом</div>
+                    <div class="top-bar-wrap"><div class="top-bar-fill" style="width: 67%;"></div></div>
+                  </div>
+                </div>
+                <div class="top-count">8 разів</div>
+              </div>
+              <div class="top-item">
+                <div class="top-item-info">
+                  <div class="top-rank">4</div>
+                  <div>
+                    <div class="top-name">Запечений лосось з броколі</div>
+                    <div class="top-bar-wrap"><div class="top-bar-fill" style="width: 42%;"></div></div>
+                  </div>
+                </div>
+                <div class="top-count">5 разів</div>
+              </div>
+              <div class="top-item">
+                <div class="top-item-info">
+                  <div class="top-rank">5</div>
+                  <div>
+                    <div class="top-name">Омлет зі шпинатом</div>
+                    <div class="top-bar-wrap"><div class="top-bar-fill" style="width: 33%;"></div></div>
+                  </div>
+                </div>
+                <div class="top-count">4 рази</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">☁️ Що їси найчастіше</div><span class="badge-tag">Інгредієнти</span></div>
+            <div class="word-cloud">
+              <span class="word w-huge">Куряче філе</span>
+              <span class="word w-large" style="color: #10B981;">Броколі</span>
+              <span class="word w-large">Яйця</span>
+              <span class="word w-medium" style="color: #F59C0A;">Вівсянка</span>
+              <span class="word w-medium">Сир кисломолочний</span>
+              <span class="word w-medium" style="color: #EF4444;">Помідори</span>
+              <span class="word w-small">Авокадо</span>
+              <span class="word w-small">Лосось</span>
+              <span class="word w-small">Кіноа</span>
+              <span class="word w-small">Шпинат</span>
+              <span class="word w-small">Мигдаль</span>
+              <span class="word w-small">Банан</span>
+              <span class="word w-small" style="text-decoration: line-through; opacity: 0.3;">Цукор</span>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: auto; padding-top: 8px;">ШІ-аналіз на основі останніх 30 днів (FoodLog)</div>
+          </div>
+        </div>
+
+        <!-- ========================
+             PLAN COMPLETION + SPEND
+             (нові секції з API)
+        ========================= -->
+        <div class="row-extra">
+          
+          <!-- Виконання плану по прийомах їжі -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🍽️ Виконання по прийомах їжі</div>
+              <span class="badge-tag">PlanStatus</span>
+            </div>
+            <div class="completion-bar-list">
+              <div class="comp-item">
+                <div class="comp-top">
+                  <div class="comp-label">🌅 Сніданок</div>
+                  <div class="comp-val" style="color: var(--success);">93%</div>
+                </div>
+                <div class="comp-bar-bg"><div class="comp-bar" style="width: 93%; background: var(--success);"></div></div>
+              </div>
+              <div class="comp-item">
+                <div class="comp-top">
+                  <div class="comp-label">☀️ Обід</div>
+                  <div class="comp-val" style="color: var(--success);">88%</div>
+                </div>
+                <div class="comp-bar-bg"><div class="comp-bar" style="width: 88%; background: var(--success);"></div></div>
+              </div>
+              <div class="comp-item">
+                <div class="comp-top">
+                  <div class="comp-label">🌙 Вечеря</div>
+                  <div class="comp-val" style="color: var(--warning);">71%</div>
+                </div>
+                <div class="comp-bar-bg"><div class="comp-bar" style="width: 71%; background: var(--warning);"></div></div>
+              </div>
+              <div class="comp-item">
+                <div class="comp-top">
+                  <div class="comp-label">🥜 Перекус</div>
+                  <div class="comp-val" style="color: var(--danger);">55%</div>
+                </div>
+                <div class="comp-bar-bg"><div class="comp-bar" style="width: 55%; background: var(--danger);"></div></div>
+              </div>
+            </div>
+            <div style="margin-top: 16px; padding: 10px 12px; background: var(--neutral); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 12px; color: var(--text-muted);">
+              💡 Перекуси часто пропускаються — додай нагадування на 15:00, щоб не зривати вечірній баланс.
+            </div>
+          </div>
+
+          <!-- Витрати на продукти -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🛒 Витрати на продукти</div>
+              <span class="badge-tag">Orders</span>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px;">
+              <span style="font-size: 30px; font-weight: 800; color: var(--primary);">₴ 2 340</span>
+              <span style="font-size: 13px; color: var(--text-muted);">цього місяця</span>
+            </div>
+            <div style="font-size: 12px; color: var(--success); font-weight: 600; margin-bottom: 16px;">↓ −12% порівняно з минулим місяцем</div>
+            <div>
+              <div class="budget-row">
+                <div class="budget-icon">📦</div>
+                <div class="budget-info">
+                  <div class="budget-name">Замовлення #ORD-2045</div>
+                  <div class="budget-date">20 квітня 2025 · В дорозі</div>
+                </div>
+                <div class="budget-amount">₴ 890</div>
+              </div>
+              <div class="budget-row">
+                <div class="budget-icon">✅</div>
+                <div class="budget-info">
+                  <div class="budget-name">Замовлення #ORD-2041</div>
+                  <div class="budget-date">15 квітня 2025 · Доставлено</div>
+                </div>
+                <div class="budget-amount">₴ 760</div>
+              </div>
+              <div class="budget-row">
+                <div class="budget-icon">✅</div>
+                <div class="budget-info">
+                  <div class="budget-name">Замовлення #ORD-2038</div>
+                  <div class="budget-date">8 квітня 2025 · Доставлено</div>
+                </div>
+                <div class="budget-amount">₴ 690</div>
+              </div>
+            </div>
+            <div style="margin-top: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                <span style="color: var(--text-muted);">Бюджет на місяць</span>
+                <span>₴ 2 340 / ₴ 3 000</span>
+              </div>
+              <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                <div style="width: 78%; height: 100%; background: var(--primary); border-radius: 3px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#6B7280';
+
+    // 1. Динаміка ваги з трендом та прогнозом
+    const weightCtx = document.getElementById('weightChart').getContext('2d');
+    const weightGradient = weightCtx.createLinearGradient(0, 0, 0, 250);
+    weightGradient.addColorStop(0, 'rgba(108, 63, 197, 0.15)');
+    weightGradient.addColorStop(1, 'rgba(108, 63, 197, 0)');
+
+    new Chart(weightCtx, {
+      type: 'line',
+      data: {
+        labels: ['01 Лис', '15 Лис', '01 Гру', '15 Гру', '01 Січ', '15 Січ', '01 Лют', '15 Лют', '01 Бер', '15 Бер', '01 Кві', 'Сьогодні', '+2тиж', '+4тиж'],
+        datasets: [
+          { 
+            label: 'Вага (кг)', 
+            data: [80.0, 79.2, 78.5, 78.0, 77.0, 76.5, 75.8, 75.2, 74.5, 73.8, 73.0, 72.5, null, null], 
+            borderColor: '#6C3FC5', backgroundColor: weightGradient, borderWidth: 3, tension: 0.4, fill: true, 
+            pointBackgroundColor: '#fff', pointBorderColor: '#6C3FC5', pointBorderWidth: 2, pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          { 
+            label: 'Прогноз', 
+            data: [null, null, null, null, null, null, null, null, null, null, null, 72.5, 71.5, 70.5], 
+            borderColor: '#F59C0A', borderWidth: 2, borderDash: [5, 5], pointRadius: 3, 
+            pointBorderColor: '#F59C0A', pointBackgroundColor: '#fff', fill: false, tension: 0.4
+          },
+          { 
+            label: 'Ціль 70кг', 
+            data: [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70], 
+            borderColor: '#10B981', borderWidth: 2, borderDash: [4, 4], pointRadius: 0, fill: false 
+          }
+        ]
+      },
+      options: { 
+        responsive: true, maintainAspectRatio: false, 
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false } }, 
+        scales: { 
+          y: { min: 68, max: 82, grid: { color: '#F7F8FA' } }, 
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 7, maxRotation: 0 } } 
+        } 
+      }
+    });
+
+    // 2. Goal Donut
+    new Chart(document.getElementById('goalChart').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Пройдено', 'Залишилось'],
+        datasets: [{ data: [7.5, 2.5], backgroundColor: ['#6C3FC5', '#F0EAFE'], borderWidth: 0, cutout: '80%', borderRadius: 20 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+    });
+
+    // 3. Zig-Zag
+    new Chart(document.getElementById('zigzagChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
+        datasets: [
+          { 
+            label: 'Факт', 
+            data: [1750, 1800, 2400, 1500, 1500, 0, 0], 
+            backgroundColor: (ctx) => {
+              const v = ctx.raw;
+              if (v === 0) return 'rgba(0,0,0,0.05)';
+              return v > 2000 ? '#EF4444' : '#6C3FC5';
+            }, 
+            borderRadius: 6 
+          },
+          { 
+            label: 'Норма ШІ', 
+            data: [1800, 1800, 1800, 1500, 1500, 2000, 1900], 
+            type: 'line', borderColor: '#10B981', borderWidth: 2, borderDash: [4, 4], pointRadius: 0, fill: false 
+          }
+        ]
+      },
+      options: { 
+        responsive: true, maintainAspectRatio: false, 
+        plugins: { legend: { display: false } }, 
+        scales: { y: { min: 1000, grid: { color: '#F7F8FA' } }, x: { grid: { display: false } } } 
+      }
+    });
+
+    // 4. Radar Plan vs Fact
+    new Chart(document.getElementById('radarChart').getContext('2d'), {
+      type: 'radar',
+      data: {
+        labels: ['Калорії', 'Білки', 'Жири', 'Вуглеводи', 'Клітковина', 'Вода'],
+        datasets: [
+          { 
+            label: 'Факт', 
+            data: [85, 92, 110, 78, 65, 80], 
+            borderColor: 'rgba(108, 63, 197, 0.8)', backgroundColor: 'rgba(108, 63, 197, 0.15)', 
+            borderWidth: 2, pointBackgroundColor: '#6C3FC5', pointRadius: 4
+          },
+          { 
+            label: 'План', 
+            data: [100, 100, 100, 100, 100, 100], 
+            borderColor: 'rgba(16, 185, 129, 0.6)', backgroundColor: 'rgba(16, 185, 129, 0.08)', 
+            borderWidth: 2, borderDash: [4, 4], pointRadius: 3, pointBackgroundColor: '#10B981'
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { 
+          r: { 
+            min: 0, max: 120, ticks: { stepSize: 30, font: { size: 10 } }, 
+            grid: { color: '#F0EAFE' }, pointLabels: { font: { size: 11, weight: '700' } },
+            angleLines: { color: '#E5E7EB' }
+          } 
+        }
+      }
+    });
+
+    // 5. Macro Weekly Bar
+    const macroData = {
+      protein: {
+        fact: [110, 125, 100, 135, 140, 0, 0],
+        plan: [130, 130, 130, 140, 140, 130, 130],
+        color: '#3B82F6'
+      },
+      fat: {
+        fact: [70, 65, 95, 60, 50, 0, 0],
+        plan: [65, 65, 65, 55, 55, 65, 65],
+        color: '#F59C0A'
+      },
+      carbs: {
+        fact: [170, 185, 250, 140, 145, 0, 0],
+        plan: [180, 180, 180, 150, 150, 180, 180],
+        color: '#10B981'
+      }
+    };
+    let activeMacro = 'protein';
+    const macroChart = new Chart(document.getElementById('macroChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
+        datasets: [
+          { label: 'Факт', data: macroData.protein.fact, backgroundColor: '#3B82F6', borderRadius: 6 },
+          { label: 'Норма', data: macroData.protein.plan, type: 'line', borderColor: '#3B82F6', borderWidth: 2, borderDash: [4, 4], pointRadius: 0, fill: false }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+        scales: { x: { grid: { display: false } }, y: { grid: { color: '#F7F8FA' } } }
+      }
+    });
+
+    function toggleMacro(type, el) {
+      document.querySelectorAll('.macro-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      activeMacro = type;
+      const d = macroData[type];
+      macroChart.data.datasets[0].data = d.fact;
+      macroChart.data.datasets[0].backgroundColor = d.color;
+      macroChart.data.datasets[1].data = d.plan;
+      macroChart.data.datasets[1].borderColor = d.color;
+      macroChart.update();
+    }
+
+    // 6. Heatmap Calendar (6 місяців = ~26 тижнів)
+    function buildHeatmap() {
+      const calendar = document.getElementById('hmCalendar');
+      const monthLabels = document.getElementById('hm-month-labels');
+      const totalDays = 182;
+      const today = new Date();
+      const startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - totalDays);
+      // Align to Monday
+      const dow = (startDate.getDay() + 6) % 7;
+      startDate.setDate(startDate.getDate() - dow);
+
+      const levelColors = ['hm-l0','hm-l4','hm-l1','hm-l2','hm-l3'];
+      const levelLabels = ['Немає даних','Недоїдання','✓ Норма','Легке перевищення','Значний зрив'];
+      
+      const months = ['Лис','Гру','Січ','Лют','Бер','Кві'];
+      let monthPos = [];
+      let weekCount = 0;
+
+      const d = new Date(startDate);
+      let prevMonth = -1;
+      
+      for (let w = 0; w < 27; w++) {
+        const col = document.createElement('div');
+        col.className = 'hm-week-col';
+        
+        for (let day = 0; day < 7; day++) {
+          const curr = new Date(d);
+          curr.setDate(d.getDate() + day);
+          
+          if (curr.getMonth() !== prevMonth && curr <= today) {
+            monthPos.push({ week: w, month: curr.getMonth() });
+            prevMonth = curr.getMonth();
+          }
+
+          const cell = document.createElement('div');
+          cell.className = 'hm-cell-sq';
+          
+          if (curr > today) {
+            cell.style.background = 'transparent';
+          } else {
+            const dayIdx = Math.floor((today - curr) / 86400000);
+            let level;
+            if (dayIdx < 12) {
+              level = Math.random() > 0.2 ? 2 : 1; // Останні 12 = стрік (норма/трохи вище)
+            } else {
+              const r = Math.random();
+              if (r > 0.65) level = 2;
+              else if (r > 0.45) level = 1;
+              else if (r > 0.25) level = 3;
+              else if (r > 0.12) level = 4;
+              else level = 0;
+            }
+            cell.classList.add(levelColors[level]);
+            cell.title = levelLabels[level] + ' · ' + curr.toLocaleDateString('uk-UA', {day:'numeric', month:'short'});
+          }
+          col.appendChild(cell);
+        }
+        d.setDate(d.getDate() + 7);
+        calendar.appendChild(col);
+      }
+    }
+    buildHeatmap();
+
+    function switchPeriod(el, days) {
+      document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      // In production this would re-fetch data
+    }
+  </script>
+
+</body>
+</html>

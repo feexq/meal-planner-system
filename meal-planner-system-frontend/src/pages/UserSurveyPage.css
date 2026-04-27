@@ -1,0 +1,735 @@
+/* ─── Survey Layout ─────────────────────────── */
+.survey-header {
+    padding: 20px 0;
+    text-align: center;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+}
+
+.survey-main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 5%;
+    min-height: calc(100vh - 65px);
+    background: var(--neutral);
+}
+
+/* ─── Wizard Card ───────────────────────────── */
+.wizard-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.progress-header {
+    padding: 32px 48px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.step-indicator {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.progress-segments {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+}
+
+.segment {
+    height: 4px;
+    width: 36px;
+    background: var(--border);
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.segment.active {
+    background: var(--primary);
+    width: 50px;
+}
+
+.segment.done {
+    background: var(--primary-light);
+}
+
+.wizard-body {
+    padding: 32px 48px 48px;
+}
+
+/* ─── Step Animation ────────────────────────── */
+.step.active {
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.step-subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 32px;
+    line-height: 1.5;
+}
+
+/* ─── AI Insight ────────────────────────────── */
+.ai-insight {
+    background: var(--neutral);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 16px 16px 0;
+    padding: 16px 20px;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    align-items: flex-start;
+}
+
+.ai-icon {
+    font-size: 20px;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.ai-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.ai-text strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* ─── Stepper Inputs ────────────────────────── */
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.smart-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.smart-input-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.smart-input-control {
+    display: flex;
+    align-items: center;
+    background: var(--neutral);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 4px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.stepper-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 18px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    font-family: inherit;
+}
+
+.stepper-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.smart-input-control input {
+    width: 50px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: var(--text);
+    font-family: inherit;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.smart-input-control input::-webkit-outer-spin-button,
+.smart-input-control input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-unit {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* ─── Radio Cards ───────────────────────────── */
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.radio-card input {
+    display: none;
+}
+
+.radio-card label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 12px;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    height: 100%;
+    background: #fff;
+}
+
+.radio-card label:hover {
+    border-color: var(--primary-light);
+    background: var(--neutral);
+}
+
+.radio-card input:checked+label {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 4px 12px rgba(108, 63, 197, 0.08);
+}
+
+.radio-card input:checked+label .rc-title {
+    color: var(--primary-dark);
+}
+
+.rc-icon {
+    font-size: 32px;
+    margin-bottom: 4px;
+}
+
+.rc-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.2s;
+}
+
+.rc-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+/* ─── List Cards ────────────────────────────── */
+.list-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.list-card input {
+    display: none;
+}
+
+.list-card label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+}
+
+.list-card label:hover {
+    border-color: var(--primary-light);
+    background: var(--neutral);
+}
+
+.list-card input:checked+label {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.lc-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.lc-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lc-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.lc-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ─── Tag Cloud ─────────────────────────────── */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.tag-check input {
+    display: none;
+}
+
+.tag-check label {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+}
+
+.tag-check label:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+}
+
+.tag-check input:checked+label {
+    border-color: var(--primary);
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    font-weight: 600;
+}
+
+.tag-cloud.stretch .tag-check {
+    flex: 1;
+}
+
+.tag-cloud.stretch label {
+    justify-content: center;
+    padding: 12px;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* ─── Section Labels ────────────────────────── */
+.section-lbl {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+}
+
+/* ─── Exclusion Input ───────────────────────── */
+.exclusion-wrapper {
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 12px;
+    background: #fff;
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    transition: border-color 0.2s;
+}
+
+.exclusion-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.excl-input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    min-width: 150px;
+    font-size: 15px;
+    padding: 4px;
+    font-family: inherit;
+}
+
+.excl-tag {
+    background: #FEE2E2;
+    color: #991B1B;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.excl-tag span {
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.6;
+    line-height: 1;
+}
+
+.excl-tag span:hover {
+    opacity: 1;
+}
+
+.quick-adds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.quick-add {
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--neutral);
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+}
+
+.quick-add:hover {
+    background: #FEE2E2;
+    color: #991B1B;
+    border-color: #FCA5A5;
+}
+
+.db-stats {
+    background: var(--text);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-top: 24px;
+}
+
+.db-stats-icon {
+    font-size: 20px;
+}
+
+.db-stats-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: #FCA5A5;
+}
+
+/* ─── Zig-Zag Chart ─────────────────────────── */
+.chart-box {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 40px;
+    margin-bottom: 8px;
+}
+
+.bar {
+    width: 12px;
+    background: var(--border);
+    border-radius: 4px 4px 0 0;
+    transition: background 0.3s;
+}
+
+.radio-card input:checked+label .bar {
+    background: var(--primary);
+    opacity: 0.8;
+}
+
+/* ─── Footer Navigation ─────────────────────── */
+.wizard-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+}
+
+.btn {
+    padding: 14px 28px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    border: none;
+}
+
+.btn-back {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+}
+
+.btn-back:hover {
+    background: var(--neutral);
+    color: var(--text);
+}
+
+.btn-next {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(108, 63, 197, 0.2);
+}
+
+.btn-next:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-next:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+/* ─── Search Preview Box (Step 4) ───────────────────────── */
+.search-preview-box {
+    margin-top: 12px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.btn-text-small {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.btn-text-small:hover {
+    background: var(--primary-light);
+}
+
+.btn-add-preview {
+    width: 100%;
+    padding: 10px;
+    background: var(--neutral);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-add-preview:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary-dark);
+}
+
+/* ─── Preview Modal (Step 4) ────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 32px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: var(--text);
+}
+
+.preview-list {
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    flex-grow: 1;
+    margin-top: 16px;
+    background: var(--neutral);
+}
+
+.preview-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    background: #fff;
+}
+
+.preview-item:last-child {
+    border-bottom: none;
+}
+
+.preview-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpModal {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ─── Responsive ────────────────────────────── */
+@media (max-width: 600px) {
+
+    .wizard-body,
+    .progress-header {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .input-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .smart-input-control {
+        max-width: 200px;
+        margin: 0 auto;
+    }
+
+    .grid-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .list-card label {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+}

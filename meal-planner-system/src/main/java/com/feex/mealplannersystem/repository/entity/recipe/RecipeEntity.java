@@ -3,17 +3,13 @@ package com.feex.mealplannersystem.repository.entity.recipe;
 import com.feex.mealplannersystem.common.survey.CookBudget;
 import com.feex.mealplannersystem.common.survey.CookComplexity;
 import com.feex.mealplannersystem.common.survey.CookTime;
-import com.feex.mealplannersystem.common.MealType;
+import com.feex.mealplannersystem.common.mealplan.MealType;
 import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,6 +35,9 @@ public class RecipeEntity {
 
     @Column(nullable = false, unique = true)
     private String slug;
+
+    @Column(name = "ingredients_raw_str", columnDefinition = "TEXT")
+    private String ingredientsRawStr;
 
     @Column(name = "serving_size")
     private String servingSize;
@@ -69,9 +68,8 @@ public class RecipeEntity {
     @Builder.Default
     private Set<RecipeStepEntity> steps = new HashSet<>();
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 100)
     private Set<RecipeIngredientEntity> ingredients = new HashSet<>();
 
@@ -82,7 +80,6 @@ public class RecipeEntity {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @Builder.Default
-    @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 100)
     private Set<TagEntity> tags = new HashSet<>();
 

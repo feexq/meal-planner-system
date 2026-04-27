@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.config.dataloader;
 
-import com.feex.mealplannersystem.common.DietaryTagStatus;
+import com.feex.mealplannersystem.common.mealplan.DietaryTagStatus;
 import com.feex.mealplannersystem.repository.DietaryConditionRepository;
 import com.feex.mealplannersystem.repository.IngredientDietaryTagRepository;
 import com.feex.mealplannersystem.repository.IngredientRepository;

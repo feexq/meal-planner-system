@@ -5,10 +5,12 @@ import com.stripe.exception.EventDataObjectDeserializationException;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.EventDataObjectDeserializer;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -68,6 +70,30 @@ public class StripeWebhookController {
 
             } else {
                 log.error("Об'єкт не є сесією Stripe!");
+            }
+        } else if ("payment_intent.succeeded".equals(event.getType())) {
+            log.info("Зловили payment_intent.succeeded!");
+
+            EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
+            StripeObject stripeObject;
+
+            if (dataObjectDeserializer.getObject().isPresent()) {
+                stripeObject = dataObjectDeserializer.getObject().get();
+            } else {
+                log.warn("Версії API не збігаються. Використовуємо deserializeUnsafe() для PaymentIntent");
+                stripeObject = dataObjectDeserializer.deserializeUnsafe();
+            }
+
+            if (stripeObject instanceof PaymentIntent intent) {
+                log.info("PaymentIntent розпаршено. ID: {}", intent.getId());
+                try {
+                    orderService.processSuccessfulPayment(intent.getId());
+                    log.info("Замовлення успішно оновлено через PaymentIntent!");
+                } catch (Exception e) {
+                    log.error("Помилка під час оновлення замовлення: {}", e.getMessage(), e);
+                }
+            } else {
+                log.error("Об'єкт не є PaymentIntent!");
             }
         }
 

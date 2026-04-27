@@ -1,6 +1,5 @@
 package com.feex.mealplannersystem.dto.cart;
 
-import com.feex.mealplannersystem.common.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,7 @@ public class CartItemResponse {
     private String slug;
     private String imageUrl;
     private BigDecimal price;
-    private Unit unit;
+    private String unit;
     private Integer quantity;
-    private BigDecimal totalPrice; // price * quantity
+    private BigDecimal totalPrice;
 }

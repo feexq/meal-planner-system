@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.common.Role;
+import com.feex.mealplannersystem.common.user.Role;
 import com.feex.mealplannersystem.config.jwt.JwtTokenProvider;
 import com.feex.mealplannersystem.dto.auth.AuthResponse;
 import com.feex.mealplannersystem.dto.auth.LoginRequest;
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
@@ -73,6 +73,11 @@ public class AuthServiceImpl implements AuthService {
         RefreshTokenEntity refreshTokenEntity = refreshTokenService.createRefreshToken(user);
 
         String sessionId = httpRequest.getHeader("X-Cart-Session");
+        if (sessionId != null && !sessionId.isBlank()) {
+            cartService.mergeCarts("cart:session:" + sessionId, "cart:user:" + user.getId());
+        }
+
+        System.out.println("X-Cart-Session header: " + sessionId); // ← має бути uuid, не null
         if (sessionId != null && !sessionId.isBlank()) {
             cartService.mergeCarts("cart:session:" + sessionId, "cart:user:" + user.getId());
         }

@@ -1,6 +1,7 @@
 package com.feex.mealplannersystem.repository;
 
 import com.feex.mealplannersystem.repository.entity.ingredient.IngredientEntity;
+import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,4 +39,10 @@ public interface IngredientRepository extends JpaRepository<IngredientEntity, Lo
         LEFT JOIN FETCH i.aliases
         """)
     List<IngredientEntity> findAllWithDetails();
+
+    IngredientEntity findFirstIngredientEntityByProduct_Id(Long productId);
+
+    @Query("SELECT i.id FROM IngredientEntity i WHERE i.product.id IN :productIds")
+    List<Long> findIngredientIdsByProductIds(@Param("productIds") List<Long> productIds);
+
 }

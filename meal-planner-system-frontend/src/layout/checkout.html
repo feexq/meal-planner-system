@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оформлення замовлення | FoodMart</title>
+  
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --neutral: #F7F5FB;
+      --text: #1A1030;
+      --text-muted: #7A6A90;
+      --border: #EAE4F5;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); background-color: var(--neutral); line-height: 1.5; padding-bottom: 60px; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+
+    header { padding: 20px 0; border-bottom: 1px solid var(--border); background: #fff; text-align: center; }
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+
+    .page-header { padding: 32px 0 24px; text-align: center; }
+    .page-header h1 { font-size: 28px; font-weight: 700; }
+
+    .checkout-layout { display: grid; grid-template-columns: 1fr 400px; gap: 32px; align-items: start; }
+
+    /* Збільшено відступ між секціями до 36px */
+    .checkout-form-container { display: flex; flex-direction: column; gap: 36px; }
+    
+    .checkout-section { background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 32px; }
+    .section-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+    .step-number { width: 28px; height: 28px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+    .form-control { padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 15px; background: #fff; outline: none; transition: all 0.2s; font-family: inherit; }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+    #card-element {
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #fff;
+      transition: all 0.2s;
+    }
+    #card-element.StripeElement--focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    #card-element.StripeElement--invalid {
+      border-color: #D14343;
+    }
+    #card-errors { color: #D14343; font-size: 13px; margin-top: 8px; font-weight: 500; }
+
+    .summary-card { background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 32px; position: sticky; top: 24px; }
+    .summary-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+    
+    .order-items { margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+    .order-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+    .order-item-name { color: var(--text-muted); }
+    .order-item-price { font-weight: 600; }
+
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; color: var(--text-muted); }
+    .summary-row span:last-child { color: var(--text); font-weight: 500; }
+    
+    .summary-total { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border); font-size: 18px; font-weight: 700; }
+    .summary-total span:last-child { color: var(--primary); font-size: 24px; }
+
+    .btn-pay { width: 100%; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-md); padding: 16px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 32px; transition: background 0.2s; box-shadow: 0 4px 12px rgba(108, 63, 197, 0.2); display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-pay:hover { background: var(--primary-dark); }
+    .btn-pay:disabled { background: var(--text-muted); cursor: not-allowed; box-shadow: none; }
+
+    .secure-badge { display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+
+    @media (max-width: 900px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .summary-card { position: static; order: -1; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo">FoodMart</a>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Оформлення замовлення</h1>
+    </div>
+
+    <div class="checkout-layout">
+      
+      <div class="checkout-form-container">
+        
+        <form id="payment-form">
+          <div class="checkout-section">
+            <div class="section-title"><span class="step-number">1</span> Контактні дані</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Ім'я та Прізвище</label>
+                <input type="text" class="form-control" value="Іван Франко" required>
+              </div>
+              <div class="form-group">
+                <label>Телефон</label>
+                <input type="tel" class="form-control" value="+380 50 123 45 67" required>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Email</label>
+              <input type="email" class="form-control" value="ivan.franko@example.com" required>
+            </div>
+          </div>
+
+          <div class="checkout-section">
+            <div class="section-title"><span class="step-number">2</span> Доставка (Нова Пошта)</div>
+            <div class="form-row" style="margin-bottom: 0;">
+              <div class="form-group">
+                <label>Місто</label>
+                <input type="text" class="form-control" value="Київ" readonly style="background: var(--neutral);">
+              </div>
+              <div class="form-group">
+                <label>Відділення</label>
+                <input type="text" class="form-control" value="Відділення №1" readonly style="background: var(--neutral);">
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-section">
+            <div class="section-title"><span class="step-number">3</span> Оплата карткою</div>
+            
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Дані картки</label>
+              <div id="card-element"></div>
+              <div id="card-errors" role="alert"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <div class="summary-card">
+          <h2 class="summary-title">Підсумок</h2>
+          
+          <div class="order-items">
+            <div class="order-item">
+              <span class="order-item-name">Авокадо Хасс (2 шт)</span>
+              <span class="order-item-price">134 ₴</span>
+            </div>
+            <div class="order-item">
+              <span class="order-item-name">Томати Чері гілочка</span>
+              <span class="order-item-price">75 ₴</span>
+            </div>
+            <div class="order-item">
+              <span class="order-item-name">Хліб цільнозерновий</span>
+              <span class="order-item-price">45 ₴</span>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span>Сума</span>
+            <span>254 ₴</span>
+          </div>
+          <div class="summary-row">
+            <span>Доставка</span>
+            <span>За тарифами перевізника</span>
+          </div>
+
+          <div class="summary-total">
+            <span>До сплати</span>
+            <span>254 ₴</span>
+          </div>
+
+          <button class="btn-pay" id="submit-button" onclick="document.getElementById('payment-form').dispatchEvent(new Event('submit'))">
+            💳 Оплатити 254 ₴
+          </button>
+          
+          <div class="secure-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Безпечний платіж через Stripe
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); 
+    const elements = stripe.elements();
+
+    const style = {
+      base: {
+        color: '#1A1030',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '15px',
+        '::placeholder': { color: '#7A6A90' }
+      },
+      invalid: { color: '#D14343', iconColor: '#D14343' }
+    };
+
+    const card = elements.create('card', { style: style, hidePostalCode: true });
+    card.mount('#card-element');
+
+    card.on('change', function(event) {
+      const displayError = document.getElementById('card-errors');
+      if (event.error) {
+        displayError.textContent = event.error.message;
+      } else {
+        displayError.textContent = '';
+      }
+    });
+
+    const form = document.getElementById('payment-form');
+    const submitBtn = document.getElementById('submit-button');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '🔄 Обробка...';
+
+      setTimeout(() => {
+        alert("Успіх! Оплата пройшла (імітація для макета).");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '💳 Оплатити 254 ₴';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

@@ -47,6 +47,19 @@ spring:
     storage:
       connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
       container: ${IMAGE_CONTAINER_NAME}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: email, profile
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: user:email, read:user
+
 
 app:
   jwt:
@@ -67,5 +80,5 @@ normalizer:
   url: ${NORMALIZER_URL}
   batch-size: 35
   service:
-    timeout-seconds: 90
+    timeout-seconds: 120
 

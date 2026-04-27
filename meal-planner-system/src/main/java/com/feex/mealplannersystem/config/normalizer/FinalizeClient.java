@@ -1,20 +1,19 @@
 package com.feex.mealplannersystem.config.normalizer;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.feex.mealplannersystem.mealplan.dto.FinalizeRequestDto;
-import com.feex.mealplannersystem.mealplan.dto.FinalizedMealPlanDtos.FinalizedMealPlanDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.feex.mealplannersystem.config.normalizer.dto.request.SwapSideRequest;
+import com.feex.mealplannersystem.config.normalizer.dto.response.SwapSideResponse;
+import com.feex.mealplannersystem.config.normalizer.dto.response.ParseFoodResponse;
+import com.feex.mealplannersystem.config.normalizer.dto.request.ParseFoodRequest;
+import com.feex.mealplannersystem.mealplan.dto.finalize.FinalizeRequestDto;
+import com.feex.mealplannersystem.dto.mealplan.FinalizedMealPlanDto;
+import com.feex.mealplannersystem.service.exception.MealPlanFinalizationException;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.util.List;
 
 
 @Slf4j
@@ -30,49 +29,18 @@ public class FinalizeClient {
     @Value("${normalizer.service.timeout-seconds}")
     private int timeoutSeconds;
 
-
-    @Getter
-    @AllArgsConstructor
-    public static class ParseFoodRequest {
-        private String text;
-        private String language = "auto";
-
-        public ParseFoodRequest(String text) { this.text = text; }
-    }
-
-    @Getter @AllArgsConstructor @NoArgsConstructor
-    public static class ParsedFoodItem {
-        private String name;
-        private String original;
-        @JsonProperty("quantity_description")
-        private String quantityDescription;
-        private double calories;
-        @JsonProperty("protein_g")
-        private double proteinG;
-        @JsonProperty("carbs_g")
-        private double carbsG;
-        @JsonProperty("fat_g")
-        private double fatG;
-        private String confidence;
-        @JsonProperty("from_cache")
-        private boolean fromCache;
-    }
-
-    @Getter @AllArgsConstructor @NoArgsConstructor
-    public static class ParseFoodResponse {
-        private List<ParsedFoodItem> items;
-        @JsonProperty("total_calories")
-        private double totalCalories;
-        @JsonProperty("total_protein_g")
-        private double totalProteinG;
-        @JsonProperty("total_carbs_g")
-        private double totalCarbsG;
-        @JsonProperty("total_fat_g")
-        private double totalFatG;
-        @JsonProperty("parse_note")
-        private String parseNote;
-    }
-
+     public SwapSideResponse swapSide(SwapSideRequest request) {
+         return webClientBuilder
+                 .baseUrl(nlpServiceUrl)
+                 .build()
+                 .post()
+                 .uri("/swap-slot/side")
+                 .bodyValue(request)
+                 .retrieve()
+                 .bodyToMono(SwapSideResponse.class)
+                 .timeout(java.time.Duration.ofSeconds(90))
+                 .block();
+     }
 
     public FinalizedMealPlanDto finalize(FinalizeRequestDto request) {
         log.info("Calling Python /finalize for user={}", request.getUserId());
@@ -92,20 +60,13 @@ public class FinalizeClient {
 
         } catch (WebClientResponseException e) {
             log.error("Python /finalize returned HTTP {}: {}", e.getStatusCode(), e.getResponseBodyAsString());
-            throw new MealPlanFinalizationException("LLM finalization failed: " + e.getMessage(), e);
+            throw new MealPlanFinalizationException(e);
 
         } catch (Exception e) {
             log.error("Python /finalize call failed: {}", e.getMessage());
-            throw new MealPlanFinalizationException("LLM finalization failed: " + e.getMessage(), e);
+            throw new MealPlanFinalizationException(e);
         }
     }
-
-    public static class MealPlanFinalizationException extends RuntimeException {
-        public MealPlanFinalizationException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
-
 
     public ParseFoodResponse parseFood(String foodText) {
         log.info("Calling Python /parse-food: \"{}\"", foodText);
@@ -123,7 +84,7 @@ public class FinalizeClient {
                     .block();
         } catch (Exception e) {
             log.error("Python /parse-food failed: {}", e.getMessage());
-            throw new MealPlanFinalizationException("Food parsing failed: " + e.getMessage(), e);
+            throw new MealPlanFinalizationException(e);
         }
     }
 }

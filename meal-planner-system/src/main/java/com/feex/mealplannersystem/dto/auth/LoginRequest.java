@@ -5,23 +5,14 @@ import com.feex.mealplannersystem.dto.validation.annotation.ValidNoSpace;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
 
-@Value
-@Builder
-@Jacksonized
-@AllArgsConstructor
-public class LoginRequest {
+public record LoginRequest(
+        @NotBlank(message = "Email is required")
+        @Email(message = "Invalid email format")
+        String email,
+        @ValidNoSpace(groups = ExtendedValidation.class)
+        @NotBlank(message = "Password is required")
+        @Size(min = 6, message = "Password must be at least 6 characters")
+        String password) {
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    String email;
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
-    @ValidNoSpace(groups = ExtendedValidation.class)
-    String password;
 }

@@ -4,10 +4,14 @@ import com.feex.mealplannersystem.dto.cart.AddToCartRequest;
 import com.feex.mealplannersystem.dto.cart.CartItemResponse;
 import com.feex.mealplannersystem.dto.cart.CartResponse;
 import com.feex.mealplannersystem.dto.cart.UpdateCartItemRequest;
-import com.feex.mealplannersystem.repository.IngredientRepository;
+import com.feex.mealplannersystem.dto.recipe.RecipeIngredientDetail;
+import com.feex.mealplannersystem.repository.ProductRepository;
 import com.feex.mealplannersystem.repository.RecipeRepository;
-import com.feex.mealplannersystem.repository.entity.ingredient.IngredientEntity;
+import com.feex.mealplannersystem.repository.RecipeTranslationRepository;
+import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
+import com.feex.mealplannersystem.repository.entity.recipe.RecipeIngredientEntity;
+import com.feex.mealplannersystem.repository.entity.recipe.RecipeTranslationEntity;
 import com.feex.mealplannersystem.service.CartService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import com.feex.mealplannersystem.service.exception.IngredientNotAvailableException;
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -29,8 +34,9 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     private final StringRedisTemplate redisTemplate;
-    private final IngredientRepository ingredientRepository;
+    private final ProductRepository productRepository;
     private final RecipeRepository recipeRepository;
+    private final RecipeTranslationRepository translationRepository;
 
     private static final int USER_CART_TTL_DAYS = 30;
     private static final int SESSION_CART_TTL_DAYS = 7;
@@ -43,11 +49,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponse addItem(String cartKey, AddToCartRequest request) {
-        IngredientEntity ingredient = ingredientRepository.findById(request.getIngredientId())
-                .orElseThrow(() -> new CustomNotFoundException("Ingredient", request.getIngredientId().toString()));
+        ProductEntity product = productRepository.findById(request.getIngredientId())
+                .orElseThrow(() -> new CustomNotFoundException("Product", request.getIngredientId().toString()));
 
-        if (!ingredient.isAvailable()) {
-            throw new IngredientNotAvailableException(ingredient.getNormalizedName());
+        if (!product.isAvailable()) {
+            throw new IngredientNotAvailableException(product.getNameUk());
         }
 
         String field = request.getIngredientId().toString();
@@ -63,11 +69,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartResponse updateItem(String cartKey, Long ingredientId, UpdateCartItemRequest request) {
-        String field = ingredientId.toString();
+    public CartResponse updateItem(String cartKey, Long productId, UpdateCartItemRequest request) {
+        String field = productId.toString();
 
         if (!redisTemplate.opsForHash().hasKey(cartKey, field)) {
-            throw new CustomNotFoundException("Ingredient", ingredientId.toString());
+            throw new CustomNotFoundException("Ingredient", productId.toString());
         }
 
         redisTemplate.opsForHash().put(cartKey, field, String.valueOf(request.getQuantity()));
@@ -77,8 +83,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartResponse removeItem(String cartKey, Long ingredientId) {
-        redisTemplate.opsForHash().delete(cartKey, ingredientId.toString());
+    public CartResponse removeItem(String cartKey, Long productId) {
+        redisTemplate.opsForHash().delete(cartKey, productId.toString());
         return getCart(cartKey);
     }
 
@@ -96,7 +102,7 @@ public class CartServiceImpl implements CartService {
             Object existing = redisTemplate.opsForHash().get(userKey, ingredientId);
             int sessionQty = Integer.parseInt(quantity.toString());
             int currentQty = existing != null ? Integer.parseInt(existing.toString()) : 0;
-            int finalQty = Math.max(sessionQty, currentQty);
+            int finalQty = sessionQty + currentQty;
             redisTemplate.opsForHash().put(userKey, ingredientId.toString(), String.valueOf(finalQty));
         });
 
@@ -109,13 +115,27 @@ public class CartServiceImpl implements CartService {
         RecipeEntity recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new EntityNotFoundException("Recipe not found: " + recipeId));
 
+        Optional<RecipeTranslationEntity> ukTranslation = translationRepository
+                .findByRecipeIdAndLanguageCode(recipeId, "uk");
+
+        List<RecipeIngredientDetail> parsedIngredients = ukTranslation
+                .map(RecipeTranslationEntity::getIngredients)
+                .orElse(List.of());
+
         recipe.getIngredients().stream()
-                .filter(ri -> ri.getIngredient() != null && ri.getIngredient().isAvailable())
+                .filter(ri -> ri.getIngredient().getProduct() != null
+                        && ri.getIngredient().getProduct().isAvailable())
                 .forEach(ri -> {
-                    String field = ri.getIngredient().getId().toString();
+                    ProductEntity product = ri.getIngredient().getProduct();
+
+                    // 2. Рахуємо кількість за допомогою нашої функції
+                    int qtyToAdd = calculateRequiredPackages(ri, product, parsedIngredients);
+
+                    String field = product.getId().toString();
                     Object existing = redisTemplate.opsForHash().get(cartKey, field);
                     int currentQty = existing != null ? Integer.parseInt(existing.toString()) : 0;
-                    redisTemplate.opsForHash().put(cartKey, field, String.valueOf(currentQty + 1));
+
+                    redisTemplate.opsForHash().put(cartKey, field, String.valueOf(currentQty + qtyToAdd));
                 });
 
         setTtl(cartKey);
@@ -135,15 +155,15 @@ public class CartServiceImpl implements CartService {
                 .map(k -> Long.parseLong(k.toString()))
                 .toList();
 
-        Map<Long, IngredientEntity> ingredientsMap = ingredientRepository.findAllById(ingredientIds)
+        Map<Long, ProductEntity> productsMap = productRepository.findAllById(ingredientIds)
                 .stream()
-                .collect(Collectors.toMap(IngredientEntity::getId, i -> i));
+                .collect(Collectors.toMap(ProductEntity::getId, i -> i));
 
         List<CartItemResponse> items = cartData.entrySet().stream()
                 .map(entry -> {
                     Long ingredientId = Long.parseLong(entry.getKey().toString());
                     int quantity = Integer.parseInt(entry.getValue().toString());
-                    IngredientEntity ingredient = ingredientsMap.get(ingredientId);
+                    ProductEntity ingredient = productsMap.get(ingredientId); // Змінна названа ingredient, але це ProductEntity (залишаю як в тебе)
 
                     if (ingredient == null) {
                         return null;
@@ -155,11 +175,11 @@ public class CartServiceImpl implements CartService {
 
                     return CartItemResponse.builder()
                             .ingredientId(ingredientId)
-                            .normalizedName(ingredient.getNormalizedName())
+                            .normalizedName(ingredient.getNameUk())
                             .slug(ingredient.getSlug())
                             .imageUrl(ingredient.getImageUrl())
                             .price(ingredient.getPrice())
-                            .unit(ingredient.getUnit())
+                            .unit(ingredient.getUnit()) // Повертає старий текстовий unit для UI
                             .quantity(quantity)
                             .totalPrice(itemTotal)
                             .build();
@@ -181,5 +201,93 @@ public class CartServiceImpl implements CartService {
     private void setTtl(String cartKey) {
         long days = cartKey.startsWith("cart:user:") ? USER_CART_TTL_DAYS : SESSION_CART_TTL_DAYS;
         redisTemplate.expire(cartKey, days, TimeUnit.DAYS);
+    }
+
+    private int calculateRequiredPackages(
+            RecipeIngredientEntity dbEntity,
+            ProductEntity product,
+            List<RecipeIngredientDetail> parsedList) {
+
+        RecipeIngredientDetail detail = parsedList.stream()
+                .filter(p -> {
+                    if (p.getNameUk() == null || product.getNameUk() == null) return false;
+                    String jsonName = p.getNameUk().toLowerCase();
+                    String productName = product.getNameUk().toLowerCase();
+                    return productName.contains(jsonName) || jsonName.contains(productName);
+                })
+                .findFirst()
+                .orElse(null);
+
+        if (detail == null || detail.getAmount() == null || detail.getUnit() == null) {
+            return 1;
+        }
+
+        double recipeAmount = detail.getAmount();
+        String recipeUnit = detail.getUnit().toLowerCase();
+
+        double packageAmount = product.getPackageAmount() != null ? product.getPackageAmount() : 1.0;
+        String packageUnit = product.getPackageUnit() != null ? product.getPackageUnit().toLowerCase() : recipeUnit;
+
+        double convertedRecipeAmount = convertToMatchShopUnit(recipeAmount, recipeUnit, packageUnit);
+
+        if (packageAmount > 0) {
+            return (int) Math.ceil(convertedRecipeAmount / packageAmount);
+        }
+
+        return 1;
+    }
+
+    private double convertToMatchShopUnit(double amount, String fromUnit, String toUnit) {
+        if (fromUnit == null || toUnit == null) return amount;
+
+        fromUnit = fromUnit.trim().toLowerCase();
+        toUnit = toUnit.trim().toLowerCase();
+
+        if (fromUnit.equals(toUnit)) return amount;
+
+        boolean toIsKg = toUnit.equals("кг");
+        boolean toIsG = toUnit.equals("г");
+        boolean toIsL = toUnit.equals("л");
+        boolean toIsMl = toUnit.equals("мл") || toUnit.equals("ml");
+
+        if (fromUnit.equals("ст.л.") || fromUnit.equals("ст. л.")) {
+            if (toIsG || toIsMl) return amount * 15.0;
+            if (toIsKg || toIsL) return (amount * 15.0) / 1000.0;
+        }
+        if (fromUnit.equals("ч.л.") || fromUnit.equals("ч. л.")) {
+            if (toIsG || toIsMl) return amount * 5.0;
+            if (toIsKg || toIsL) return (amount * 5.0) / 1000.0;
+        }
+
+        if (fromUnit.equals("склянка") || fromUnit.equals("склянки")) {
+            if (toIsG || toIsMl) return amount * 250.0;
+            if (toIsKg || toIsL) return (amount * 250.0) / 1000.0;
+        }
+
+        if (fromUnit.equals("кг") && toIsG) return amount * 1000.0;
+        if (fromUnit.equals("г") && toIsKg) return amount / 1000.0;
+
+        if (fromUnit.equals("л") && toIsMl) return amount * 1000.0;
+        if ((fromUnit.equals("мл") || fromUnit.equals("ml")) && toIsL) return amount / 1000.0;
+
+        if ((fromUnit.equals("мл") || fromUnit.equals("ml")) && toIsG) return amount;
+        if ((fromUnit.equals("мл") || fromUnit.equals("ml")) && toIsKg) return amount / 1000.0;
+        if (fromUnit.equals("л") && toIsG) return amount * 1000.0;
+        if (fromUnit.equals("л") && toIsKg) return amount;
+        if (fromUnit.equals("г") && toIsMl) return amount;
+        if (fromUnit.equals("г") && toIsL) return amount / 1000.0;
+        if (fromUnit.equals("кг") && toIsMl) return amount * 1000.0;
+        if (fromUnit.equals("кг") && toIsL) return amount;
+
+        if (fromUnit.equals("шт") || fromUnit.equals("штук")) {
+            if (toIsG) return amount * 150.0;
+            if (toIsKg) return (amount * 150.0) / 1000.0;
+        }
+
+        if (fromUnit.contains("смак") || fromUnit.contains("дрібк")) {
+            return 0.01;
+        }
+
+        return amount;
     }
 }

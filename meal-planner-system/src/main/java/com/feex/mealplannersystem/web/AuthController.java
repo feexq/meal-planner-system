@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*") // змінити на свій frontend пізніше
 public class AuthController {
 
     private final AuthService authService;
@@ -31,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
-        return ResponseEntity.ok(authService.refreshToken(request.getRefreshToken()));
+        return ResponseEntity.ok(authService.refreshToken(request.refreshToken()));
     }
 
     @PostMapping("/logout")

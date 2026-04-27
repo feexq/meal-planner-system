@@ -44,11 +44,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         try {
             String cachedData = redisTemplate.opsForValue().get(cacheKey);
             if (cachedData != null) {
-                log.info("Отримано міста з Redis кешу для: {}", cityName);
+                log.info("Cities retrieved from Redis cache for: {}", cityName);
                 return objectMapper.readValue(cachedData, new TypeReference<List<DeliveryLocationDto>>() {});
             }
 
-            log.info("Кеш порожній. Робимо запит до API Нової Пошти для міст: {}", cityName);
+            log.info("Cache is empty. Making request to Nova Poshta API for cities: {}", cityName);
 
             Map<String, Object> methodProperties = new HashMap<>();
             if (cityName != null && !cityName.isBlank()) {
@@ -69,23 +69,31 @@ public class DeliveryServiceImpl implements DeliveryService {
             return cities;
 
         } catch (Exception e) {
-            log.error("Помилка під час пошуку міст: {}", e.getMessage(), e);
+            log.error("Error searching for cities: {}", e.getMessage(), e);
             return new ArrayList<>();
         }
     }
 
     @Override
-    public List<DeliveryLocationDto> getWarehouses(String cityRef) {
-        String cacheKey = "np:warehouses:" + cityRef;
+    public List<DeliveryLocationDto> getWarehouses(String cityRef, String search) {
+        if (search != null && !search.isBlank()) {
+            try {
+                Map<String, Object> methodProperties = new HashMap<>();
+                methodProperties.put("CityRef", cityRef);
+                methodProperties.put("FindByString", search);
+                return makeApiCall("Address", "getWarehouses", methodProperties);
+            } catch (Exception e) {
+                log.error("Error searching for warehouses: {}", e.getMessage(), e);
+                return new ArrayList<>();
+            }
+        }
 
+        String cacheKey = "np:warehouses:" + cityRef;
         try {
             String cachedData = redisTemplate.opsForValue().get(cacheKey);
             if (cachedData != null) {
-                log.info("Отримано відділення з Redis кешу для міста: {}", cityRef);
-                return objectMapper.readValue(cachedData, new TypeReference<List<DeliveryLocationDto>>() {});
+                return objectMapper.readValue(cachedData, new TypeReference<>() {});
             }
-
-            log.info("Кеш порожній. Робимо запит до API Нової Пошти для відділень у місті: {}", cityRef);
 
             Map<String, Object> methodProperties = new HashMap<>();
             methodProperties.put("CityRef", cityRef);
@@ -93,20 +101,15 @@ public class DeliveryServiceImpl implements DeliveryService {
             List<DeliveryLocationDto> warehouses = makeApiCall("Address", "getWarehouses", methodProperties);
 
             if (!warehouses.isEmpty()) {
-                redisTemplate.opsForValue().set(
-                        cacheKey,
-                        objectMapper.writeValueAsString(warehouses),
-                        Duration.ofHours(12)
-                );
+                redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(warehouses), Duration.ofHours(12));
             }
-
             return warehouses;
-
         } catch (Exception e) {
-            log.error("Помилка під час пошуку відділень: {}", e.getMessage(), e);
+            log.error("Error retrieving warehouses: {}", e.getMessage(), e);
             return new ArrayList<>();
         }
     }
+
 
     private List<DeliveryLocationDto> makeApiCall(String modelName, String calledMethod, Map<String, Object> methodProperties) throws Exception {
 

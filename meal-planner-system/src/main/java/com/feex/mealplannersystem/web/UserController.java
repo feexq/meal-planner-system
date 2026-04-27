@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -24,17 +25,16 @@ public class UserController {
     private final UserPreferenceService userPreferenceService;
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        UserEntity user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", user.getId());
+        response.put("email", user.getEmail());
+        response.put("firstName", user.getFirstName());
+        response.put("lastName", user.getLastName());
+        response.put("role", user.getRole().name());
+        response.put("provider", user.getProvider().name());
 
-        return ResponseEntity.ok(Map.of(
-                "id", user.getId(),
-                "email", user.getEmail(),
-                "firstName", user.getFirstName(),
-                "lastName", user.getLastName(),
-                "role", user.getRole()
-        ));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/preference")

@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.dto.profile;
 
-import com.feex.mealplannersystem.common.StreakType;
+import com.feex.mealplannersystem.common.user.StreakType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

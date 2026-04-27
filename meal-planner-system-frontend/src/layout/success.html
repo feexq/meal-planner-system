@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплата успішна | FoodMart</title>
+  <style>
+    /* Палітра ModernBerry */
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --neutral: #F7F5FB;
+      --text: #1A1030;
+      --text-muted: #7A6A90;
+      --border: #EAE4F5;
+      --radius-lg: 24px;
+      --radius-md: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); background-color: var(--neutral); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; width: 100%; }
+
+    /* Шапка (Мінімалістична) */
+    header { padding: 24px 0; background: transparent; text-align: center; width: 100%; }
+    .logo { font-size: 26px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+
+    /* Основний контент (Центрування) */
+    main { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 40px 0; }
+
+    /* Картка успіху */
+    .success-card { background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 48px; max-width: 600px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(108, 63, 197, 0.08); position: relative; overflow: hidden; }
+
+    /* Декоративний фон */
+    .success-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--primary), var(--accent)); }
+
+    /* Анімована іконка */
+    .icon-wrapper { width: 96px; height: 96px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary); animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; transform: scale(0); }
+    @keyframes popIn { 
+      0% { transform: scale(0); opacity: 0; } 
+      100% { transform: scale(1); opacity: 1; } 
+    }
+
+    .success-card h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+    .success-card p { font-size: 16px; color: var(--text-muted); margin-bottom: 32px; }
+
+    /* Деталі замовлення */
+    .order-details { background: var(--neutral); border-radius: var(--radius-md); padding: 24px; text-align: left; margin-bottom: 32px; border: 1px solid var(--border); }
+    
+    .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; }
+    .detail-row:last-child { margin-bottom: 0; padding-top: 12px; border-top: 1px dashed var(--border); font-weight: 600; color: var(--text); }
+    .detail-label { color: var(--text-muted); }
+    .detail-value { font-weight: 500; color: var(--text); text-align: right; }
+
+    /* Кнопки дій */
+    .actions { display: flex; flex-direction: column; gap: 16px; }
+    
+    .btn-primary { width: 100%; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-md); padding: 16px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.2s; box-shadow: 0 8px 24px rgba(108, 63, 197, 0.2); }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    
+    .btn-secondary { width: 100%; background: transparent; color: var(--primary); border: 1px solid var(--primary); border-radius: var(--radius-md); padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; }
+    .btn-secondary:hover { background: var(--primary-light); }
+
+    /* Адаптивність */
+    @media (max-width: 600px) {
+      .success-card { padding: 32px 20px; border-radius: 16px; }
+      .success-card h1 { font-size: 26px; }
+      .detail-row { flex-direction: column; gap: 4px; margin-bottom: 16px; }
+      .detail-value { text-align: left; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="#" class="logo">FoodMart</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" style="display: flex; justify-content: center;">
+      <div class="success-card">
+        
+        <div class="icon-wrapper">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+
+        <h1>Оплата успішна!</h1>
+        <p>Дякуємо за замовлення. Продукти вже готуються до відправки, а ваш персональний раціон оновлено.</p>
+
+        <div class="order-details">
+          <div class="detail-row">
+            <span class="detail-label">Номер замовлення</span>
+            <span class="detail-value" id="order-number">#ORD-20459812</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Дата</span>
+            <span class="detail-value" id="order-date">10 Квітня 2026, 14:30</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Доставка</span>
+            <span class="detail-value">Нова Пошта, Відділення №1</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Сума оплати</span>
+            <span class="detail-value">254 ₴</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a href="#" class="btn-primary">✨ Перейти до мого раціону</a>
+          <a href="#" class="btn-secondary">Повернутися до магазину</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Простий скрипт для встановлення поточної дати
+    const dateElement = document.getElementById('order-date');
+    const now = new Date();
+    const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+    dateElement.textContent = now.toLocaleDateString('uk-UA', options);
+
+    // Як це працюватиме в реальному проєкті:
+    // Коли Stripe перекидає сюди, в URL зазвичай є ?payment_intent=pi_12345
+    // Ти береш цей ID з URL, робиш запит на свій бекенд (/api/orders/details?intent=pi_12345)
+    // і підставляєш реальні дані у блок .order-details
+    /*
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentIntentId = urlParams.get('payment_intent');
+    if (paymentIntentId) {
+       // fetch data...
+    }
+    */
+  </script>
+
+</body>
+</html>

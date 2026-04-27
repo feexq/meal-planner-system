@@ -8,7 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-@AllArgsConstructor
 public class AuthResponse {
     String accessToken;
     String refreshToken;

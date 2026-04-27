@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-ingredients-raw-str-to-recipes
+      author: feex
+      changes:
+        - addColumn:
+            tableName: recipes
+            columns:
+              - column:
+                  name: ingredients_raw_str
+                  type: TEXT

@@ -1,7 +1,10 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.dto.mealplan.AdaptiveDtos;
+import com.feex.mealplannersystem.dto.mealplan.DayTargetDto;
+import com.feex.mealplannersystem.dto.mealplan.WeeklyBalanceDto;
+import com.feex.mealplannersystem.dto.mealplan.response.AdaptedPlanResponse;
 import com.feex.mealplannersystem.repository.FoodLogRepository;
+import com.feex.mealplannersystem.repository.MealPlanSlotRepository;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +22,49 @@ import java.util.stream.Collectors;
 public class WeeklyBalanceServiceImpl {
 
     private final FoodLogRepository foodLogRepository;
+    private final MealPlanSlotRepository slotRepository;
 
     private static final double MAX_DEFICIT_PCT  = 0.20;
     private static final double MIN_DAILY_KCAL   = 1200.0;
 
-    public AdaptiveDtos.AdaptedPlanResponse recalculate(MealPlanRecordEntity plan, int currentDay) {
+    private static final Map<String, Double> MEAL_TYPE_RATIO = Map.of(
+            "BREAKFAST", 0.25,
+            "LUNCH",     0.40,
+            "DINNER",    0.35
+    );
+
+    public void applyMinimumSafeLimits(MealPlanRecordEntity plan, int currentDay) {
+        List<MealPlanSlotEntity> futureSlots = plan.getSlots().stream()
+                .filter(s -> s.getDayNumber() > currentDay
+                        && s.getStatus() == MealPlanSlotEntity.SlotStatus.PLANNED)
+                .toList();
+
+        if (futureSlots.isEmpty()) return;
+
+        Map<Integer, List<MealPlanSlotEntity>> byDay = futureSlots.stream()
+                .collect(Collectors.groupingBy(MealPlanSlotEntity::getDayNumber));
+
+        for (var entry : byDay.entrySet()) {
+            List<MealPlanSlotEntity> daySlots = entry.getValue();
+
+            for (MealPlanSlotEntity slot : daySlots) {
+                String mealType = slot.getMealType() != null
+                        ? slot.getMealType().toUpperCase()
+                        : "LUNCH";
+
+                double ratio = MEAL_TYPE_RATIO.getOrDefault(mealType, 1.0 / daySlots.size());
+                double newTarget = Math.round(MIN_DAILY_KCAL * ratio * 10.0) / 10.0;
+
+                slot.setTargetCalories(newTarget);
+            }
+
+            slotRepository.saveAll(daySlots);
+            log.info("Plan {}: applied min-safe limits for day {} ({} slots → 1200 kcal total)",
+                    plan.getId(), entry.getKey(), daySlots.size());
+        }
+    }
+
+    public AdaptedPlanResponse recalculate(MealPlanRecordEntity plan, int currentDay) {
 
         double baseDaily  = plan.getDailyCalorieTarget();
         double weeklyTarget = plan.getWeeklyCalorieTarget();
@@ -80,8 +121,12 @@ public class WeeklyBalanceServiceImpl {
                         Collectors.summingDouble(MealPlanSlotEntity::getTargetCalories)
                 ));
 
-        double maxDeficitPerDay = baseDaily * MAX_DEFICIT_PCT;
-        List<AdaptiveDtos.DayTargetDto> updatedTargets = new ArrayList<>();
+        // Групуємо майбутні слоти по днях для детального аналізу сайдів/основних страв
+        Map<Integer, List<MealPlanSlotEntity>> plannedSlotsByDay = plan.getSlots().stream()
+                .filter(s -> s.getStatus() == MealPlanSlotEntity.SlotStatus.PLANNED)
+                .collect(Collectors.groupingBy(MealPlanSlotEntity::getDayNumber));
+
+        List<DayTargetDto> updatedTargets = new ArrayList<>();
         boolean overLimitWarning = false;
         double totalUnrecoverable = 0;
 
@@ -92,31 +137,24 @@ public class WeeklyBalanceServiceImpl {
             String action = "NONE";
 
             if (day > currentDay) {
-                double minAllowedDaily  = Math.max(MIN_DAILY_KCAL, dayOriginalTarget - maxDeficitPerDay);
                 adjustedDaily = dayOriginalTarget + deltaPerDay;
 
-                if (adjustedDaily < minAllowedDaily) {
+                if (adjustedDaily < MIN_DAILY_KCAL) {
                     overLimitWarning = true;
-                    totalUnrecoverable += (minAllowedDaily - adjustedDaily);
-                    adjustedDaily = minAllowedDaily;
+                    totalUnrecoverable += (MIN_DAILY_KCAL - adjustedDaily);
+                    adjustedDaily = MIN_DAILY_KCAL;
                 }
 
                 adjustedDaily = Math.round(adjustedDaily * 10.0) / 10.0;
                 dailyDelta = Math.round((adjustedDaily - dayOriginalTarget) * 10.0) / 10.0;
-
                 double deficit = Math.abs(dailyDelta);
+
                 if (deficit > 0) {
-                    if (deficit <= 150) {
-                        action = "SCALE_PORTIONS";
-                    } else if (deficit <= 300) {
-                        action = "DROP_SIDES";
-                    } else {
-                        action = "REQUIRE_SWAP";
-                    }
+                    action = determineActionBasedOnSlots(deficit, plannedSlotsByDay.getOrDefault(day, List.of()));
                 }
             }
 
-            updatedTargets.add(new AdaptiveDtos.DayTargetDto(
+            updatedTargets.add(new DayTargetDto(
                     day,
                     Math.round(dayOriginalTarget * 10.0) / 10.0,
                     adjustedDaily,
@@ -141,18 +179,62 @@ public class WeeklyBalanceServiceImpl {
                 overLimitWarning, note, updatedTargets);
     }
 
-    public AdaptiveDtos.WeeklyBalanceDto buildBalance(MealPlanRecordEntity plan, int currentDay) {
+    private String determineActionBasedOnSlots(double deficit, List<MealPlanSlotEntity> daySlots) {
+        List<MealPlanSlotEntity> sideSlots = daySlots.stream()
+                .filter(this::isSideSlot)
+                .toList();
+        List<MealPlanSlotEntity> mainSlots = daySlots.stream()
+                .filter(s -> !isSideSlot(s))
+                .toList();
+
+        double totalSideCals = sideSlots.stream()
+                .mapToDouble(s -> s.getTargetCalories() != null ? s.getTargetCalories() : 0.0)
+                .sum();
+        double totalMainCals = mainSlots.stream()
+                .mapToDouble(s -> s.getTargetCalories() != null ? s.getTargetCalories() : 0.0)
+                .sum();
+
+        double maxSafeMainScaleReduction = totalMainCals * 0.15;
+
+        double maxSingleSideCal = sideSlots.stream()
+                .mapToDouble(s -> s.getTargetCalories() != null ? s.getTargetCalories() : 0.0)
+                .max().orElse(0.0);
+
+        double absoluteMaxSavings = totalSideCals + (totalMainCals * 0.30);
+
+        if (deficit <= maxSafeMainScaleReduction) {
+            return "SCALE_PORTIONS";
+        }
+        else if (sideSlots.size() > 1 && maxSingleSideCal >= deficit * 0.85) {
+            return "DROP_1_SIDE";
+        }
+        else if (totalSideCals >= deficit * 0.85) {
+            return "DROP_SIDES";
+        }
+        else if (deficit <= absoluteMaxSavings) {
+            return "DROP_SIDES_AND_SCALE";
+        }
+        else {
+            return "REQUIRE_SWAP";
+        }
+    }
+
+    private boolean isSideSlot(MealPlanSlotEntity slot) {
+        return slot.getSlotRole() != null && slot.getSlotRole().equalsIgnoreCase("side");
+    }
+
+    public WeeklyBalanceDto buildBalance(MealPlanRecordEntity plan, int currentDay) {
         return recalculate(plan, currentDay).getWeeklyBalance();
     }
 
-    private AdaptiveDtos.AdaptedPlanResponse buildResponse(
+    private AdaptedPlanResponse buildResponse(
             MealPlanRecordEntity plan,
             double totalConsumed, double remainingBudget,
             int remainingDays, double baseDaily, double avgAdjustedDaily,
             boolean overLimit, String note,
-            List<AdaptiveDtos.DayTargetDto> targets) {
+            List<DayTargetDto> targets) {
 
-        AdaptiveDtos.WeeklyBalanceDto balance = AdaptiveDtos.WeeklyBalanceDto.builder()
+        WeeklyBalanceDto balance = WeeklyBalanceDto.builder()
                 .weeklyCalorieTarget(plan.getWeeklyCalorieTarget())
                 .totalConsumed(Math.round(totalConsumed * 10.0) / 10.0)
                 .remainingBudget(Math.round(remainingBudget * 10.0) / 10.0)
@@ -162,6 +244,6 @@ public class WeeklyBalanceServiceImpl {
                 .adjustmentNote(note)
                 .build();
 
-        return new AdaptiveDtos.AdaptedPlanResponse(plan.getId(), balance, targets);
+        return new AdaptedPlanResponse(plan.getId(), balance, targets);
     }
 }

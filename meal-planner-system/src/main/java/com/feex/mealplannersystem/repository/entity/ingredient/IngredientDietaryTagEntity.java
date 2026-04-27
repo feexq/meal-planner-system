@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.repository.entity.ingredient;
 
-import com.feex.mealplannersystem.common.DietaryTagStatus;
+import com.feex.mealplannersystem.common.mealplan.DietaryTagStatus;
 import com.feex.mealplannersystem.repository.entity.DietaryConditionEntity;
 import com.feex.mealplannersystem.repository.other.IngredientDietaryTagId;
 import jakarta.persistence.*;

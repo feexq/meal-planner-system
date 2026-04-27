@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-package-amount-and-unit
+      author: feex
+      changes:
+        - addColumn:
+            tableName: products
+            columns:
+              - column:
+                  name: package_amount
+                  type: NUMERIC(10, 2)
+              - column:
+                  name: package_unit
+                  type: VARCHAR(20)

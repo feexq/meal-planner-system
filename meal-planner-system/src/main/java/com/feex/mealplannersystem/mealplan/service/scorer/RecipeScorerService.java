@@ -1,13 +1,15 @@
 package com.feex.mealplannersystem.mealplan.service.scorer;
 
-import com.feex.mealplannersystem.mealplan.mapper.IngredientClassificationAdapter.ClassificationContext;
-import com.feex.mealplannersystem.mealplan.mapper.RecipeDataAdapter.RecipeDataContext;
+import com.feex.mealplannersystem.mealplan.common.ConditionSeverity;
+import com.feex.mealplannersystem.mealplan.common.ScoringMode;
+import com.feex.mealplannersystem.mealplan.dto.scoring.RecipeCandidateDto;
+import com.feex.mealplannersystem.mealplan.dto.scoring.ScoreBreakdownDto;
+import com.feex.mealplannersystem.mealplan.mapper.context.ClassificationContext;
 import com.feex.mealplannersystem.mealplan.model.NutritionModel;
 import com.feex.mealplannersystem.mealplan.model.RecipeModel;
 import com.feex.mealplannersystem.mealplan.model.UserProfileModel;
-import com.feex.mealplannersystem.mealplan.service.calculator.MacroRequirementService.MacroTarget;
 import com.feex.mealplannersystem.mealplan.service.filter.RecipeFilterService;
-import com.feex.mealplannersystem.mealplan.dto.*;
+import com.feex.mealplannersystem.mealplan.service.scorer.context.ScoringContext;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -15,54 +17,46 @@ import java.util.*;
 @Component
 public class RecipeScorerService {
 
-    public enum ScoringMode { FULL, ILP_MODE }
+    public RecipeCandidateDto scoreRecipe(RecipeModel recipe,
+                                          UserProfileModel user,
+                                          ScoringContext ctx,
+                                          double scaledServings,
+                                          double scaledCalories,
+                                          List<String> relaxations) {
 
-    public RecipeCandidateDto scoreRecipe(RecipeModel recipe, UserProfileModel user,
-                                          double slotBudget, double scaledServings, double scaledCalories,
-                                          Map<Integer, Map<String, List<Integer>>> usageBySlotType,
-                                          int currentDay, MacroTarget macroTarget,
-                                          RecipeDataContext data, ClassificationContext classification,
-                                          List<String> relaxations, String slotType,
-                                          int proteinWeight) {
-        return scoreRecipe(recipe, user, slotBudget, scaledServings, scaledCalories,
-                usageBySlotType, currentDay, macroTarget, data, classification,
-                relaxations, slotType, proteinWeight, ScoringMode.FULL, 0);
-    }
-
-    public RecipeCandidateDto scoreRecipe(RecipeModel recipe, UserProfileModel user,
-                                          double slotBudget, double scaledServings, double scaledCalories,
-                                          Map<Integer, Map<String, List<Integer>>> usageBySlotType,
-                                          int currentDay, MacroTarget macroTarget,
-                                          RecipeDataContext data, ClassificationContext classification,
-                                          List<String> relaxations, String slotType,
-                                          int proteinWeight, ScoringMode mode, int poolSize) {
-
-        NutritionModel nutrition = data.getNutrition(recipe.getId());
+        NutritionModel nutrition = ctx.getData().getNutrition(recipe.getId());
         double calsPerServing = nutrition.getCalories();
 
-        double slotProteinTarget = macroTarget.proteinPerMealG;
-        if (slotType != null && slotType.startsWith("snack")) slotProteinTarget *= 0.6;
+        double slotProteinTarget = ctx.getMacroTarget().proteinPerMealG;
+        if (ctx.getSlotType() != null && ctx.getSlotType().startsWith("snack"))
+            slotProteinTarget *= 0.6;
 
-        int calorieFit   = scoreCalorieFit(scaledCalories, slotBudget);
+        int calorieFit    = scoreCalorieFit(scaledCalories, ctx.getSlotBudget());
         int cookTimeScore = scoreCookTime(recipe.getCookTime(), recipe.getTags());
 
         int proteinFit = 0, carbsFit = 0, fatFit = 0;
-        if (mode == ScoringMode.FULL) {
-            proteinFit = scoreProteinFit(nutrition.getProteinG(), scaledServings, slotProteinTarget, proteinWeight);
+        if (ctx.getMode() == ScoringMode.FULL) {
+            proteinFit = scoreProteinFit(nutrition.getProteinG(), scaledServings,
+                    slotProteinTarget, ctx.getProteinWeight());
             carbsFit   = scoreCarbsFit(nutrition.getTotalCarbsG() * scaledServings,
-                    macroTarget.carbsPerMealG, macroTarget.carbsTargetG, recipe.getName(), recipe.getTags());
-            fatFit     = scoreFatFit(nutrition.getTotalFatG() * scaledServings, macroTarget.fatPerMealG);
+                    ctx.getMacroTarget().carbsPerMealG,
+                    ctx.getMacroTarget().carbsTargetG,
+                    recipe.getName(), recipe.getTags());
+            fatFit     = scoreFatFit(nutrition.getTotalFatG() * scaledServings,
+                    ctx.getMacroTarget().fatPerMealG);
         }
 
         List<String> matchedHealthTags = new ArrayList<>();
-        int nutritionQuality = scoreNutritionQuality(recipe.getTags(), user, matchedHealthTags,
-                macroTarget.carbsTargetG);
+        int nutritionQuality = scoreNutritionQuality(recipe.getTags(), user,
+                matchedHealthTags, ctx.getMacroTarget().carbsTargetG);
 
-        int variety        = scoreVariety(recipe.getId(), user, usageBySlotType, currentDay, slotType, poolSize);
+        int variety        = scoreVariety(recipe.getId(), user, ctx.getUsageBySlotType(),
+                ctx.getCurrentDay(), ctx.getSlotType(), ctx.getPoolSize());
         int vegProteinBonus = scoreVegProteinBonus(recipe, user);
 
         List<String> activeConditions = buildActiveConditions(user);
-        Map<String, List<String>> softMatches = computeSoftForbidden(recipe, activeConditions, classification);
+        Map<String, List<String>> softMatches = computeSoftForbidden(
+                recipe, activeConditions, ctx.getClassification());
         int softPenalty = calcSoftPenalty(softMatches);
 
         ScoreBreakdownDto breakdown = new ScoreBreakdownDto(
@@ -70,8 +64,8 @@ public class RecipeScorerService {
                 proteinFit, carbsFit, fatFit,
                 nutritionQuality, variety, vegProteinBonus, softPenalty);
 
-        double deviation = Math.round(((scaledCalories - slotBudget) / slotBudget * 100.0) * 10.0) / 10.0;
-
+        double deviation = Math.round(
+                ((scaledCalories - ctx.getSlotBudget()) / ctx.getSlotBudget() * 100.0) * 10.0) / 10.0;
 
         List<String> thresholds = RecipeFilterService.getAppliedThresholds(
                 user.getHealthConditions() != null ? user.getHealthConditions() : List.of());
@@ -85,9 +79,7 @@ public class RecipeScorerService {
                 recipe.getId(), recipe.getName(), breakdown.total(),
                 calsPerServing, scaledServings,
                 Math.round(scaledCalories * 10.0) / 10.0, deviation,
-                scaledProtein,
-                scaledCarbs,
-                scaledFat,
+                scaledProtein, scaledCarbs, scaledFat,
                 matchedHealthTags, thresholds, dietaryNotes,
                 relaxations, breakdown, recipe.getParsedIngredients());
     }
@@ -200,7 +192,7 @@ public class RecipeScorerService {
         int total = 0;
         Set<String> penalized = new HashSet<>();
         for (Map.Entry<String, List<String>> e : softMatchesByCondition.entrySet()) {
-            int pp = switch (RecipeFilterService.getConditionSeverity(e.getKey())) {
+            int pp = switch (ConditionSeverity.of(e.getKey())) {
                 case CRITICAL -> 20; case HIGH -> 15; case MODERATE -> 10; default -> 5;
             };
             for (String match : e.getValue())

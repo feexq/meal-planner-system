@@ -1,13 +1,16 @@
 package com.feex.mealplannersystem.service.mapper;
 
 import com.feex.mealplannersystem.dto.recipe.*;
+import com.feex.mealplannersystem.repository.IngredientRepository;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeIngredientEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeStepEntity;
 import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,12 +19,10 @@ import java.util.stream.Collectors;
 public interface RecipeMapper {
 
     // ───── SUMMARY ─────
-    @Mapping(target = "mealType", expression = "java(toLower(r.getMealType()))")
-    @Mapping(target = "cookTime", expression = "java(toName(r.getCookTime()))")
-    @Mapping(target = "cookComplexity", expression = "java(toLower(r.getCookComplexity()))")
-    @Mapping(target = "cookBudget", expression = "java(toLower(r.getCookBudget()))")
-    @Mapping(target = "tags", expression = "java(mapTags(r.getTags()))")
     @Mapping(source = "nutrition.calories", target = "calories")
+    @Mapping(source = "nutrition.proteinG", target = "proteinG")
+    @Mapping(source = "nutrition.totalFatG", target = "totalFatG")
+    @Mapping(source = "nutrition.totalCarbsG", target = "totalCarbsG")
     RecipeSummaryResponse toSummaryResponse(RecipeEntity r);
 
     // ───── FULL ─────
@@ -49,7 +50,9 @@ public interface RecipeMapper {
     }
 
     default Set<String> mapSteps(Set<RecipeStepEntity> steps) {
-        return steps == null ? null : steps.stream()
+        if (steps == null || steps.isEmpty()) return Set.of();
+        return steps.stream()
+                .sorted(Comparator.comparingInt(RecipeStepEntity::getStepNumber))
                 .map(RecipeStepEntity::getDescription)
                 .collect(Collectors.toSet());
     }
@@ -68,6 +71,7 @@ public interface RecipeMapper {
                 .price(ri.getIngredient() != null ? ri.getIngredient().getPrice() : null)
                 .unit(ri.getIngredient() != null ? ri.getIngredient().getUnit() : null)
                 .imageUrl(ri.getIngredient() != null ? ri.getIngredient().getImageUrl() : null)
+                .productId(ri.getIngredient() != null ? ri.getIngredient().getProduct().getId() : null)
                 .build();
     }
 }

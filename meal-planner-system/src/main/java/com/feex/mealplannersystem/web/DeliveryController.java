@@ -25,7 +25,8 @@ public class DeliveryController {
 
     @GetMapping("/warehouses")
     public ResponseEntity<List<DeliveryLocationDto>> getWarehouses(
-            @RequestParam String cityRef) {
-        return ResponseEntity.ok(deliveryService.getWarehouses(cityRef));
+            @RequestParam String cityRef,
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(deliveryService.getWarehouses(cityRef, search));
     }
 }

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { authAPI } from '../api/api';
+import { authAPI, profileAPI } from '../api/api';
 
 const AuthContext = createContext(null);
 
@@ -14,11 +14,11 @@ export function AuthProvider({ children }) {
         setLoading(false);
         return;
       }
-      const { data } = await authAPI.me();
+      // Виправлено: використовуємо правильний ендпоінт /api/profile/me
+      const { data } = await profileAPI.getProfile();
       setUser(data);
     } catch {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      // Токени вже видалені interceptor-ом якщо refresh не вдався
       setUser(null);
     } finally {
       setLoading(false);
@@ -33,6 +33,7 @@ export function AuthProvider({ children }) {
     const { data } = await authAPI.login({ email, password });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
+    localStorage.removeItem('cartSessionId'); // ← кошик вже змержено, uuid більше не потрібен
     await fetchUser();
     return data;
   };
@@ -41,6 +42,7 @@ export function AuthProvider({ children }) {
     const { data } = await authAPI.register({ email, password, firstName, lastName });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
+    localStorage.removeItem('cartSessionId'); // ← те саме
     await fetchUser();
     return data;
   };
@@ -53,6 +55,7 @@ export function AuthProvider({ children }) {
     }
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('cartSessionId'); // ← новий uuid згенерується автоматично при наступному запиті
     setUser(null);
   };
 
@@ -63,6 +66,7 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    refetchUser: fetchUser, // корисно після оновлення профілю
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

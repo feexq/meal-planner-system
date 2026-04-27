@@ -1,0 +1,9 @@
+databaseChangeLog:
+    - changeSet:
+        id: seed-products-data
+        author: feex
+        changes:
+          - sqlFile:
+              path: update_products.sql
+              relativeToChangelogFile: true
+              encoding: UTF-8

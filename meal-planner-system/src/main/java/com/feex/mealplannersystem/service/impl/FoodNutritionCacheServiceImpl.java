@@ -2,6 +2,8 @@ package com.feex.mealplannersystem.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.feex.mealplannersystem.dto.mealplan.nutrition.CachedNutrition;
+import com.feex.mealplannersystem.service.FoodNutritionCacheService;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,22 +16,13 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FoodNutritionCacheServiceImpl {
+public class FoodNutritionCacheServiceImpl implements FoodNutritionCacheService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String KEY_PREFIX = "food_nutrition:";
     private static final Duration TTL       = Duration.ofDays(30);
-
-    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
-    public static class CachedNutrition {
-        private double calories;
-        private double proteinG;
-        private double carbsG;
-        private double fatG;
-        private String quantityDescription;
-    }
 
     public static String normalizeKey(String foodName) {
         return KEY_PREFIX + foodName.toLowerCase()

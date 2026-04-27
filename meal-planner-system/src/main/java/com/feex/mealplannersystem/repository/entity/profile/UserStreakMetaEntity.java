@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.repository.entity.profile;
 
-import com.feex.mealplannersystem.common.StreakType;
+import com.feex.mealplannersystem.common.user.StreakType;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;

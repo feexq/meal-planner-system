@@ -13,5 +13,5 @@ public class CreateCategoryRequest {
     @NotBlank
     private String name;
 
-    private Long parentId;  // null = коренева категорія
+    private Long parentId;
 }

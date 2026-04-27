@@ -25,7 +25,6 @@ public class ClassificationScheduler {
     @Value("${normalizer.batch-size:35}")
     private int batchSize;
 
-    // Запускається кожні 10 хвилин
     @Scheduled(fixedDelay = 600_000)
     public void processBatch() {
         long queueSize = queue.size();

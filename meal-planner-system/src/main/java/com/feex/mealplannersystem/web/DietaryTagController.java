@@ -1,10 +1,8 @@
 package com.feex.mealplannersystem.web;
 
-import com.feex.mealplannersystem.common.DietaryConditionType;
+import com.feex.mealplannersystem.common.mealplan.DietaryConditionType;
 import com.feex.mealplannersystem.config.normalizer.ClassificationScheduler;
 import com.feex.mealplannersystem.dto.dietary.DietaryConditionResponse;
-import com.feex.mealplannersystem.dto.dietary.IngredientDietaryTagResponse;
-import com.feex.mealplannersystem.dto.dietary.UpdateDietaryTagsRequest;
 import com.feex.mealplannersystem.service.DietaryTagService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -12,10 +12,7 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Value
-@Builder
-@Jacksonized
 @GroupSequence({RegisterRequest.class, ExtendedValidation.class})
-@AllArgsConstructor
 public class RegisterRequest {
 
     @NotBlank(message = "Email is required")

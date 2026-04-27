@@ -21,46 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecipeDataAdapter {
 
-    private final RecipeRepository recipeRepository;
-    private final TransactionTemplate transactionTemplate;
-
-    private RecipeDataContext cachedContext;
-
-    @PostConstruct
-    public void init() {
-        log.info("Починаю завантаження всіх рецептів у кеш пам'яті...");
-
-        transactionTemplate.executeWithoutResult(status -> {
-            refreshCache();
-        });
-
-        log.info("Рецепти успішно завантажено в кеш.");
-    }
-
-    public RecipeDataContext buildContext() {
-        if (this.cachedContext == null) {
-            transactionTemplate.executeWithoutResult(status -> refreshCache());
-        }
-        return this.cachedContext;
-    }
-
-    public void refreshCache() {
-        List<RecipeEntity> entities = recipeRepository.findAllForGenerator();
-
-        List<RecipeModel>         recipes      = new ArrayList<>(entities.size());
-        Map<Long, NutritionModel> nutritionMap = new HashMap<>(entities.size());
-
-        for (RecipeEntity entity : entities) {
-            recipes.add(toRecipeModel(entity));
-            if (entity.getNutrition() != null) {
-                nutritionMap.put(entity.getId(), toNutritionModel(entity.getNutrition()));
-            }
-        }
-
-        this.cachedContext = new RecipeDataContext(recipes, nutritionMap);
-    }
-
-    private RecipeModel toRecipeModel(RecipeEntity e) {
+    public RecipeModel toRecipeModel(RecipeEntity e) {
         List<String> ingredients = e.getIngredients().stream()
                 .map(i -> {
                     if (i.getIngredient() != null && i.getIngredient().getNormalizedName() != null)
@@ -89,7 +50,7 @@ public class RecipeDataAdapter {
                 .build();
     }
 
-    private NutritionModel toNutritionModel(RecipeNutritionEntity n) {
+    public NutritionModel toNutritionModel(RecipeNutritionEntity n) {
         return NutritionModel.builder()
                 .recipeId(n.getRecipe().getId())
                 .calories(bd(n.getCalories()))
@@ -107,18 +68,5 @@ public class RecipeDataAdapter {
 
     private static double bd(BigDecimal v) {
         return v != null ? v.doubleValue() : 0.0;
-    }
-
-    public static class RecipeDataContext {
-        @Getter
-        private final List<RecipeModel>         recipes;
-        private final Map<Long, NutritionModel> nutritionMap;
-
-        public RecipeDataContext(List<RecipeModel> recipes, Map<Long, NutritionModel> nutritionMap) {
-            this.recipes      = Collections.unmodifiableList(recipes);
-            this.nutritionMap = Collections.unmodifiableMap(nutritionMap);
-        }
-
-        public NutritionModel    getNutrition(long recipeId) { return nutritionMap.get(recipeId); }
     }
 }

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тост з авокадо | FoodMart</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Палітра ModernBerry */
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --neutral: #F7F8FA; 
+      --text: #1A1030;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --success: #10B981;
+      --danger: #EF4444;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      color: var(--text); 
+      background-color: #fff; 
+      line-height: 1.6; 
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 100px;
+    }
+    
+    .container { max-width: 1300px; margin: 0 auto; padding: 0 5%; }
+
+    /* --- Шапка сайту --- */
+    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+    .btn-catalog { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .search-bar { flex-grow: 1; max-width: 500px; display: flex; position: relative; }
+    .search-bar input { width: 100%; padding: 10px 16px 10px 40px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: var(--neutral); outline: none; transition: border-color 0.2s; font-family: inherit; }
+    .search-bar input:focus { border-color: var(--primary); background: #fff; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 14px; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 15px; font-weight: 500; }
+    .header-actions { display: flex; gap: 16px; align-items: center; }
+    .cart-btn { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--text-muted); position: relative; }
+
+    /* --- Хлібні крихти --- */
+    .breadcrumbs { padding: 24px 0 16px; font-size: 13px; color: var(--text-muted); display: flex; gap: 8px; }
+    .breadcrumbs a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumbs a:hover { color: var(--primary); }
+    .breadcrumbs span { color: var(--text); font-weight: 500; }
+
+    /* --- Заголовок рецепту --- */
+    .recipe-header { margin-bottom: 32px; max-width: 800px; }
+    .recipe-header h1 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; color: var(--text); letter-spacing: -0.5px; }
+    .recipe-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 15px; font-weight: 500; align-items: center; }
+    .meta-item { display: flex; align-items: center; gap: 6px; }
+    .meta-highlight { color: var(--primary); font-weight: 700; background: var(--primary-light); padding: 4px 10px; border-radius: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* --- Layout: 2 Колонки --- */
+    .recipe-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr; /* Асиметрія: 60% на 40% */
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* ЛІВА ЧАСТИНА (Контент) */
+    .main-content { display: flex; flex-direction: column; gap: 32px; }
+
+    .recipe-image {
+      width: 100%;
+      height: 400px;
+      background: var(--neutral);
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center; font-size: 100px;
+      border: 1px solid var(--border);
+    }
+
+    /* ІЗЮМИНКА 1: Блок макронутриєнтів */
+    .macros-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .macro-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; text-align: center; }
+    .macro-val { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .macro-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+    /* ІЗЮМИНКА 2: Інтерактивні кроки */
+    .steps-section h2 { font-size: 22px; font-weight: 800; margin-bottom: 24px; color: var(--text); }
+    .step-list { display: flex; flex-direction: column; gap: 16px; }
+    
+    .step-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 20px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      cursor: pointer; /* Вказує на інтерактивність */
+      background: #fff;
+    }
+    .step-item:hover { background: var(--neutral); }
+    
+    .step-number { width: 32px; height: 32px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; transition: all 0.2s; }
+    .step-text { font-size: 15px; color: var(--text); line-height: 1.6; transition: all 0.2s; padding-top: 4px; }
+
+    /* Стан "Виконано" */
+    .step-item.completed { opacity: 0.5; background: transparent; }
+    .step-item.completed .step-number { background: var(--border); color: var(--text-muted); text-decoration: line-through; }
+    .step-item.completed .step-text { text-decoration: line-through; color: var(--text-muted); }
+
+    /* ПРАВА ЧАСТИНА (Віджет Магазину) */
+    .shop-widget {
+      background: var(--neutral);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .shop-widget h3 { font-size: 18px; font-weight: 800; margin-bottom: 24px; color: var(--text); }
+
+    .ing-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05); gap: 12px; }
+    .ing-row:last-of-type { border-bottom: none; margin-bottom: 24px; padding-bottom: 0; }
+    
+    .ing-main { display: flex; flex-direction: column; gap: 4px; }
+    .ing-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    
+    .status-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; width: fit-content; }
+    .status-in { background: #E8F7EF; color: var(--success); }
+    .status-out { background: #FDE8E8; color: var(--danger); }
+
+    .ing-amount { font-size: 14px; font-weight: 500; color: var(--text-muted); white-space: nowrap; text-align: right; margin-top: 2px; }
+
+    /* Кнопка покупки */
+    .btn-buy { 
+      width: 100%; background: var(--primary); color: #fff; border: none; border-radius: 8px; padding: 16px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; font-family: inherit;
+    }
+    .btn-buy:hover { background: var(--primary-dark); }
+    
+    .missing-alert { font-size: 13px; color: var(--text-muted); margin-top: 16px; line-height: 1.5; padding-top: 16px; border-top: 1px dashed var(--border); }
+
+    /* Адаптивність */
+    @media (max-width: 900px) {
+      .recipe-layout { grid-template-columns: 1fr; gap: 40px; }
+      .recipe-image { height: 300px; }
+      .shop-widget { position: static; order: -1; } /* На мобільному кошик піднімаємо нагору */
+      .macros-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">FoodMart</a>
+      <button class="btn-catalog">☰ Каталог</button>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Пошук продуктів, рецептів чи категорій...">
+      </div>
+      <nav class="nav-links">
+        <a href="#">Магазин</a>
+        <a href="#">Мій раціон</a>
+        <a href="#">Статистика</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn">🛒</button>
+        <div style="width:32px; height:32px; border-radius:50%; border: 1px solid var(--primary); color:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:14px; cursor:pointer;">V</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <div class="breadcrumbs">
+      <a href="#">Головна</a> / <a href="#">Рецепти</a> / <a href="#">Сніданки</a> / <span>Тост з авокадо...</span>
+    </div>
+
+    <div class="recipe-header">
+      <h1>Тост з авокадо, томатами та яйцем пашот</h1>
+      <div class="recipe-meta">
+        <span class="meta-highlight">Сніданок</span>
+        <span class="meta-item">⏱ 15 хв</span>
+        <span class="meta-item">🔥 380 ккал</span>
+        <span class="meta-item">₴ 35.99</span>
+      </div>
+    </div>
+
+    <div class="recipe-layout">
+      
+      <div class="main-content">
+        <div class="recipe-image">
+          🥑🍞🍳
+        </div>
+
+        <div class="macros-grid">
+          <div class="macro-card">
+            <div class="macro-val" style="color: var(--accent);">380</div>
+            <div class="macro-lbl">Ккал</div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-val">14г</div>
+            <div class="macro-lbl">Білки</div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-val">22г</div>
+            <div class="macro-lbl">Жири</div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-val">34г</div>
+            <div class="macro-lbl">Вуглеводи</div>
+          </div>
+        </div>
+
+        <div class="steps-section">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h2>Спосіб приготування</h2>
+            <span style="font-size: 13px; color: var(--text-muted);">Натисніть на крок, щоб відмітити</span>
+          </div>
+          
+          <div class="step-list">
+            <div class="step-item" onclick="this.classList.toggle('completed')">
+              <div class="step-number">1</div>
+              <div class="step-text">Підсмажте скибочки цільнозернового хліба на сухій сковорідці або в тостері до утворення легкої золотистої скоринки.</div>
+            </div>
+            
+            <div class="step-item" onclick="this.classList.toggle('completed')">
+              <div class="step-number">2</div>
+              <div class="step-text">Розріжте авокадо навпіл, видаліть кісточку та дістаньте м'якоть ложкою. Розімніть її виделкою в невеликій мисці. Додайте декілька крапель лимонного соку, сіль та перець.</div>
+            </div>
+            
+            <div class="step-item" onclick="this.classList.toggle('completed')">
+              <div class="step-number">3</div>
+              <div class="step-text">Приготуйте яйце пашот: закип'ятіть воду в сотейнику. Додайте ложку оцту, зробіть водяну воронку вінчиком та обережно влийте яйце. Варіть рівно 3 хвилини.</div>
+            </div>
+            
+            <div class="step-item" onclick="this.classList.toggle('completed')">
+              <div class="step-number">4</div>
+              <div class="step-text">Рясно намажте пасту з авокадо на підсушений тост. Викладіть зверху розрізані томати чері, а в самий центр — готове яйце.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="shop-widget">
+          <h3>Інгредієнти</h3>
+          
+          <div class="ing-row">
+            <div class="ing-main">
+              <span class="ing-name">Авокадо Хасс органік</span>
+              <span class="status-badge status-in">В наявності</span>
+            </div>
+            <div class="ing-amount">1 шт</div>
+          </div>
+
+          <div class="ing-row">
+            <div class="ing-main">
+              <span class="ing-name">Хліб цільнозерновий на заквасці</span>
+              <span class="status-badge status-in">В наявності</span>
+            </div>
+            <div class="ing-amount">2 ск.</div>
+          </div>
+
+          <div class="ing-row">
+            <div class="ing-main">
+              <span class="ing-name">Яйця курячі С0</span>
+              <span class="status-badge status-in">В наявності</span>
+            </div>
+            <div class="ing-amount">1 шт</div>
+          </div>
+
+          <div class="ing-row">
+            <div class="ing-main">
+              <span class="ing-name" style="color: var(--text-muted);">Лимонний сік</span>
+              <span class="status-badge status-out">Відсутній</span>
+            </div>
+            <div class="ing-amount">1 ч.л.</div>
+          </div>
+
+          <button class="btn-buy" onclick="addToCart()">
+            🛒 Додати у кошик (3/4)
+          </button>
+          
+          <div class="missing-alert">
+            Лимонний сік наразі відсутній в магазині. До кошика буде додано лише 3 наявні товари.
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <script>
+    function addToCart() {
+      const btn = document.querySelector('.btn-buy');
+      btn.innerHTML = '✓ Додано в кошик';
+      btn.style.background = 'var(--success)';
+      
+      setTimeout(() => {
+        btn.innerHTML = '🛒 Додати у кошик (3/4)';
+        btn.style.background = 'var(--primary)';
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>

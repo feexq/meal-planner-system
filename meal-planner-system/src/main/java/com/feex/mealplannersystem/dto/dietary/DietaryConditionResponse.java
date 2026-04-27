@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.dto.dietary;
 
-import com.feex.mealplannersystem.common.DietaryConditionType;
+import com.feex.mealplannersystem.common.mealplan.DietaryConditionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,0 +1,367 @@
+/* ─── Header ────────────────────────────────── */
+/* Фікс горизонтальних стрибків сторінки */
+html {
+    overflow-y: scroll;
+    /* Завжди показувати скролбар */
+    /* Або сучасніший варіант: */
+    scrollbar-gutter: stable;
+}
+
+.preview-header {
+    padding: 20px 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* ─── Container ─────────────────────────────── */
+.preview-container {
+    padding-bottom: 140px;
+    min-height: 100vh;
+    /* Фікс вертикальних стрибків */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── Hero ──────────────────────────────────── */
+.plan-hero {
+    text-align: center;
+    padding: 48px 0 32px;
+}
+
+.plan-hero h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.plan-hero p {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.confetti {
+    display: inline-block;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ─── Day Navigation ────────────────────────── */
+.days-nav {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+
+.days-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.day-tab {
+    min-width: 100px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.day-tab:hover {
+    border-color: var(--primary-light);
+    background: var(--primary-light);
+}
+
+.day-tab.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 8px 16px rgba(108, 63, 197, 0.2);
+}
+
+.day-name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
+
+.day-cals {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* ─── Day Summary ───────────────────────────── */
+.day-summary {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.day-title {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.day-macros {
+    display: flex;
+    gap: 24px;
+}
+
+.macro-item {
+    text-align: center;
+}
+
+.macro-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.macro-val span {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 2px;
+}
+
+.macro-lbl {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* ─── Meal Slot ─────────────────────────────── */
+.meal-slot {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    transition: transform 0.2s;
+}
+
+.meal-slot:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+    border-color: var(--primary-light);
+}
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--neutral);
+}
+
+.meal-type {
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.meal-total {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* ─── Recipe Row ────────────────────────────── */
+.recipe-row {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.recipe-divider {
+    margin: 16px 0;
+    border-top: 1px dashed var(--border);
+}
+
+.recipe-img {
+    width: 80px;
+    height: 80px;
+    background: var(--neutral);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.recipe-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.recipe-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.recipe-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.recipe-portion {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.recipe-stats {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.r-cal {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.r-mac {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* ─── Floating Action Bar ───────────────────── */
+.action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    z-index: 100;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.action-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.action-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.action-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.action-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.btn-approve {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 8px 24px rgba(108, 63, 197, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+
+.btn-approve:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-approve:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ─── Responsive ────────────────────────────── */
+@media (max-width: 600px) {
+    .day-summary {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .action-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .btn-approve {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .plan-hero h1 {
+        font-size: 26px;
+    }
+}

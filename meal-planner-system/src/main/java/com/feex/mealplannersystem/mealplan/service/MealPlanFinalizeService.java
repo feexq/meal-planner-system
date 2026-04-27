@@ -1,27 +1,34 @@
 package com.feex.mealplannersystem.mealplan.service;
 
 import com.feex.mealplannersystem.config.normalizer.FinalizeClient;
-import com.feex.mealplannersystem.mealplan.dto.FinalizeRequestDto;
-import com.feex.mealplannersystem.mealplan.dto.FinalizeRequestDto.UserProfilePayload;
-import com.feex.mealplannersystem.mealplan.dto.FinalizedMealPlanDtos.FinalizedMealPlanDto;
-import com.feex.mealplannersystem.mealplan.dto.MealPlanDtos.WeeklyMealPlanDto;
+import com.feex.mealplannersystem.dto.mealplan.FinalizedMealPlanDto;
+import com.feex.mealplannersystem.dto.mealplan.UserProfilePayload;
+import com.feex.mealplannersystem.dto.mealplan.score.AdditionalRecipeDto;
+import com.feex.mealplannersystem.mealplan.dto.finalize.FinalizeRequestDto;
+import com.feex.mealplannersystem.mealplan.dto.plan.MealItemDto;
+import com.feex.mealplannersystem.dto.mealplan.SavedPlanResult;
+import com.feex.mealplannersystem.mealplan.dto.plan.WeeklyMealPlanDto;
 import com.feex.mealplannersystem.mealplan.mapper.IngredientClassificationAdapter;
 import com.feex.mealplannersystem.mealplan.mapper.RecipeDataAdapter;
+import com.feex.mealplannersystem.mealplan.mapper.RecipeDataCache;
 import com.feex.mealplannersystem.mealplan.mapper.UserProfileAdapter;
 import com.feex.mealplannersystem.mealplan.model.UserProfileModel;
 import com.feex.mealplannersystem.repository.UserPreferenceRepository;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanRecordEntity;
 import com.feex.mealplannersystem.repository.entity.preference.UserPreferenceEntity;
-import com.feex.mealplannersystem.service.impl.AdditionalRecipeService;
-import com.feex.mealplannersystem.service.impl.MealPlanPersistenceService;
-import lombok.Getter;
+import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
+import com.feex.mealplannersystem.service.impl.AdditionalRecipeServiceImpl;
+import com.feex.mealplannersystem.service.impl.MealPlanPersistenceServiceImpl;
+import com.feex.mealplannersystem.service.impl.RecipeTranslationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Slf4j
@@ -29,52 +36,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealPlanFinalizeService {
 
-    private final UserPreferenceRepository   userPreferenceRepository;
-    private final UserProfileAdapter         userProfileAdapter;
-    private final MealPlanGeneratorService   generator;
-    private final FinalizeClient            nlpClient;
-    private final MealPlanPersistenceService persistenceService;
-    private final AdditionalRecipeService additionalRecipeService;
+    private final UserPreferenceRepository userPreferenceRepository;
+    private final UserProfileAdapter userProfileAdapter;
+    private final MealPlanGeneratorService generator;
+    private final FinalizeClient nlpClient;
+    private final MealPlanPersistenceServiceImpl persistenceService;
+    private final AdditionalRecipeServiceImpl additionalRecipeService;
     private final RecipeDataAdapter recipeDataAdapter;
+    private final RecipeDataCache recipeDataCache;
     private final IngredientClassificationAdapter classificationAdapter;
-
-    @Getter
-    public static class SavedPlanResult {
-        private final Long planId;
-        private final FinalizedMealPlanDto finalizedPlan;
-        private final WeeklyMealPlanDto    rawPlan;
-
-        public SavedPlanResult(Long planId, FinalizedMealPlanDto fp, WeeklyMealPlanDto rp) {
-            this.planId = planId; this.finalizedPlan = fp; this.rawPlan = rp;
-        }
-    }
+    private final RecipeTranslationServiceImpl translationService;
 
     @Transactional
     public SavedPlanResult generateAndFinalize(String userEmail) {
 
         UserPreferenceEntity prefs = userPreferenceRepository
                 .findByUserEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("No preferences: " + userEmail));
+                .orElseThrow(() -> new CustomNotFoundException("No preferences: ", userEmail));
 
-        UserEntity user       = prefs.getUser();
+        UserEntity user = prefs.getUser();
         UserProfileModel model = userProfileAdapter.toModel(prefs);
 
-        // 1. ILP генерація
         log.info("Generating plan for {}", userEmail);
         WeeklyMealPlanDto weeklyPlan = generator.generatePlan(model);
 
-        // 2. Додаткові рецепти (легкі, відфільтровані)
-        var data           = recipeDataAdapter.buildContext();
+        var data = recipeDataCache.buildContext();
         var classification = classificationAdapter.buildContext();
-        List<AdditionalRecipeService.AdditionalRecipeDto> additional =
+        List<AdditionalRecipeDto> additional =
                 additionalRecipeService.getAdditionalRecipes(model, data, classification);
         log.info("Additional recipes for LLM: {}", additional.size());
+        log.info("RAW DAYS COUNT = {}", weeklyPlan.getDays().size());
 
-        // 3. LLM фіналізація з additional у payload
         FinalizeRequestDto request = buildFinalizeRequest(weeklyPlan, model, additional);
         FinalizedMealPlanDto finalizedPlan = nlpClient.finalize(request);
+        applyTranslationsToFinalizedPlan(finalizedPlan);
+        log.info("FINALIZED DAYS COUNT = {}", finalizedPlan.getDays().size());
 
-        // 4. Збереження в БД
         MealPlanRecordEntity saved =
                 persistenceService.saveFinalizedPlan(user, finalizedPlan, weeklyPlan);
 
@@ -85,7 +82,7 @@ public class MealPlanFinalizeService {
     private FinalizeRequestDto buildFinalizeRequest(
             WeeklyMealPlanDto plan,
             UserProfileModel model,
-            List<AdditionalRecipeService.AdditionalRecipeDto> additional) {
+            List<AdditionalRecipeDto> additional) {
 
         return FinalizeRequestDto.builder()
                 .userId(model.getUserId())
@@ -104,5 +101,26 @@ public class MealPlanFinalizeService {
                         .mealsPerDay(model.getMealsPerDay())
                         .build())
                 .build();
+    }
+
+    private void applyTranslationsToFinalizedPlan(FinalizedMealPlanDto plan) {
+        Set<Long> ids = plan.getDays().stream()
+                .flatMap(d -> d.getSlots().stream())
+                .flatMap(s -> Stream.of(s.getMain(), s.getSide()))
+                .filter(Objects::nonNull)
+                .map(MealItemDto::getRecipeId)
+                .collect(Collectors.toSet());
+
+        Map<Long, String> names = translationService.getUkrainianNames(ids);
+        if (names.isEmpty()) return;
+
+        plan.getDays().stream()
+                .flatMap(d -> d.getSlots().stream())
+                .forEach(slot -> {
+                    if (slot.getMain() != null && names.containsKey(slot.getMain().getRecipeId()))
+                        slot.getMain().setName(names.get(slot.getMain().getRecipeId()));
+                    if (slot.getSide() != null && names.containsKey(slot.getSide().getRecipeId()))
+                        slot.getSide().setName(names.get(slot.getSide().getRecipeId()));
+                });
     }
 }

@@ -1,0 +1,1138 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tags-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: ing_tags
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: slug
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: color
+                  type: VARCHAR(7)
+                  remarks: "HEX color, e.g. #6C3FC5"
+
+        - createIndex:
+            tableName: ing_tags
+            indexName: idx_tags_slug
+            columns:
+              - column:
+                  name: slug
+
+      rollback:
+        - dropTable:
+            tableName: ing_tags
+
+  - changeSet:
+      id: create-ingredient-tags-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: ingredient_tags
+            columns:
+              - column:
+                  name: ingredient_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: ingredient_tags
+            columnNames: ingredient_id, tag_id
+            constraintName: pk_ingredient_tags
+
+        - addForeignKeyConstraint:
+            baseTableName: ingredient_tags
+            baseColumnNames: ingredient_id
+            referencedTableName: ingredients
+            referencedColumnNames: id
+            constraintName: fk_ingredient_tags_ingredient
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: ingredient_tags
+            baseColumnNames: tag_id
+            referencedTableName: ing_tags
+            referencedColumnNames: id
+            constraintName: fk_ingredient_tags_tag
+            onDelete: CASCADE
+
+        - createIndex:
+            tableName: ingredient_tags
+            indexName: idx_ingredient_tags_ingredient_id
+            columns:
+              - column:
+                  name: ingredient_id
+
+        - createIndex:
+            tableName: ingredient_tags
+            indexName: idx_ingredient_tags_tag_id
+            columns:
+              - column:
+                  name: tag_id
+
+      rollback:
+        - dropTable:
+            tableName: ingredient_tags
+
+  - changeSet:
+      id: seed-root-categories
+      author: feex
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Vegetables & Fruits"}
+              - column: {name: slug, value: "vegetables-fruits"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Meat & Poultry"}
+              - column: {name: slug, value: "meat-poultry"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Fish & Seafood"}
+              - column: {name: slug, value: "fish-seafood"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Dairy & Eggs"}
+              - column: {name: slug, value: "dairy-eggs"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Grains & Bread"}
+              - column: {name: slug, value: "grains-bread"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Legumes & Nuts"}
+              - column: {name: slug, value: "legumes-nuts"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Herbs & Spices"}
+              - column: {name: slug, value: "herbs-spices"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Oils, Sauces & Condiments"}
+              - column: {name: slug, value: "oils-sauces-condiments"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Sweeteners & Baking"}
+              - column: {name: slug, value: "sweeteners-baking"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Beverages & Alcohol"}
+              - column: {name: slug, value: "beverages-alcohol"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Dairy Alternatives"}
+              - column: {name: slug, value: "dairy-alternatives"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Prepared & Canned Foods"}
+              - column: {name: slug, value: "prepared-canned-foods"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Snacks & Sweets"}
+              - column: {name: slug, value: "snacks-sweets"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Other"}
+              - column: {name: slug, value: "other"}
+
+      rollback:
+        - delete:
+            tableName: categories
+
+  - changeSet:
+      id: seed-sub-categories
+      author: feex
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Vegetables"}
+              - column: {name: slug, value: "vegetables"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='vegetables-fruits')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Fruits"}
+              - column: {name: slug, value: "fruits"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='vegetables-fruits')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Mushrooms"}
+              - column: {name: slug, value: "mushrooms"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='vegetables-fruits')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Beef"}
+              - column: {name: slug, value: "beef"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='meat-poultry')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Pork"}
+              - column: {name: slug, value: "pork"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='meat-poultry')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Chicken"}
+              - column: {name: slug, value: "chicken"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='meat-poultry')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Turkey & Other Poultry"}
+              - column: {name: slug, value: "turkey-other-poultry"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='meat-poultry')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Lamb & Veal"}
+              - column: {name: slug, value: "lamb-veal"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='meat-poultry')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Sausages & Deli"}
+              - column: {name: slug, value: "sausages-deli"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='meat-poultry')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Fish"}
+              - column: {name: slug, value: "fish"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='fish-seafood')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Shellfish & Crustaceans"}
+              - column: {name: slug, value: "shellfish-crustaceans"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='fish-seafood')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Cheese"}
+              - column: {name: slug, value: "cheese"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='dairy-eggs')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Milk & Cream"}
+              - column: {name: slug, value: "milk-cream"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='dairy-eggs')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Butter & Margarine"}
+              - column: {name: slug, value: "butter-margarine"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='dairy-eggs')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Yogurt & Sour Cream"}
+              - column: {name: slug, value: "yogurt-sour-cream"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='dairy-eggs')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Eggs"}
+              - column: {name: slug, value: "eggs"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='dairy-eggs')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Flour"}
+              - column: {name: slug, value: "flour"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='grains-bread')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Pasta & Noodles"}
+              - column: {name: slug, value: "pasta-noodles"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='grains-bread')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Rice & Grains"}
+              - column: {name: slug, value: "rice-grains"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='grains-bread')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Bread & Bakery"}
+              - column: {name: slug, value: "bread-bakery"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='grains-bread')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Cereals & Oats"}
+              - column: {name: slug, value: "cereals-oats"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='grains-bread')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Beans & Lentils"}
+              - column: {name: slug, value: "beans-lentils"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='legumes-nuts')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Nuts & Seeds"}
+              - column: {name: slug, value: "nuts-seeds"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='legumes-nuts')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Fresh Herbs"}
+              - column: {name: slug, value: "fresh-herbs"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='herbs-spices')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Dried Spices"}
+              - column: {name: slug, value: "dried-spices"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='herbs-spices')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Spice Blends"}
+              - column: {name: slug, value: "spice-blends"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='herbs-spices')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Cooking Oils & Vinegar"}
+              - column: {name: slug, value: "cooking-oils-vinegar"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='oils-sauces-condiments')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Sauces & Pastes"}
+              - column: {name: slug, value: "sauces-pastes"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='oils-sauces-condiments')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Dressings & Marinades"}
+              - column: {name: slug, value: "dressings-marinades"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='oils-sauces-condiments')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Sugar & Sweeteners"}
+              - column: {name: slug, value: "sugar-sweeteners"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='sweeteners-baking')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Chocolate & Cocoa"}
+              - column: {name: slug, value: "chocolate-cocoa"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='sweeteners-baking')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Baking Additives"}
+              - column: {name: slug, value: "baking-additives"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='sweeteners-baking')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Extracts & Flavoring"}
+              - column: {name: slug, value: "extracts-flavoring"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='sweeteners-baking')"}
+
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Non-Alcoholic Beverages"}
+              - column: {name: slug, value: "non-alcoholic-beverages"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='beverages-alcohol')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Wine & Beer"}
+              - column: {name: slug, value: "wine-beer"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='beverages-alcohol')"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Spirits & Liqueurs"}
+              - column: {name: slug, value: "spirits-liqueurs"}
+              - column: {name: parent_id, valueComputed: "(SELECT id FROM categories WHERE slug='beverages-alcohol')"}
+
+      rollback:
+        - delete:
+            tableName: categories
+            where: parent_id IS NOT NULL
+
+  - changeSet:
+      id: seed-tags
+      author: feex
+      changes:
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "vegan"}
+              - column: {name: slug, value: "vegan"}
+              - column: {name: color, value: "#3B6D11"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "vegetarian"}
+              - column: {name: slug, value: "vegetarian"}
+              - column: {name: color, value: "#639922"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "gluten-free"}
+              - column: {name: slug, value: "gluten-free"}
+              - column: {name: color, value: "#BA7517"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "dairy-free"}
+              - column: {name: slug, value: "dairy-free"}
+              - column: {name: color, value: "#185FA5"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "keto"}
+              - column: {name: slug, value: "keto"}
+              - column: {name: color, value: "#534AB7"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "paleo"}
+              - column: {name: slug, value: "paleo"}
+              - column: {name: color, value: "#993C1D"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "halal"}
+              - column: {name: slug, value: "halal"}
+              - column: {name: color, value: "#0F6E56"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "kosher"}
+              - column: {name: slug, value: "kosher"}
+              - column: {name: color, value: "#0C447C"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "nut-free"}
+              - column: {name: slug, value: "nut-free"}
+              - column: {name: color, value: "#A32D2D"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "low-calorie"}
+              - column: {name: slug, value: "low-calorie"}
+              - column: {name: color, value: "#1D9E75"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "high-protein"}
+              - column: {name: slug, value: "high-protein"}
+              - column: {name: color, value: "#6C3FC5"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "organic"}
+              - column: {name: slug, value: "organic"}
+              - column: {name: color, value: "#27500A"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "contains-gluten"}
+              - column: {name: slug, value: "contains-gluten"}
+              - column: {name: color, value: "#854F0B"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "contains-dairy"}
+              - column: {name: slug, value: "contains-dairy"}
+              - column: {name: color, value: "#378ADD"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "contains-nuts"}
+              - column: {name: slug, value: "contains-nuts"}
+              - column: {name: color, value: "#E24B4A"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "contains-alcohol"}
+              - column: {name: slug, value: "contains-alcohol"}
+              - column: {name: color, value: "#7F77DD"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "contains-soy"}
+              - column: {name: slug, value: "contains-soy"}
+              - column: {name: color, value: "#D85A30"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "spicy"}
+              - column: {name: slug, value: "spicy"}
+              - column: {name: color, value: "#993556"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "raw"}
+              - column: {name: slug, value: "raw"}
+              - column: {name: color, value: "#5F5E5A"}
+        - insert:
+            tableName: ing_tags
+            columns:
+              - column: {name: name, value: "fermented"}
+              - column: {name: slug, value: "fermented"}
+              - column: {name: color, value: "#888780"}
+
+      rollback:
+        - delete:
+            tableName: ing_tags
+
+  - changeSet:
+      id: assign-categories-to-ingredients
+      author: feex
+      runOnChange: false
+      changes:
+        - sql:
+            sql: |
+              -- ── Vegetables ──────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='vegetables')
+              WHERE normalized_name IN (
+                'acorn squash','alfalfa','alfalfa sprout','artichoke','arugula',
+                'asparagus','beet','beet green','bok choy','broccoli','brussels sprout',
+                'butternut squash','cabbage','carrot','cauliflower','celery','chard',
+                'chive','collard green','corn','cucumber','daikon','eggplant',
+                'endive','escarole','fennel','garlic','ginger','green bean',
+                'green onion','jalapeño','kale','kohlrabi','leek','lettuce',
+                'mustard green','okra','onion','parsnip','pea','pepper',
+                'potato','pumpkin','radicchio','radish','rhubarb','scallion',
+                'shallot','snow pea','spinach','squash','string bean','sweet potato',
+                'swiss chard','tomatillo','tomato','turnip','watercress','yellow squash',
+                'yam','zucchini','avocado','bell pepper','red onion','yellow onion',
+                'yellow pepper','red pepper','green pepper','purple cabbage',
+                'napa cabbage','savoy cabbage','red cabbage','white onion',
+                'cherry tomato','grape tomato','roma tomato','sun-dried tomato',
+                'yucca root','taro root','jicama','water chestnut','bamboo shoot',
+                'hearts of palm','artichoke heart','roasted red pepper','canned tomato',
+                'whole tomato','diced tomato','crushed tomato','tomato paste',
+                'tomato purée','tomato sauce','tomato juice','green tomato',
+                'yellow tomato','yellow cherry tomato','yellow pear tomato'
+              );
+
+              -- ── Fruits ──────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='fruits')
+              WHERE normalized_name IN (
+                'apple','apricot','banana','blackberry','blueberry','cantaloupe',
+                'cherry','clementine','coconut','cranberry','date','fig',
+                'grape','grapefruit','guava','honeydew','kiwi','lemon',
+                'lime','lychee','mango','nectarine','orange','papaya',
+                'passion fruit','peach','pear','pineapple','plum','pomegranate',
+                'raspberry','strawberry','tangerine','watermelon','yuzu juice',
+                'dried cranberry','dried apricot','dried fig','dried mango',
+                'dried cherry','raisin','prune','currant','gooseberry',
+                'elderberry','boysenberry','açaí','plantain','quince',
+                'blood orange','mandarin','clementine','persimmon','star fruit',
+                'dragon fruit','jackfruit','durian','tamarind','loquat',
+                'alphonso mango','anjou pear','wild blueberry'
+              );
+
+              -- ── Mushrooms ────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='mushrooms')
+              WHERE normalized_name IN (
+                'mushroom','shiitake mushroom','portobello mushroom',
+                'cremini mushroom','button mushroom','oyster mushroom',
+                'chanterelle','morel','porcini','enoki mushroom',
+                'wild mushroom','dried mushroom','truffle'
+              );
+
+              -- ── Beef ────────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='beef')
+              WHERE normalized_name IN (
+                'beef','ground beef','beef chuck','beef brisket','beef rib',
+                'beef tenderloin','beef sirloin','flank steak','ribeye',
+                'beef roast','beef stew meat','beef short rib','beef liver',
+                'beef broth','beef stock','beef shank','oxtail','veal'
+              );
+
+              -- ── Pork ────────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='pork')
+              WHERE normalized_name IN (
+                'pork','bacon','ham','pork chop','pork loin','pork shoulder',
+                'pork belly','pork rib','pork roast','prosciutto','pancetta',
+                'pork sausage','pork tenderloin','pork broth','pork stock',
+                'pork ground','salami','pepperoni','chorizo','lard',
+                'pork rind','canadian bacon','apple-smoked bacon'
+              );
+
+              -- ── Chicken ─────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='chicken')
+              WHERE normalized_name IN (
+                'chicken','chicken breast','chicken thigh','chicken leg',
+                'chicken wing','whole chicken','chicken drumstick','rotisserie chicken',
+                'chicken broth','chicken stock','ground chicken','chicken liver',
+                'roasting chicken','chicken fillet','chicken tender'
+              );
+
+              -- ── Turkey & Other Poultry ───────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='turkey-other-poultry')
+              WHERE normalized_name IN (
+                'turkey','ground turkey','turkey breast','turkey bacon',
+                'turkey sausage','duck','duck breast','goose','quail',
+                'cornish hen','pheasant','whole turkey'
+              );
+
+              -- ── Lamb & Veal ─────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='lamb-veal')
+              WHERE normalized_name IN (
+                'lamb','lamb chop','lamb rack','ground lamb','lamb shank',
+                'lamb shoulder','leg of lamb','lamb broth'
+              );
+
+              -- ── Sausages & Deli ──────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='sausages-deli')
+              WHERE normalized_name IN (
+                'andouille sausage','bratwurst','hot dog','kielbasa',
+                'italian sausage','breakfast sausage','deli meat','bologna',
+                'corned beef','pastrami','mortadella'
+              );
+
+              -- ── Fish ────────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='fish')
+              WHERE normalized_name IN (
+                'salmon','tuna','cod','tilapia','halibut','sea bass',
+                'mahi mahi','trout','catfish','sardine','anchovy',
+                'herring','mackerel','snapper','swordfish','flounder',
+                'sole','pike','perch','ahi tuna','albacore tuna',
+                'wild salmon','whole salmon','yellowfin tuna','smoked salmon',
+                'canned tuna','canned salmon','fish sauce','fish stock',
+                'anchovies','anchovy paste'
+              );
+
+              -- ── Shellfish & Crustaceans ──────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='shellfish-crustaceans')
+              WHERE normalized_name IN (
+                'shrimp','prawn','lobster','crab','scallop','clam',
+                'oyster','mussel','squid','octopus','crayfish',
+                'langoustine','abalone','sea scallop'
+              );
+
+              -- ── Cheese ──────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='cheese')
+              WHERE normalized_name IN (
+                'cheddar cheese','mozzarella','parmesan','feta cheese',
+                'brie','gouda','swiss cheese','ricotta','cream cheese',
+                'blue cheese','gorgonzola','provolone','gruyère',
+                'jack cheese','pepper jack','colby','american cheese',
+                'cottage cheese','bocconcini','manchego','havarti',
+                'camembert','roquefort','asiago','romano','fontina',
+                'appenzeller cheese','goat cheese','queso fresco',
+                'queso blanco','velveeta','processed cheese'
+              );
+
+              -- ── Milk & Cream ─────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='milk-cream')
+              WHERE normalized_name IN (
+                'milk','whole milk','skim milk','2% milk','heavy cream',
+                'heavy whipping cream','light cream','half and half',
+                'evaporated milk','condensed milk','coconut milk',
+                'coconut cream','sour cream','whipping cream','buttermilk'
+              );
+
+              -- ── Butter & Margarine ───────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='butter-margarine')
+              WHERE normalized_name IN (
+                'butter','unsalted butter','salted butter','margarine',
+                'ghee','clarified butter','vegan butter'
+              );
+
+              -- ── Yogurt & Sour Cream ──────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='yogurt-sour-cream')
+              WHERE normalized_name IN (
+                'yogurt','greek yogurt','plain yogurt','yoghurt',
+                'sour cream','crème fraîche','labneh','kefir'
+              );
+
+              -- ── Eggs ────────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='eggs')
+              WHERE normalized_name IN (
+                'egg','large egg','egg white','egg yolk','quail egg','duck egg'
+              );
+
+              -- ── Flour ───────────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='flour')
+              WHERE normalized_name LIKE '%flour%'
+                AND normalized_name NOT IN ('coconut flour','almond flour','chickpea flour');
+
+              -- ── Pasta & Noodles ──────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='pasta-noodles')
+              WHERE normalized_name IN (
+                'spaghetti','penne','fettuccine','linguine','rigatoni',
+                'farfalle','fusilli','rotini','ziti pasta','lasagna noodle',
+                'angel hair pasta','alphabet pasta','orzo','couscous',
+                'egg noodle','rice noodle','udon noodle','soba noodle',
+                'ramen noodle','vermicelli','wonton wrapper','macaroni',
+                'gnocchi','pappardelle','tagliatelle','tortellini','ravioli',
+                'ditalini','cavatappi','elbow macaroni','wide egg noodle',
+                'wide rice noodle','wheat pasta','wheat spaghetti','wheat penne',
+                'wheat fettuccine','wheat rotini','wheat couscous','wheat macaroni'
+              );
+
+              -- ── Rice & Grains ────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='rice-grains')
+              WHERE normalized_name IN (
+                'rice','white rice','brown rice','jasmine rice','basmati rice',
+                'arborio rice','wild rice','black rice','sushi rice',
+                'quinoa','farro','barley','bulgur','millet','amaranth',
+                'oats','rolled oats','whole oats','steel-cut oats',
+                'polenta','cornmeal','yellow cornmeal','grits',
+                'yellow corn grits','buckwheat','spelt','teff','wheat germ',
+                'wheat bran','bran'
+              );
+
+              -- ── Bread & Bakery ───────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='bread-bakery')
+              WHERE normalized_name IN (
+                'bread','white bread','wheat bread','sourdough bread',
+                'baguette','ciabatta','pita bread','tortilla','naan',
+                'english muffin','bagel','dinner roll','breadcrumb',
+                'panko','crouton','croissant','puff pastry','pie crust',
+                'pizza dough','biscuit','cornbread','muffin','flatbread',
+                'wheat baguette','wheat pita bread','wheat tortilla',
+                '9-grain bread','rye bread','pumpernickel'
+              );
+
+              -- ── Cereals & Oats ───────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='cereals-oats')
+              WHERE normalized_name IN (
+                'granola','all-bran cereal','corn flakes','cheerios',
+                'oatmeal','wheat flakes','muesli','alpha-bit cereal'
+              );
+
+              -- ── Beans & Lentils ──────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='beans-lentils')
+              WHERE normalized_name IN (
+                'black bean','kidney bean','chickpea','lentil','pinto bean',
+                'navy bean','cannellini bean','great northern bean','lima bean',
+                'adzuki bean','mung bean','split pea','yellow split pea',
+                'red lentil','green lentil','brown lentil','edamame',
+                'fava bean','soybeans','tofu','tempeh','yellow moong dal',
+                'yellow bean','green bean','white bean'
+              );
+
+              -- ── Nuts & Seeds ─────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='nuts-seeds')
+              WHERE normalized_name IN (
+                'almond','walnut','pecan','cashew','pistachio','hazelnut',
+                'macadamia nut','peanut','pine nut','brazil nut','chestnut',
+                'chia seed','flaxseed','sunflower seed','pumpkin seed',
+                'sesame seed','hemp seed','poppy seed','almond butter',
+                'peanut butter','tahini','almond flour','almond meal',
+                'almond milk','almond paste','almond oil','whole pecans',
+                'sliced almond','slivered almond','coconut flake',
+                'shredded coconut','desiccated coconut'
+              );
+
+              -- ── Fresh Herbs ──────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='fresh-herbs')
+              WHERE normalized_name IN (
+                'basil','parsley','cilantro','mint','thyme','rosemary',
+                'oregano','sage','dill','chives','tarragon','bay leaf',
+                'lemongrass','kaffir lime leaf','curry leaf','epazote',
+                'marjoram','savory','winter savory','summer savory'
+              );
+
+              -- ── Dried Spices ─────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='dried-spices')
+              WHERE normalized_name IN (
+                'salt','pepper','black pepper','white pepper','red pepper flake',
+                'cayenne pepper','paprika','smoked paprika','cumin','coriander',
+                'turmeric','cinnamon','nutmeg','clove','cardamom',
+                'allspice','anise','anise seed','star anise','fennel seed',
+                'mustard seed','celery seed','caraway seed','fenugreek',
+                'saffron','sumac','za''atar spice mix','amchoor powder',
+                'ajwain','achiote paste','chipotle powder','chili powder',
+                'garlic powder','onion powder','ginger powder','dried oregano',
+                'dried basil','dried thyme','dried rosemary','dried dill',
+                'dried parsley','dried cilantro','dried mint','red chili flake',
+                'ancho chile powder','arbol chili powder','yellow mustard seed'
+              );
+
+              -- ── Spice Blends ─────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='spice-blends')
+              WHERE normalized_name IN (
+                'italian seasoning','herbes de provence','ras el hanout',
+                'garam masala','curry powder','five spice','old bay seasoning',
+                'cajun seasoning','creole seasoning','lemon pepper seasoning',
+                'adobo seasoning','accent seasoning','arabic spice',
+                'all-purpose greek seasoning','apple pie spice','pumpkin pie spice',
+                'taco seasoning','fajita seasoning','steak seasoning',
+                'everything bagel seasoning','za''atar'
+              );
+
+              -- ── Cooking Oils & Vinegar ───────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='cooking-oils-vinegar')
+              WHERE normalized_name IN (
+                'olive oil','vegetable oil','canola oil','coconut oil',
+                'sesame oil','avocado oil','sunflower oil','corn oil',
+                'grapeseed oil','peanut oil','almond oil','walnut oil',
+                'flaxseed oil','truffle oil','white vinegar','red wine vinegar',
+                'apple cider vinegar','balsamic vinegar','rice vinegar',
+                'sherry vinegar','champagne vinegar','white wine vinegar',
+                'malt vinegar','wine vinegar','cooking spray','nonstick spray'
+              );
+
+              -- ── Sauces & Pastes ──────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='sauces-pastes')
+              WHERE normalized_name IN (
+                'soy sauce','hot sauce','worcestershire sauce','oyster sauce',
+                'hoisin sauce','teriyaki sauce','fish sauce','alfredo sauce',
+                'tomato sauce','bbq sauce','pasta sauce','marinara sauce',
+                'pesto','aioli','harissa','sriracha','tabasco',
+                'ketchup','mustard','dijon mustard','yellow mustard',
+                'whole grain mustard','mayonnaise','tartar sauce',
+                'cocktail sauce','horseradish','miso paste','gochujang',
+                'doubanjiang','sambal oelek','adobo sauce','ajvar',
+                'anchovy paste','tomato paste','chipotle in adobo',
+                'wasabi','tzatziki','hummus'
+              );
+
+              -- ── Dressings & Marinades ────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='dressings-marinades')
+              WHERE normalized_name IN (
+                'italian dressing','ranch dressing','caesar dressing',
+                'balsamic dressing','thousand island dressing',
+                'blue cheese dressing','honey mustard dressing',
+                'wishbone italian dressing','vinaigrette'
+              );
+
+              -- ── Sugar & Sweeteners ───────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='sugar-sweeteners')
+              WHERE normalized_name IN (
+                'sugar','brown sugar','powdered sugar','confectioners sugar',
+                'honey','maple syrup','agave','agave nectar','agave syrup',
+                'corn syrup','golden syrup','molasses','stevia',
+                'xylitol sugar substitute','amber maple syrup',
+                'apple jelly','apricot jam','jam','jelly','marmalade',
+                'apple butter','apple pie filling','fruit spread'
+              );
+
+              -- ── Chocolate & Cocoa ────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='chocolate-cocoa')
+              WHERE normalized_name IN (
+                'chocolate','dark chocolate','milk chocolate','white chocolate',
+                'cocoa powder','alkalized cocoa powder','chocolate chip',
+                'baking chocolate','chocolate syrup','nutella',
+                'almond bark','almond nougat','chocolate ganache'
+              );
+
+              -- ── Baking Additives ─────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='baking-additives')
+              WHERE normalized_name IN (
+                'baking soda','baking powder','yeast','active yeast',
+                'active starter','cream of tartar','gelatin','agar',
+                'agar-agar','pectin','cornstarch','arrowroot',
+                'xanthan gum','vital wheat gluten','bread improver'
+              );
+
+              -- ── Extracts & Flavoring ─────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='extracts-flavoring')
+              WHERE normalized_name IN (
+                'vanilla extract','almond extract','almond essence',
+                'almond flavoring','anise extract','peppermint extract',
+                'lemon extract','orange extract','rose water','orange blossom water'
+              );
+
+              -- ── Non-Alcoholic Beverages ──────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='non-alcoholic-beverages')
+              WHERE normalized_name IN (
+                'water','sparkling water','club soda','tonic water',
+                'orange juice','apple juice','lemon juice','lime juice',
+                'cranberry juice','grape juice','tomato juice',
+                'coconut water','coffee','espresso','tea','green tea',
+                'black tea','herbal tea','milk tea','7-up','7-up soda',
+                'apple cider','apple cider drink mix','ginger ale',
+                'lemonade','hot cocoa','apple juice concentrate',
+                'apricot nectar','pomegranate juice'
+              );
+
+              -- ── Wine & Beer ──────────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='wine-beer')
+              WHERE normalized_name IN (
+                'wine','red wine','white wine','rosé wine','sparkling wine',
+                'champagne','prosecco','port wine','sherry','marsala wine',
+                'beer','ale','lager','amber beer','stout','alcoholic cider',
+                'wine-cured sauerkraut'
+              );
+
+              -- ── Spirits & Liqueurs ───────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='spirits-liqueurs')
+              WHERE normalized_name IN (
+                'vodka','absolut vodka','absolut citron vodka','absolut kurant vodka',
+                'rum','whiskey','bourbon','gin','tequila','brandy',
+                'cognac','scotch','vermouth','kahlua','baileys',
+                'amaretto','amaretto liqueur','amarula cream liqueur',
+                'applejack','apricot brandy','angostura bitters',
+                'anise-flavored liqueur','apple schnapp',
+                'x-rated fusion liqueur'
+              );
+
+              -- ── Dairy Alternatives ───────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='dairy-alternatives')
+              WHERE normalized_name IN (
+                'almond milk','soy milk','oat milk','rice milk',
+                'cashew milk','coconut milk beverage','vegan cheese',
+                'vegan butter','vegan cream cheese','silken tofu'
+              );
+
+              -- ── Prepared & Canned Foods ──────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='prepared-canned-foods')
+              WHERE normalized_name IN (
+                'canned tomato','diced tomato','crushed tomato',
+                'canned beans','canned chickpea','canned tuna','canned salmon',
+                'chicken broth','beef broth','vegetable broth',
+                'chicken stock','beef stock','vegetable stock',
+                'apple pie filling','apple cider','applesauce',
+                'apricot in juice','apricot in syrup','apricot preserve',
+                'alfredo sauce','pasta sauce','marinara sauce','pizza sauce',
+                'canned corn','canned pea','canned pumpkin'
+              );
+
+              -- ── Snacks & Sweets ──────────────────────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='snacks-sweets')
+              WHERE normalized_name IN (
+                'chips','potato chip','tortilla chip','pretzel','cracker',
+                'graham cracker','animal cracker','rice cake','popcorn',
+                'granola bar','energy bar','cookie','oreo','candy',
+                'gummy bear','marshmallow','angel food cake','muffin mix',
+                'cake mix','yellow cake mix','brownie mix'
+              );
+
+              -- ── Other (all still-uncategorized) ─────────────────────────────
+              UPDATE ingredients SET category_id = (SELECT id FROM categories WHERE slug='other')
+              WHERE category_id IS NULL;
+
+  # ─────────────────────────────────────────────
+  # 7. Seed: базове призначення тегів (dietary)
+  # ─────────────────────────────────────────────
+  - changeSet:
+      id: assign-base-tags-to-ingredients
+      author: feex
+      runOnChange: false
+      changes:
+        - sql:
+            sql: |
+              -- vegan: всі овочі, фрукти, гриби, бобові, горіхи, зернові
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'vegan'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('vegetables','fruits','mushrooms','beans-lentils',
+                                 'nuts-seeds','fresh-herbs','dried-spices','spice-blends',
+                                 'rice-grains','cereals-oats','sugar-sweeteners',
+                                 'cooking-oils-vinegar','extracts-flavoring',
+                                 'baking-additives','dairy-alternatives')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- vegetarian: vegan + молочка + яйця
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'vegetarian'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('vegetables','fruits','mushrooms','beans-lentils',
+                                 'nuts-seeds','fresh-herbs','dried-spices','spice-blends',
+                                 'rice-grains','cereals-oats','dairy-eggs','cheese',
+                                 'milk-cream','butter-margarine','yogurt-sour-cream','eggs',
+                                 'sugar-sweeteners','cooking-oils-vinegar','extracts-flavoring',
+                                 'baking-additives','dairy-alternatives')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- gluten-free: М'ясо, риба, овочі, фрукти, молочка, горіхи
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'gluten-free'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('vegetables','fruits','mushrooms','meat-poultry',
+                                 'fish-seafood','dairy-eggs','cheese','milk-cream',
+                                 'butter-margarine','yogurt-sour-cream','eggs',
+                                 'beans-lentils','nuts-seeds','rice-grains',
+                                 'fresh-herbs','dried-spices','cooking-oils-vinegar')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- contains-gluten: борошно, хліб, паста, злаки
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'contains-gluten'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('flour','pasta-noodles','bread-bakery','cereals-oats')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- contains-dairy: молочка
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'contains-dairy'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('cheese','milk-cream','butter-margarine','yogurt-sour-cream')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- dairy-free: все крім молочки
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'dairy-free'
+                AND i.category_id NOT IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('cheese','milk-cream','butter-margarine','yogurt-sour-cream')
+                )
+                AND i.category_id IS NOT NULL
+              ON CONFLICT DO NOTHING;
+
+              -- contains-nuts: горіхи та насіння
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'contains-nuts'
+                AND i.category_id = (SELECT id FROM categories WHERE slug = 'nuts-seeds')
+              ON CONFLICT DO NOTHING;
+
+              -- contains-alcohol: алкогольні напої
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'contains-alcohol'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('wine-beer','spirits-liqueurs')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- high-protein: м'ясо, риба, яйця, бобові
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'high-protein'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('beef','pork','chicken','turkey-other-poultry',
+                                 'lamb-veal','sausages-deli','fish','shellfish-crustaceans',
+                                 'eggs','beans-lentils')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- keto: м'ясо, риба, яйця, горіхи, молочка, олії
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'keto'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('beef','pork','chicken','turkey-other-poultry',
+                                 'lamb-veal','fish','shellfish-crustaceans',
+                                 'eggs','nuts-seeds','cheese','butter-margarine',
+                                 'cooking-oils-vinegar','fresh-herbs','dried-spices')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- spicy: перець, гострі спеції
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'spicy'
+                AND i.normalized_name IN (
+                  'cayenne pepper','red pepper flake','jalapeño','habanero',
+                  'serrano pepper','ancho chile','chipotle powder','sriracha',
+                  'hot sauce','tabasco','gochujang','sambal oelek','harissa',
+                  'chili powder','arbol chili powder','ancho chile powder',
+                  'anaheim chili','ancho chili','red chili'
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- raw: свіжі некулінарні
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'raw'
+                AND i.category_id IN (
+                  SELECT id FROM categories
+                  WHERE slug IN ('vegetables','fruits','fresh-herbs')
+                )
+              ON CONFLICT DO NOTHING;
+
+              -- fermented
+              INSERT INTO ingredient_tags (ingredient_id, tag_id)
+              SELECT i.id, t.id FROM ingredients i
+              CROSS JOIN ing_tags t
+              WHERE t.slug = 'fermented'
+                AND i.normalized_name IN (
+                  'sauerkraut','kimchi','miso paste','miso','kefir',
+                  'yogurt','yoghurt','tempeh','vinegar','wine-cured sauerkraut',
+                  'sourdough bread','active starter'
+                )
+              ON CONFLICT DO NOTHING;

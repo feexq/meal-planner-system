@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.dto.recipe;
 
-import com.feex.mealplannersystem.common.Unit;
+import com.feex.mealplannersystem.common.product.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +20,5 @@ public class RecipeIngredientResponse {
     private BigDecimal price;
     private Unit unit;
     private String imageUrl;
+    private Long productId;
 }

@@ -1,20 +1,22 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.common.OrderStatus;
+import com.feex.mealplannersystem.common.order.OrderStatus;
 import com.feex.mealplannersystem.dto.cart.CartItemResponse;
 import com.feex.mealplannersystem.dto.cart.CartResponse;
 import com.feex.mealplannersystem.dto.order.CheckoutRequest;
 import com.feex.mealplannersystem.dto.order.CheckoutResponse;
 import com.feex.mealplannersystem.repository.OrderRepository;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
-import com.feex.mealplannersystem.repository.entity.ingredient.IngredientEntity;
 import com.feex.mealplannersystem.repository.entity.order.OrderEntity;
 import com.feex.mealplannersystem.repository.entity.order.OrderItemEntity;
+import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
 import com.feex.mealplannersystem.service.CartService;
 import com.feex.mealplannersystem.service.CheckoutService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
+import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +65,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         for (CartItemResponse item : cart.getItems()) {
             OrderItemEntity orderItem = OrderItemEntity.builder()
-                    .ingredient(IngredientEntity.builder().id(item.getIngredientId()).build())
+                    .ingredient(ProductEntity.builder().id(item.getIngredientId()).build())
                     .quantity(item.getQuantity())
                     .priceAtPurchase(item.getPrice())
                     .build();
@@ -76,7 +78,6 @@ public class CheckoutServiceImpl implements CheckoutService {
                     .setSuccessUrl(frontendUrl + "/checkout/success?session_id={CHECKOUT_SESSION_ID}")
                     .setCancelUrl(frontendUrl + "/checkout/cancel");
 
-            // Додаємо кожен товар зі списку у чек Stripe
             for (CartItemResponse item : cart.getItems()) {
                 paramsBuilder.addLineItem(
                         SessionCreateParams.LineItem.builder()
@@ -101,10 +102,58 @@ public class CheckoutServiceImpl implements CheckoutService {
             order.setStripeSessionId(session.getId());
             orderRepository.save(order);
 
-            return new CheckoutResponse(session.getUrl());
+            return new CheckoutResponse(session.getUrl(), order.getId());
 
         } catch (StripeException e) {
             throw new RuntimeException("Помилка при створенні платіжної сесії Stripe: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public CheckoutResponse createPaymentIntent(String cartKey, CheckoutRequest request) {
+        CartResponse cart = cartService.getCart(cartKey);
+        if (cart.getItems() == null || cart.getItems().isEmpty()) {
+            throw new RuntimeException("Кошик порожній! Неможливо оформити замовлення.");
+        }
+
+        UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        OrderEntity order = OrderEntity.builder()
+                .user(currentUser)
+                .totalAmount(cart.getTotalPrice())
+                .status(OrderStatus.PENDING)
+                .npCityRef(request.getNpCityRef())
+                .npWarehouseRef(request.getNpWarehouseRef())
+                .build();
+
+        for (CartItemResponse item : cart.getItems()) {
+            OrderItemEntity orderItem = OrderItemEntity.builder()
+                    .ingredient(ProductEntity.builder().id(item.getIngredientId()).build())
+                    .quantity(item.getQuantity())
+                    .priceAtPurchase(item.getPrice())
+                    .build();
+            order.addItem(orderItem);
+        }
+
+        try {
+            long amountInCents = cart.getTotalPrice().multiply(BigDecimal.valueOf(100)).longValue();
+
+            PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+                    .setAmount(amountInCents)
+                    .setCurrency("uah")
+                    .putMetadata("user_id", currentUser.getId().toString())
+                    .build();
+
+            PaymentIntent intent = PaymentIntent.create(params);
+
+            order.setStripeSessionId(intent.getId());
+            orderRepository.save(order);
+
+            return new CheckoutResponse(intent.getClientSecret(), order.getId());
+
+        } catch (StripeException e) {
+            throw new RuntimeException("Помилка при створенні PaymentIntent: " + e.getMessage());
         }
     }
 }

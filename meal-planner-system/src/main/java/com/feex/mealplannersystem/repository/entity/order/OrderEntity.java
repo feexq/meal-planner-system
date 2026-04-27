@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.repository.entity.order;
 
-import com.feex.mealplannersystem.common.OrderStatus;
+import com.feex.mealplannersystem.common.order.OrderStatus;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;

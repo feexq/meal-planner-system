@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.util;
 
-import com.feex.mealplannersystem.common.OrderStatus;
+import com.feex.mealplannersystem.common.order.OrderStatus;
 import com.feex.mealplannersystem.repository.OrderRepository;
 import com.feex.mealplannersystem.repository.entity.order.OrderEntity;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class DeliverySimulationScheduler {
 
         for (OrderEntity order : paidOrders) {
             order.setStatus(OrderStatus.IN_TRANSIT);
-            log.info("🚚 Замовлення ID {} відправлено (IN_TRANSIT)", order.getId());
+            log.info("🚚 Order ID {} has been shipped (IN_TRANSIT)", order.getId());
         }
         orderRepository.saveAll(paidOrders);
 
@@ -38,7 +38,7 @@ public class DeliverySimulationScheduler {
 
         for (OrderEntity order : inTransitOrders) {
             order.setStatus(OrderStatus.DELIVERED);
-            log.info("📦 Замовлення ID {} успішно доставлено (DELIVERED)", order.getId());
+            log.info("📦 Order ID {} successfully delivered (DELIVERED)", order.getId());
         }
         orderRepository.saveAll(inTransitOrders);
     }

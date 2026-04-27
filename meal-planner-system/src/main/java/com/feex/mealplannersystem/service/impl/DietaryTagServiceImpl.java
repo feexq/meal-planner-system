@@ -1,7 +1,7 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.common.DietaryConditionType;
-import com.feex.mealplannersystem.common.DietaryTagStatus;
+import com.feex.mealplannersystem.common.mealplan.DietaryConditionType;
+import com.feex.mealplannersystem.common.mealplan.DietaryTagStatus;
 import com.feex.mealplannersystem.dto.dietary.DietaryConditionResponse;
 import com.feex.mealplannersystem.dto.dietary.IngredientDietaryTagResponse;
 import com.feex.mealplannersystem.dto.dietary.UpdateDietaryTagsRequest;
@@ -16,7 +16,6 @@ import com.feex.mealplannersystem.service.DietaryTagService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import com.feex.mealplannersystem.service.mapper.DietaryConditionMapper;
 import com.feex.mealplannersystem.service.mapper.DietaryTagMapper;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +53,9 @@ public class DietaryTagServiceImpl implements DietaryTagService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<IngredientDietaryTagResponse> getTagsByIngredient(Long ingredientId) {
-        return tagRepository.findAllByIngredientId(ingredientId).stream()
+    public List<IngredientDietaryTagResponse> getTagsByIngredient(Long productId) {
+        IngredientEntity ing = ingredientRepository.findFirstIngredientEntityByProduct_Id(productId);
+        return tagRepository.findAllByIngredientId(ing.getId()).stream()
                 .map(tagMapper::toResponse)
                 .toList();
     }

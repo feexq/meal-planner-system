@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,4 +31,8 @@ public interface MealPlanRecordRepository extends JpaRepository<MealPlanRecordEn
     Optional<MealPlanRecordEntity> findByIdAndUserId(
             @Param("planId") Long planId,
             @Param("userId") Long userId);
+
+    // MealPlanRecordRepository
+    @Query("SELECT p FROM MealPlanRecordEntity p WHERE p.status = 'ACTIVE' AND p.weekStartDate <= :threshold")
+    List<MealPlanRecordEntity> findAllActiveOlderThan(@Param("threshold") LocalDate threshold);
 }

@@ -1,13 +1,15 @@
 package com.feex.mealplannersystem.mealplan.service.filter;
 
-import com.feex.mealplannersystem.mealplan.mapper.IngredientClassificationAdapter.ClassificationContext;
-import com.feex.mealplannersystem.mealplan.mapper.RecipeDataAdapter.RecipeDataContext;
+import com.feex.mealplannersystem.mealplan.dto.FilterResult;
+import com.feex.mealplannersystem.mealplan.mapper.context.ClassificationContext;
+import com.feex.mealplannersystem.mealplan.mapper.context.RecipeDataContext;
 import com.feex.mealplannersystem.mealplan.model.NutritionModel;
 import com.feex.mealplannersystem.mealplan.model.RecipeModel;
 import com.feex.mealplannersystem.mealplan.model.UserProfileModel;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -15,7 +17,16 @@ import java.util.stream.Collectors;
 @Component
 public class RecipeFilterService {
 
-    private static final java.util.concurrent.ConcurrentHashMap<String, Pattern> PATTERN_CACHE = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final double DIABETES_MAX_SUGARS_G   = 10.0;
+    private static final double DIABETES_MAX_CARBS_G    = 45.0;
+    private static final double HYPERTENSION_MAX_SODIUM = 600.0;
+    private static final double HIGH_CHOLESTEROL_MAX_FAT_G = 7.0;
+    private static final double HIGH_CHOLESTEROL_MAX_CHOL_MG = 100.0;
+    private static final double KIDNEY_DISEASE_MAX_SODIUM_MG = 400.0;
+    private static final double KIDNEY_DISEASE_MAX_PROTEIN_G = 20.0;
+    private static final double GOUT_MAX_PROTEIN_G = 25.0;
+
+    private static final ConcurrentHashMap<String, Pattern> PATTERN_CACHE = new ConcurrentHashMap<>();
 
     public FilterResult filterRecipes(RecipeDataContext data, ClassificationContext classification,
                                       UserProfileModel user, String slotMealType) {
@@ -101,26 +112,15 @@ public class RecipeFilterService {
         return new FilterResult(result, note, counts);
     }
 
-    public enum ConditionSeverity { CRITICAL, HIGH, MODERATE, MILD }
-
-    public static ConditionSeverity getConditionSeverity(String condition) {
-        return switch (condition.toLowerCase()) {
-            case "celiac_disease", "nut_allergy", "shellfish_allergy", "fish_allergy" -> ConditionSeverity.CRITICAL;
-            case "diabetes", "kidney_disease"                                          -> ConditionSeverity.HIGH;
-            case "hypertension", "high_cholesterol", "gout", "pancreatitis"           -> ConditionSeverity.MODERATE;
-            default                                                                    -> ConditionSeverity.MILD;
-        };
-    }
-
     public static List<String> getAppliedThresholds(List<String> userConditions) {
         List<String> t = new ArrayList<>();
         for (String c : userConditions) {
             switch (c.toLowerCase()) {
-                case "diabetes"         -> { t.add("sugars_g ≤ 10.0"); t.add("total_carbs_g ≤ 45.0"); }
-                case "hypertension"     -> t.add("sodium_mg ≤ 600.0");
-                case "high_cholesterol" -> { t.add("saturated_fat_g ≤ 7.0"); t.add("cholesterol_mg ≤ 100.0"); }
-                case "kidney_disease"   -> { t.add("sodium_mg ≤ 400.0"); t.add("protein_g ≤ 20.0"); }
-                case "gout"             -> t.add("protein_g ≤ 25.0");
+                case "diabetes"         -> { t.add("sugars_g ≤ " + DIABETES_MAX_SUGARS_G); t.add("total_carbs_g ≤ " + DIABETES_MAX_CARBS_G); }
+                case "hypertension"     -> t.add("sodium_mg ≤ " + HYPERTENSION_MAX_SODIUM);
+                case "high_cholesterol" -> { t.add("saturated_fat_g ≤ " + HIGH_CHOLESTEROL_MAX_FAT_G); t.add("cholesterol_mg ≤ " + HIGH_CHOLESTEROL_MAX_CHOL_MG); }
+                case "kidney_disease"   -> { t.add("sodium_mg ≤ " + KIDNEY_DISEASE_MAX_SODIUM_MG); t.add("protein_g ≤ " + KIDNEY_DISEASE_MAX_PROTEIN_G); }
+                case "gout"             -> t.add("protein_g ≤ " + GOUT_MAX_PROTEIN_G);
             }
         }
         return t;
@@ -188,32 +188,6 @@ public class RecipeFilterService {
         return budgetLevel(recipeB) - budgetLevel(userB) > 1;
     }
 
-    private static final Set<String> GLUTEN_SAFE = Set.of(
-            "corn tortilla","corn flour","rice flour","rice bread","gluten-free bread",
-            "gluten-free flour","gluten-free pasta","gluten-free noodle","gluten-free cracker",
-            "gluten-free soy sauce","tamari","rice noodle","rice paper","cornbread",
-            "corn starch","arrowroot","white miso","yellow miso","red miso","rice miso",
-            "shiro miso","sweet miso");
-
-    private static final List<String> GLUTEN_KW = List.of(
-            "wheat","flour","barley","rye","spelt","kamut","triticale",
-            "bread","toast","croissant","baguette","pita","pretzel",
-            "pasta","spaghetti","macaroni","noodle","couscous","orzo",
-            "fettuccine","linguine","penne","lasagna","ravioli","gnocchi",
-            "semolina","bulgur","pastry","crouton","cracker","breadcrumb",
-            "panko","tortilla","filo","phyllo","dumpling","wonton",
-            "soy sauce","teriyaki","mugi miso","barley miso",
-            "seitan","wheat germ","wheat bran","malt","malt vinegar");
-
-    public static boolean containsGlutenIngredient(RecipeModel recipe) {
-        for (String ing : recipe.getParsedIngredients()) {
-            String il = ing.toLowerCase().trim();
-            if (GLUTEN_SAFE.stream().anyMatch(il::contains)) continue;
-            if (GLUTEN_KW.stream().anyMatch(il::contains)) return true;
-        }
-        return false;
-    }
-
     private boolean hasClassifiedViolation(RecipeModel recipe, List<String> conditions,
                                             ClassificationContext ctx) {
         for (String cond : conditions) {
@@ -225,11 +199,11 @@ public class RecipeFilterService {
     private boolean hasNumericViolation(NutritionModel n, List<String> conditions) {
         for (String c : conditions) {
             boolean bad = switch (c) {
-                case "diabetes"         -> n.getSugarsG() > 10.0 || n.getTotalCarbsG() > 45.0;
-                case "hypertension"     -> n.getSodiumMg() > 600.0;
-                case "high_cholesterol" -> n.getSaturatedFatG() > 7.0 || n.getCholesterolMg() > 100.0;
-                case "kidney_disease"   -> n.getSodiumMg() > 400.0 || n.getProteinG() > 20.0;
-                case "gout"             -> n.getProteinG() > 25.0;
+                case "diabetes"         -> n.getSugarsG() > DIABETES_MAX_SUGARS_G || n.getTotalCarbsG() > DIABETES_MAX_CARBS_G;
+                case "hypertension"     -> n.getSodiumMg() > HYPERTENSION_MAX_SODIUM;
+                case "high_cholesterol" -> n.getSaturatedFatG() > HIGH_CHOLESTEROL_MAX_FAT_G || n.getCholesterolMg() > HIGH_CHOLESTEROL_MAX_CHOL_MG;
+                case "kidney_disease"   -> n.getSodiumMg() > KIDNEY_DISEASE_MAX_SODIUM_MG || n.getProteinG() > KIDNEY_DISEASE_MAX_PROTEIN_G;
+                case "gout"             -> n.getProteinG() > GOUT_MAX_PROTEIN_G;
                 default                 -> false;
             };
             if (bad) return true;
@@ -294,7 +268,4 @@ public class RecipeFilterService {
                 "cook_time_exclude","side_dish_excluded").forEach(k -> m.put(k, 0));
         return m;
     }
-
-    public record FilterResult(List<RecipeModel> recipes, String filteringNote,
-                                Map<String, Integer> eliminationCounts) {}
 }

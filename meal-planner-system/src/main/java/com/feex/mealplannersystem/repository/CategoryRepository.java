@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
     Optional<CategoryEntity> findBySlug(String slug);
     boolean existsByName(String name);
-    List<CategoryEntity> findAllByParentIsNull();  // всі кореневі
+    List<CategoryEntity> findAllByParentIsNull();
 }

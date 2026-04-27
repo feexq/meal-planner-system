@@ -1,19 +1,26 @@
 package com.feex.mealplannersystem.mealplan.service;
 
-import com.feex.mealplannersystem.mealplan.dto.*;
-import com.feex.mealplannersystem.mealplan.dto.MealPlanDtos.*;
+import com.feex.mealplannersystem.mealplan.common.ScoringMode;
+import com.feex.mealplannersystem.mealplan.dto.FilterResult;
+import com.feex.mealplannersystem.mealplan.dto.plan.DayPlanDto;
+import com.feex.mealplannersystem.mealplan.dto.plan.MealSlotDto;
+import com.feex.mealplannersystem.mealplan.dto.plan.WeeklyMealPlanDto;
+import com.feex.mealplannersystem.mealplan.dto.scoring.EstimatedDailyMacrosDto;
+import com.feex.mealplannersystem.mealplan.dto.scoring.RecipeCandidateDto;
 import com.feex.mealplannersystem.mealplan.mapper.IngredientClassificationAdapter;
-import com.feex.mealplannersystem.mealplan.mapper.IngredientClassificationAdapter.ClassificationContext;
 import com.feex.mealplannersystem.mealplan.mapper.RecipeDataAdapter;
-import com.feex.mealplannersystem.mealplan.mapper.RecipeDataAdapter.RecipeDataContext;
+import com.feex.mealplannersystem.mealplan.mapper.RecipeDataCache;
+import com.feex.mealplannersystem.mealplan.mapper.context.ClassificationContext;
+import com.feex.mealplannersystem.mealplan.mapper.context.RecipeDataContext;
 import com.feex.mealplannersystem.mealplan.model.NutritionModel;
 import com.feex.mealplannersystem.mealplan.model.RecipeModel;
 import com.feex.mealplannersystem.mealplan.model.UserProfileModel;
 import com.feex.mealplannersystem.mealplan.service.calculator.CalorieCalculatorService;
 import com.feex.mealplannersystem.mealplan.service.calculator.MacroRequirementService;
-import com.feex.mealplannersystem.mealplan.service.calculator.MacroRequirementService.MacroTarget;
+import com.feex.mealplannersystem.mealplan.service.calculator.MacroTarget;
 import com.feex.mealplannersystem.mealplan.service.filter.RecipeFilterService;
 import com.feex.mealplannersystem.mealplan.service.scorer.RecipeScorerService;
+import com.feex.mealplannersystem.mealplan.service.scorer.context.ScoringContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ojalgo.optimisation.Expression;
@@ -34,13 +41,14 @@ public class MealPlanGeneratorService {
     private final CalorieCalculatorService calorieCalculator;
     private final MacroRequirementService macroCalculator;
     private final RecipeFilterService recipeFilter;
+    private final RecipeDataCache recipeDataCache;
     private final RecipeScorerService recipeScorer;
 
-    private static final int TOP_N_CANDIDATES = 500;
+    private static final int TOP_N_CANDIDATES = 150;
     private static final int BASE_PROTEIN_WEIGHT = 15;
 
     public WeeklyMealPlanDto generatePlan(UserProfileModel user) {
-        RecipeDataContext data = recipeDataAdapter.buildContext();
+        RecipeDataContext data = recipeDataCache.buildContext();
         ClassificationContext classification = classificationAdapter.buildContext();
 
         double[] dailyTargets = calorieCalculator.getDailyTargets(user);
@@ -92,7 +100,6 @@ public class MealPlanGeneratorService {
                 relaxRate,
                 relaxRate > 0.3,
                 days);
-//                sidePool);
     }
 
     private List<MealSlotDto> buildDayViaILP(
@@ -209,21 +216,31 @@ public class MealPlanGeneratorService {
 
         String effectiveSlot = "snack_2".equals(slotName) ? "snack" : slotName;
 
-        RecipeFilterService.FilterResult fRes =
+        FilterResult fRes =
                 recipeFilter.filterRecipes(data, classification, user, effectiveSlot);
         List<RecipeModel> filtered = fRes.recipes();
-
-        logFilterStats(user.getUserId(), slotName, fRes, data.getRecipes().size());
 
         boolean relaxMealType = false;
         if (filtered.size() < 10) {
             relaxMealType = true;
             fRes = recipeFilter.filterRecipes(data, classification, user, "ALL");
             filtered = fRes.recipes();
-            log.debug("Slot '{}': <10 recipes, relaxing meal type (pool={})", slotName, filtered.size());
         }
 
         List<RecipeCandidateDto> candidates = new ArrayList<>();
+
+        ScoringContext ctx = ScoringContext.builder()
+                .slotBudget(slotBudget)
+                .slotType(effectiveSlot)
+                .currentDay(currentDay)
+                .macroTarget(macroTarget)
+                .usageBySlotType(usageBySlotType)
+                .data(data)
+                .classification(classification)
+                .proteinWeight(BASE_PROTEIN_WEIGHT)
+                .mode(ScoringMode.FULL)
+                .poolSize(filtered.size())
+                .build();
 
         for (RecipeModel recipe : filtered) {
             NutritionModel nutrition = data.getNutrition(recipe.getId());
@@ -249,7 +266,8 @@ public class MealPlanGeneratorService {
             if (scaledCalories < slotBudget * 0.60 || scaledCalories > slotBudget * 1.40) continue;
             if (usedToday.contains((int) recipe.getId())) continue;
 
-            int maxRepeats = user.getMaxRecipeRepeatsPerWeek() != null ? user.getMaxRecipeRepeatsPerWeek() : 2;
+            int maxRepeats = user.getMaxRecipeRepeatsPerWeek() != null
+                    ? user.getMaxRecipeRepeatsPerWeek() : 2;
             Map<String, List<Integer>> slotMap = usageBySlotType.get((int) recipe.getId());
             if (slotMap != null) {
                 int totalUsage = slotMap.values().stream().mapToInt(List::size).sum();
@@ -276,11 +294,9 @@ public class MealPlanGeneratorService {
                 relaxations.add("gapRelaxed");
             }
 
+            // ↓↓↓ ВИКЛИК ЗМІНИВСЯ — ctx замість 15 параметрів ↓↓↓
             RecipeCandidateDto candidate = recipeScorer.scoreRecipe(
-                    recipe, user, slotBudget, scaledServings, scaledCalories,
-                    usageBySlotType, currentDay, macroTarget,
-                    data, classification, relaxations, effectiveSlot,
-                    BASE_PROTEIN_WEIGHT, RecipeScorerService.ScoringMode.FULL, filtered.size());
+                    recipe, user, ctx, scaledServings, scaledCalories, relaxations);
 
             candidates.add(candidate);
         }
@@ -419,85 +435,4 @@ public class MealPlanGeneratorService {
                 List.of(), true, "No candidates — " + reason)));
         return empty;
     }
-
-    private void logFilterStats(String userId, String slotName,
-                                RecipeFilterService.FilterResult fRes,
-                                int totalRecipes) {
-        if (!log.isDebugEnabled()) return;
-
-        Map<String, Integer> elim = fRes.eliminationCounts();
-        int valid = fRes.recipes().size();
-
-        log.debug("=== Filter [user={} slot={}] valid={}/{} ===",
-                userId, slotName, valid, totalRecipes);
-
-        elim.entrySet().stream()
-                .filter(e -> e.getValue() > 0)
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .forEach(e -> log.debug("  {:35s} : {}", e.getKey(), e.getValue()));
-
-        if (fRes.filteringNote() != null) {
-            log.warn("  [WARNING] {}", fRes.filteringNote());
-        }
-    }
-//
-//    private List<RecipeCandidateDto> buildSideDishPool(
-//            UserProfileModel user, RecipeDataContext data,
-//            ClassificationContext classification, MacroTarget macroTarget) {
-//
-//        RecipeFilterService.FilterResult fRes =
-//                recipeFilter.filterRecipes(data, classification, user, "all");
-//
-//        Map<String, List<RecipeCandidateDto>> buckets = new LinkedHashMap<>();
-//        buckets.put("breakfast", new ArrayList<>());
-//        buckets.put("lunch", new ArrayList<>());
-//        buckets.put("dinner", new ArrayList<>());
-//        buckets.put("snack", new ArrayList<>());
-//        buckets.put("beverage", new ArrayList<>());
-//
-//        for (RecipeModel recipe : fRes.recipes()) {
-//            NutritionModel nutrition = data.getNutrition(recipe.getId());
-//            if (nutrition == null) continue;
-//
-//            double cals = nutrition.getCalories();
-//            if (cals < 20 || cals > 250) continue;
-//
-//            RecipeCandidateDto candidate = recipeScorer.scoreRecipe(
-//                    recipe, user, 150.0, 1.0, cals,
-//                    Collections.emptyMap(), 1, macroTarget,
-//                    data, classification, List.of(), "snack",
-//                    15, RecipeScorerService.ScoringMode.FULL, fRes.recipes().size());
-//
-//            String mType = recipe.getMealType() != null ? recipe.getMealType().toLowerCase() : "snack";
-//
-//            if (mType.contains("beverage") || mType.contains("drink")) {
-//                buckets.get("beverage").add(candidate);
-//            } else if (mType.contains("breakfast")) {
-//                buckets.get("breakfast").add(candidate);
-//            } else if (mType.contains("lunch")) {
-//                buckets.get("lunch").add(candidate);
-//            } else if (mType.contains("dinner")) {
-//                buckets.get("dinner").add(candidate);
-//            } else if (mType.contains("side") || mType.contains("salad") || mType.contains("soup")) {
-//                // Салати, супи та гарніри ідеально підходять і для обіду, і для вечері
-//                buckets.get("lunch").add(candidate);
-//                buckets.get("dinner").add(candidate);
-//            } else {
-//                buckets.get("snack").add(candidate);
-//            }
-//        }
-//
-//        List<RecipeCandidateDto> finalPool = new ArrayList<>();
-//
-//        for (Map.Entry<String, List<RecipeCandidateDto>> entry : buckets.entrySet()) {
-//            List<RecipeCandidateDto> catList = entry.getValue();
-//
-//            catList.sort((a, b) -> Integer.compare(b.getScore(), a.getScore()));
-//
-//            int limit = Math.min(6, catList.size());
-//            finalPool.addAll(catList.subList(0, limit));
-//        }
-//
-//        return finalPool;
-//    }
 }

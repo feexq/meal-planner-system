@@ -6,6 +6,7 @@ import com.feex.mealplannersystem.domain.ingredient.Ingredient;
 import com.feex.mealplannersystem.dto.ingredient.CreateIngredientRequest;
 import com.feex.mealplannersystem.dto.ingredient.UpdateIngredientRequest;
 import com.feex.mealplannersystem.repository.CategoryRepository;
+import com.feex.mealplannersystem.repository.IngredientAliasRepository;
 import com.feex.mealplannersystem.repository.IngredientRepository;
 import com.feex.mealplannersystem.repository.entity.category.CategoryEntity;
 import com.feex.mealplannersystem.repository.entity.ingredient.IngredientAliasEntity;
@@ -31,6 +32,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
     private final CategoryRepository categoryRepository;
+    private final IngredientAliasRepository ingredientAliasRepository;
     private final NormalizerClient normalizerClient;
     private final IngredientMapper mapper;
     private final IngredientNormalizationQueue normalizationQueue;
@@ -107,6 +109,15 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         Ingredient saved = mapper.toDomain(ingredientRepository.save(entity));
+        ingredientRepository.flush();
+
+        IngredientAliasEntity ingredientAliasEntity = IngredientAliasEntity.builder()
+                .rawName(request.getNormalizedName().toLowerCase())
+                .ingredient(ingredientRepository.findBySlug(entity.getSlug())
+                        .orElseThrow(() -> new CustomNotFoundException("Ingredient", entity.getSlug())))
+                .build();
+
+        ingredientAliasRepository.save(ingredientAliasEntity);
 
         normalizationQueue.add(saved.getId());
 

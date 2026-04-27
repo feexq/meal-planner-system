@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.config.normalizer;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.feex.mealplannersystem.config.normalizer.dto.response.NormalizeResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,9 +27,4 @@ public class NormalizerClient {
                 .map(NormalizeResponse::normalizedName)
                 .block();
     }
-
-    record NormalizeResponse(
-            @JsonProperty("raw_name") String rawName,
-            @JsonProperty("normalized_name") String normalizedName
-    ) {}
 }

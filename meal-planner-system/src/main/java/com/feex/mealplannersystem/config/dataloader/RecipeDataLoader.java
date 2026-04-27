@@ -3,7 +3,7 @@ package com.feex.mealplannersystem.config.dataloader;
 import com.feex.mealplannersystem.common.survey.CookBudget;
 import com.feex.mealplannersystem.common.survey.CookComplexity;
 import com.feex.mealplannersystem.common.survey.CookTime;
-import com.feex.mealplannersystem.common.MealType;
+import com.feex.mealplannersystem.common.mealplan.MealType;
 import com.feex.mealplannersystem.repository.IngredientRepository;
 import com.feex.mealplannersystem.repository.IngredientAliasRepository;
 import com.feex.mealplannersystem.repository.RecipeRepository;
@@ -126,6 +126,7 @@ public class RecipeDataLoader implements ApplicationRunner {
                 .cookTime(CookTime.fromString((String) raw.get("cook_time")))
                 .cookComplexity(CookComplexity.valueOf(raw.get("cook_complexity").toString().toUpperCase()))
                 .cookBudget(CookBudget.valueOf(raw.get("cook_budget").toString().toUpperCase()))
+                .ingredientsRawStr((String) raw.get("ingredients_raw_str"))
                 .build();
 
         String stepsStr = (String) raw.get("steps");

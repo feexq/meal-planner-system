@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.repository;
 
-import com.feex.mealplannersystem.common.OrderStatus;
+import com.feex.mealplannersystem.common.order.OrderStatus;
 import com.feex.mealplannersystem.repository.entity.order.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

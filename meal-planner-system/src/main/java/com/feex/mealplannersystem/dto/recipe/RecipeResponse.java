@@ -1,5 +1,6 @@
 package com.feex.mealplannersystem.dto.recipe;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class RecipeResponse {
     private String cookBudget;
     private Integer servings;
     private String servingSize;
+    private String ingredientsRawStr;
     private Set<String> steps;
     private Set<RecipeIngredientResponse> ingredients;
     private Set<String> tags;

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodMart | Вхід та Реєстрація</title>
+  <style>
+    /* Палітра ModernBerry */
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --neutral: #F7F5FB;
+      --text: #1A1030;
+      --text-muted: #7A6A90;
+      --border: #EAE4F5;
+      --radius-lg: 24px;
+      --radius-md: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      color: var(--text); 
+      background-color: var(--neutral); 
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Основний контейнер (Split Screen) */
+    .auth-container {
+      display: flex;
+      width: 100%;
+      max-width: 1000px;
+      min-height: 600px;
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 40px rgba(108, 63, 197, 0.08);
+      overflow: hidden;
+    }
+
+    /* Ліва частина - Банер із ЗОБРАЖЕННЯМ та ОВЕРЛЕЙОМ */
+    .auth-banner {
+      flex: 1;
+      /* ЗАМІНА ГРАДІЄНТА НА ФОТО */
+      background-image: url('image_1.png');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ОВЕРЛЕЙ (Фільтр затемнення/фіолетовий відтінок) */
+    .auth-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* Напівпрозорий фіолетовий (var(--primary)) overlay */
+      background: rgba(108, 63, 197, 0.65);
+      z-index: 1;
+    }
+
+    /* Усі елементи всередині банера мають бути вище оверлею */
+    .brand-logo, .banner-content { z-index: 2; position: relative; }
+
+    .brand-logo { font-size: 28px; font-weight: 700; text-decoration: none; color: #fff; letter-spacing: -0.5px; }
+    .banner-content { margin-bottom: 40px; }
+    .banner-content h1 { font-size: 36px; line-height: 1.2; margin-bottom: 16px; font-weight: 700; }
+    .banner-content p { font-size: 16px; opacity: 0.9; line-height: 1.5; max-width: 90%; }
+    
+    .feature-list { list-style: none; margin-top: 32px; font-size: 14px; }
+    .feature-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .feature-list li::before { content: '✓'; display: inline-flex; justify-content: center; align-items: center; width: 20px; height: 20px; background: rgba(255,255,255,0.2); border-radius: 50%; font-size: 12px; }
+
+    /* Права частина - Форма (Залишається білою для чіткості) */
+    .auth-form-wrapper {
+      flex: 1;
+      padding: 48px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #fff;
+    }
+
+    .auth-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .auth-header p { color: var(--text-muted); font-size: 14px; margin-bottom: 32px; }
+
+    /* Перемикач (Toggle) */
+    .toggle-container {
+      display: flex;
+      background: var(--neutral);
+      border-radius: 16px;
+      padding: 4px;
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .toggle-btn {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      z-index: 2;
+      transition: color 0.3s ease;
+    }
+    .toggle-btn.active { color: var(--primary-dark); }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+      z-index: 1;
+    }
+
+    /* Форми */
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      background: var(--neutral);
+      transition: all 0.2s;
+      outline: none;
+    }
+    .form-group input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px var(--primary-light); }
+
+    .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 13px; }
+    .checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-muted); }
+    .forgot-password { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .forgot-password:hover { text-decoration: underline; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 4px 12px rgba(108, 63, 197, 0.2);
+    }
+    .btn-submit:hover { background: var(--primary-dark); }
+
+    /* Соціальні логіни */
+    .social-login { margin-top: 32px; text-align: center; }
+    .social-login p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; position: relative; }
+    .social-login p::before, .social-login p::after { content: ''; position: absolute; top: 50%; width: 30%; height: 1px; background: var(--border); }
+    .social-login p::before { left: 0; }
+    .social-login p::after { right: 0; }
+    
+    .social-btns { display: flex; gap: 12px; }
+    .btn-social { flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: #fff; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-social:hover { background: var(--neutral); }
+    .btn-social img { width: 20px; height: 20px; }
+
+    /* Логіка перемикання */
+    .auth-form { display: none; animation: fadeIn 0.4s ease forwards; }
+    .auth-form.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Адаптивність */
+    @media (max-width: 850px) {
+      .auth-container { flex-direction: column; max-width: 450px; min-height: auto; }
+      .auth-banner { padding: 32px; text-align: center; background-position: center top; }
+      /* Відключаємо оверлей на мобільних, якщо текст не заважає картинці */
+      /* .auth-banner::before { display: none; } */
+      .feature-list { display: none; }
+      .banner-content { margin-bottom: 0; }
+      .banner-content h1 { font-size: 28px; }
+      .banner-content p { display: none; }
+      .auth-form-wrapper { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    
+    <div class="auth-banner">
+      <a href="#" class="brand-logo">FoodMart</a>
+      
+      <div class="banner-content">
+        <h1>Твій розумний підхід до їжі</h1>
+        <p>Створюй персоналізовані раціони, відстежуй макронутрієнти та купуй необхідні продукти в одному місці.</p>
+        
+        <ul class="feature-list">
+          <li>ШІ-генерація раціону під твої цілі</li>
+          <li>Врахування дієтичних потреб (Vegan, Keto тощо)</li>
+          <li>Автоматичне формування кошика для покупок</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="auth-form-wrapper">
+      <div class="auth-header">
+        <h2 id="form-title">З поверненням!</h2>
+        <p id="form-subtitle">Увійдіть, щоб продовжити роботу з раціоном</p>
+      </div>
+
+      <div class="toggle-container">
+        <div class="toggle-slider" id="toggle-slider"></div>
+        <div class="toggle-btn active" id="btn-login" onclick="switchForm('login')">Вхід</div>
+        <div class="toggle-btn" id="btn-register" onclick="switchForm('register')">Реєстрація</div>
+      </div>
+
+      <form id="form-login" class="auth-form active" action="#" method="POST">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="mail@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox"> Запам'ятати мене
+          </label>
+          <a href="#" class="forgot-password">Забули пароль?</a>
+        </div>
+
+        <button type="submit" class="btn-submit">Увійти</button>
+      </form>
+
+      <form id="form-register" class="auth-form" action="#" method="POST">
+        <div class="form-group">
+          <label>Ім'я та Прізвище</label>
+          <input type="text" placeholder="Іван Франко" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="mail@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" placeholder="Мінімум 8 символів" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" required> 
+            <span>Я погоджуюсь з <a href="#" style="color: var(--primary);">правилами</a></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Створити акаунт</button>
+      </form>
+
+      <div class="social-login">
+        <p>Або продовжити через</p>
+        <div class="social-btns">
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M1 1h22v22H1z" fill="none"/></svg>
+            Google
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchForm(type) {
+      const loginForm = document.getElementById('form-login');
+      const registerForm = document.getElementById('form-register');
+      const btnLogin = document.getElementById('btn-login');
+      const btnRegister = document.getElementById('btn-register');
+      const slider = document.getElementById('toggle-slider');
+      const title = document.getElementById('form-title');
+      const subtitle = document.getElementById('form-subtitle');
+
+      if (type === 'login') {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+        btnLogin.classList.add('active');
+        btnRegister.classList.remove('active');
+        slider.style.transform = 'translateX(0)';
+        title.textContent = 'З поверненням!';
+        subtitle.textContent = 'Увійдіть, щоб продовжити роботу з раціоном';
+      } else {
+        registerForm.classList.add('active');
+        loginForm.classList.remove('active');
+        btnRegister.classList.add('active');
+        btnLogin.classList.remove('active');
+        slider.style.transform = 'translateX(100%)';
+        title.textContent = 'Створити акаунт';
+        subtitle.textContent = 'Почніть свій шлях до здорового харчування';
+      }
+    }
+  </script>
+
+</body>
+</html>

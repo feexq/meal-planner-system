@@ -1,11 +1,15 @@
 package com.feex.mealplannersystem.web;
 
 import com.feex.mealplannersystem.dto.profile.*;
+import com.feex.mealplannersystem.dto.profile.achievement.AchievementResponse;
+import com.feex.mealplannersystem.dto.profile.statistic.*;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.profile.WeightHistoryEntity;
+import com.feex.mealplannersystem.service.impl.AchievementServiceImpl;
 import com.feex.mealplannersystem.service.impl.StreakService;
-import com.feex.mealplannersystem.service.impl.UserProfileService;
-import com.feex.mealplannersystem.service.impl.WeightService;
+import com.feex.mealplannersystem.service.impl.UserProfileServiceImpl;
+import com.feex.mealplannersystem.service.impl.WeightServiceImpl;
+import com.feex.mealplannersystem.service.impl.UserStatisticsServiceImpl;
 import com.feex.mealplannersystem.service.mapper.WeightMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,13 +32,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfileController {
 
-    private final UserProfileService profileService;
-    private final WeightService weightService;
+    private final UserProfileServiceImpl profileService;
+    private final WeightServiceImpl weightService;
     private final StreakService streakService;
+    private final UserStatisticsServiceImpl statisticsService;
+    private final AchievementServiceImpl achievementService;
     private final WeightMapper weightMapper;
 
     @GetMapping("/me")
-    public ResponseEntity<ProfileSummaryDto> getProfile(
+    public ResponseEntity<ProfileSummaryResponse> getProfile(
             @AuthenticationPrincipal UserEntity user
     ) {
         return ResponseEntity.ok(profileService.getProfileSummary(user));
@@ -133,5 +139,32 @@ public class ProfileController {
     ) {
         streakService.changeStreakType(user, request.getStreakType());
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/statistics/top-recipes")
+    @Operation(summary = "Get top recipes", description = "Returns top eaten recipes by user")
+    public ResponseEntity<List<TopRecipeResponse>> getTopRecipes(
+            @AuthenticationPrincipal UserEntity user,
+            @RequestParam(defaultValue = "5") @Min(1) @Max(50) int limit
+    ) {
+        return ResponseEntity.ok(statisticsService.getTopRecipes(user.getId(), limit));
+    }
+
+    @GetMapping("/statistics/nutrition-heatmap")
+    @Operation(summary = "Get nutrition heatmap data", description = "Returns daily nutrition summary within a date range")
+    public ResponseEntity<List<NutritionHeatmapResponse>> getNutritionHeatmap(
+            @AuthenticationPrincipal UserEntity user,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        return ResponseEntity.ok(statisticsService.getNutritionHeatmap(user.getId(), from, to));
+    }
+
+    @GetMapping("/achievements")
+    @Operation(summary = "Get user achievements", description = "Returns a list of achievements and their status")
+    public ResponseEntity<List<AchievementResponse>> getAchievements(
+            @AuthenticationPrincipal UserEntity user
+    ) {
+        return ResponseEntity.ok(achievementService.getUserAchievements(user));
     }
 }

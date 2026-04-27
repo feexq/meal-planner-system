@@ -1,14 +1,14 @@
 package com.feex.mealplannersystem.repository.entity.ingredient;
 
-import com.feex.mealplannersystem.common.Unit;
+import com.feex.mealplannersystem.common.product.Unit;
 import com.feex.mealplannersystem.repository.entity.category.CategoryEntity;
+import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
+import com.feex.mealplannersystem.repository.entity.tag.IngTagEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -57,4 +57,18 @@ public class IngredientEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<IngredientAliasEntity> aliases = new HashSet<>();
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "ingredient_tags",
+            joinColumns        = @JoinColumn(name = "ingredient_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<IngTagEntity> tags = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private ProductEntity product;
 }

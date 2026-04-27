@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-recipe-translations
+      author: feex
+      changes:
+        - createTable:
+            tableName: recipe_translations
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recipe_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_recipe_translation_origin
+                    referencedTableName: recipes
+                    referencedColumnNames: id
+              - column:
+                  name: language_code
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: ingredients_json
+                  type: jsonb
+              - column:
+                  name: steps_json
+                  type: jsonb
+              - column:
+                  name: serving_size
+                  type: varchar(100)
+        - addUniqueConstraint:
+            tableName: recipe_translations
+            columnNames: recipe_id, language_code
+            constraintName: uk_recipe_lang

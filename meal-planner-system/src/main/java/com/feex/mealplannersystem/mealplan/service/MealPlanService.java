@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.mealplan.service;
 
-import com.feex.mealplannersystem.mealplan.dto.MealPlanDtos.WeeklyMealPlanDto;
+import com.feex.mealplannersystem.mealplan.dto.plan.WeeklyMealPlanDto;
 import com.feex.mealplannersystem.mealplan.mapper.UserProfileAdapter;
 import com.feex.mealplannersystem.mealplan.model.UserProfileModel;
 import com.feex.mealplannersystem.repository.UserPreferenceRepository;

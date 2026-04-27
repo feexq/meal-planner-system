@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.repository.entity;
 
-import com.feex.mealplannersystem.common.DietaryConditionType;
+import com.feex.mealplannersystem.common.mealplan.DietaryConditionType;
 import jakarta.persistence.*;
 import lombok.*;
 

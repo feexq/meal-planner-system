@@ -37,6 +37,17 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/checkout-intent")
+    public ResponseEntity<CheckoutResponse> createPaymentIntent(@RequestBody @Valid CheckoutRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = (UserEntity) auth.getPrincipal();
+
+        String cartKey = "cart:user:" + user.getId();
+        CheckoutResponse response = checkoutService.createPaymentIntent(cartKey, request);
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
     public ResponseEntity<List<OrderSummaryResponse>> getMyOrders() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

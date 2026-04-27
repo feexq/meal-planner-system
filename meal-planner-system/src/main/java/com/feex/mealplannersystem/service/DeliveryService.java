@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface DeliveryService {
     List<DeliveryLocationDto> searchCities(String cityName);
-    List<DeliveryLocationDto> getWarehouses(String cityRef);
+    List<DeliveryLocationDto> getWarehouses(String cityRef, String search);
 }

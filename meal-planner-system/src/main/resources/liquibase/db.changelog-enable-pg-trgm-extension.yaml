@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: enable-pg-trgm-extension
+      author: feex
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS pg_trgm;

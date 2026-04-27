@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Рецепти | FoodMart</title>
+  <style>
+    /* Палітра ModernBerry */
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --accent-light: #FEF6E4;
+      --neutral: #F7F5FB;
+      --text: #1A1030;
+      --text-muted: #7A6A90;
+      --border: #EAE4F5;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); background-color: #fff; line-height: 1.5; padding-bottom: 80px; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+
+    /* --- Шапка сайту --- */
+    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; flex-shrink: 0; }
+    .nav-links { display: flex; gap: 24px; flex-shrink: 0; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+    .header-actions { display: flex; gap: 16px; align-items: center; flex-shrink: 0; }
+    .cart-btn { background: none; border: none; cursor: pointer; position: relative; font-size: 22px; }
+    .cart-badge { position: absolute; top: -6px; right: -8px; background: var(--accent); color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 10px; }
+    .profile-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid var(--primary); }
+
+    /* --- Hero Банер для рецептів З ФОТО --- */
+    .recipe-hero { 
+      /* Додано напівпрозорий градієнт + шлях до картинки */
+      background: linear-gradient(rgba(108, 63, 197, 0.65), rgba(78, 42, 150, 0.8)), url('test3.jpeg'); 
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--radius-lg); 
+      padding: 80px 5%; /* Трохи збільшив відступи зверху/знизу, щоб фото краще було видно */
+      margin: 32px auto 48px; 
+      text-align: center; 
+      color: #fff; 
+      position: relative; 
+      overflow: hidden; 
+    }
+    
+    .recipe-hero h1 { font-size: 36px; font-weight: 700; margin-bottom: 16px; position: relative; z-index: 2; }
+    .recipe-hero p { font-size: 16px; opacity: 0.95; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; position: relative; z-index: 2; }
+    
+    /* Великий пошук */
+    .hero-search { max-width: 600px; margin: 0 auto; position: relative; z-index: 2; display: flex; box-shadow: 0 12px 32px rgba(0,0,0,0.25); border-radius: var(--radius-md); }
+    .hero-search input { flex-grow: 1; padding: 20px 24px; border: none; border-radius: var(--radius-md) 0 0 var(--radius-md); font-size: 16px; outline: none; }
+    .hero-search button { background: var(--accent); color: #fff; border: none; padding: 0 32px; border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .hero-search button:hover { background: #E08D00; }
+
+    /* --- Фільтри / Категорії (Pills) --- */
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+    .section-title { font-size: 24px; font-weight: 700; }
+    
+    .filter-pills { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 32px; scrollbar-width: none; }
+    .filter-pills::-webkit-scrollbar { display: none; }
+    .filter-pill { padding: 10px 20px; background: #fff; border: 1px solid var(--border); border-radius: 30px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .filter-pill:hover { border-color: var(--primary-light); background: var(--neutral); color: var(--primary); }
+    .filter-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(108, 63, 197, 0.2); }
+
+    /* --- Сітка Рецептів --- */
+    .recipes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 64px; }
+    
+    .recipe-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; cursor: pointer; }
+    .recipe-card:hover { box-shadow: 0 16px 32px rgba(108, 63, 197, 0.08); transform: translateY(-6px); border-color: var(--primary-light); }
+    
+    /* Зображення рецепту */
+    .recipe-img { height: 220px; background: var(--neutral); display: flex; align-items: center; justify-content: center; font-size: 80px; position: relative; }
+    .recipe-time-badge { position: absolute; bottom: 16px; right: 16px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px); padding: 6px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; color: var(--text); box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 6px; }
+    .recipe-category-badge { position: absolute; top: 16px; left: 16px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Інформація */
+    .recipe-content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+    .recipe-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--text); line-height: 1.3; }
+    
+    /* Теги дієт */
+    .recipe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .r-tag { font-size: 11px; padding: 4px 8px; border-radius: 6px; font-weight: 600; background: var(--primary-light); color: var(--primary-dark); }
+    
+    /* БЖВ та Калорії */
+    .recipe-nutrition { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border); margin-top: auto; }
+    .nutrition-cals { font-size: 16px; font-weight: 800; color: var(--accent); }
+    .nutrition-macros { display: flex; gap: 12px; font-size: 12px; color: var(--text-muted); }
+    .nutrition-macros span { font-weight: 600; color: var(--text); }
+
+    /* --- Адаптивність --- */
+    @media (max-width: 1024px) {
+      .recipes-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .recipe-hero { padding: 48px 24px; }
+    }
+    @media (max-width: 768px) {
+      .recipes-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .recipe-hero h1 { font-size: 28px; }
+      .hero-search { flex-direction: column; box-shadow: none; gap: 12px; }
+      .hero-search input { border-radius: var(--radius-md); }
+      .hero-search button { border-radius: var(--radius-md); padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">FoodMart</a>
+      <nav class="nav-links">
+        <a href="#">Магазин</a>
+        <a href="#" class="active">Рецепти</a>
+        <a href="#">Мій раціон</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn">🛒 <span class="cart-badge">3</span></button>
+        <div class="profile-avatar">О</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section class="recipe-hero">
+      <h1>Що приготуємо сьогодні?</h1>
+      <p>Знайдіть ідеальний рецепт за інгредієнтами, часом приготування або дієтичними вподобаннями.</p>
+      <div class="hero-search">
+        <input type="text" placeholder="Наприклад: салат з авокадо, високий білок...">
+        <button>Шукати</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="filter-pills">
+        <div class="filter-pill active">Всі рецепти</div>
+        <div class="filter-pill">🍳 Сніданки</div>
+        <div class="filter-pill">🍲 Обіди</div>
+        <div class="filter-pill">🥗 Легкі вечері</div>
+        <div class="filter-pill">⏱️ До 20 хвилин</div>
+        <div class="filter-pill">💪 Високий білок</div>
+        <div class="filter-pill">🌱 Веганські</div>
+        <div class="filter-pill">🥑 Кето</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">Вибір дня</h2>
+      </div>
+
+      <div class="recipes-grid">
+        
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🥞
+            <div class="recipe-category-badge">Сніданок</div>
+            <div class="recipe-time-badge">⏱️ 15 хв</div>
+          </div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Протеїнові панкейки без цукру</h3>
+            <div class="recipe-tags">
+              <span class="r-tag">Високий білок</span>
+              <span class="r-tag">Без глютену</span>
+            </div>
+            <div class="recipe-nutrition">
+              <div class="nutrition-cals">340 ккал</div>
+              <div class="nutrition-macros">
+                <div>Б: <span>32г</span></div>
+                <div>Ж: <span>12г</span></div>
+                <div>В: <span>24г</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🥗
+            <div class="recipe-category-badge" style="background: #1A9E5C;">Обід</div>
+            <div class="recipe-time-badge">⏱️ 20 хв</div>
+          </div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Салат з кіноа, авокадо та нутом</h3>
+            <div class="recipe-tags">
+              <span class="r-tag" style="background: #E8F5E9; color: #3B6D11;">Веган</span>
+              <span class="r-tag">Клітковина</span>
+            </div>
+            <div class="recipe-nutrition">
+              <div class="nutrition-cals">420 ккал</div>
+              <div class="nutrition-macros">
+                <div>Б: <span>16г</span></div>
+                <div>Ж: <span>22г</span></div>
+                <div>В: <span>45г</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🐟
+            <div class="recipe-category-badge" style="background: #4E2A96;">Вечеря</div>
+            <div class="recipe-time-badge">⏱️ 35 хв</div>
+          </div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Запечений лосось із броколі</h3>
+            <div class="recipe-tags">
+              <span class="r-tag" style="background: var(--primary-light); color: var(--primary-dark);">Кето</span>
+              <span class="r-tag">Омега-3</span>
+            </div>
+            <div class="recipe-nutrition">
+              <div class="nutrition-cals">380 ккал</div>
+              <div class="nutrition-macros">
+                <div>Б: <span>38г</span></div>
+                <div>Ж: <span>24г</span></div>
+                <div>В: <span>8г</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🍗
+            <div class="recipe-category-badge" style="background: #1A9E5C;">Обід</div>
+            <div class="recipe-time-badge">⏱️ 40 хв</div>
+          </div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Куряча грудка в томатному соусі</h3>
+            <div class="recipe-tags">
+              <span class="r-tag">Високий білок</span>
+              <span class="r-tag">Низькокалорійне</span>
+            </div>
+            <div class="recipe-nutrition">
+              <div class="nutrition-cals">290 ккал</div>
+              <div class="nutrition-macros">
+                <div>Б: <span>45г</span></div>
+                <div>Ж: <span>8г</span></div>
+                <div>В: <span>12г</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🥣
+            <div class="recipe-category-badge">Сніданок</div>
+            <div class="recipe-time-badge">⏱️ 10 хв</div>
+          </div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Вівсянка з ягодами та горіхами</h3>
+            <div class="recipe-tags">
+              <span class="r-tag">Швидко</span>
+              <span class="r-tag">Вегетаріанське</span>
+            </div>
+            <div class="recipe-nutrition">
+              <div class="nutrition-cals">310 ккал</div>
+              <div class="nutrition-macros">
+                <div>Б: <span>10г</span></div>
+                <div>Ж: <span>14г</span></div>
+                <div>В: <span>42г</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🍲
+            <div class="recipe-category-badge" style="background: #4E2A96;">Вечеря</div>
+            <div class="recipe-time-badge">⏱️ 45 хв</div>
+          </div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Веганський крем-суп з гарбуза</h3>
+            <div class="recipe-tags">
+              <span class="r-tag" style="background: #E8F5E9; color: #3B6D11;">Веган</span>
+              <span class="r-tag">Легке</span>
+            </div>
+            <div class="recipe-nutrition">
+              <div class="nutrition-cals">220 ккал</div>
+              <div class="nutrition-macros">
+                <div>Б: <span>4г</span></div>
+                <div>Ж: <span>12г</span></div>
+                <div>В: <span>28г</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

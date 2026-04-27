@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CheckoutResponse {
     private String checkoutUrl;
+    private Long orderId;
 }

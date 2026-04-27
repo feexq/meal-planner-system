@@ -1,6 +1,7 @@
 package com.feex.mealplannersystem.repository.entity.auth;
 
-import com.feex.mealplannersystem.common.Role;
+import com.feex.mealplannersystem.common.user.AuthProvider;
+import com.feex.mealplannersystem.common.user.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +27,7 @@ public class UserEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column()
     private String password;
 
     @Column(nullable = false)
@@ -36,6 +37,12 @@ public class UserEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private AuthProvider provider = AuthProvider.LOCAL;
+
+    private String providerId;
 
     private boolean enabled = true;
 
@@ -60,17 +67,8 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;           // використовуємо email як username
+        return email;
     }
-
-    @Override
-    public boolean isAccountNonExpired() { return true; }
-
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
 
     @Override
     public boolean isEnabled() { return enabled; }

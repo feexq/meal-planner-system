@@ -19,7 +19,6 @@ import java.util.UUID;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
 
     public RefreshTokenEntity createRefreshToken(UserEntity user) {
         RefreshTokenEntity refreshToken = RefreshTokenEntity.builder()

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,9 +34,6 @@ public class CartController {
     }
 
     @PostMapping("/items")
-    @Operation(parameters = {
-            @Parameter(ref = "#/components/parameters/cartSessionHeader")
-    })
     public ResponseEntity<CartResponse> addItem(
             HttpServletRequest request,
             @RequestBody @Valid AddToCartRequest body
@@ -66,6 +64,26 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/add-recipe/{recipeId}")
+    public ResponseEntity<CartResponse> addRecipeIngredients(
+            @PathVariable Long recipeId,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(
+                cartService.addRecipeIngredients(recipeId, resolveCartKey(request))
+        );
+    }
+
+    @PostMapping("/merge")
+    public ResponseEntity<Void> mergeCart(
+            @RequestHeader(value = "X-Cart-Session", required = false) String sessionId,
+            @AuthenticationPrincipal UserEntity user) {
+        if (sessionId != null && !sessionId.isBlank() && user != null) {
+            cartService.mergeCarts("cart:session:" + sessionId, "cart:user:" + user.getId());
+        }
+        return ResponseEntity.ok().build();
+    }
+
     private String resolveCartKey(HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
@@ -79,15 +97,5 @@ public class CartController {
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "X-Cart-Session header is required for guests");
-    }
-
-    @PostMapping("/add-recipe/{recipeId}")
-    public ResponseEntity<CartResponse> addRecipeIngredients(
-            @PathVariable Long recipeId,
-            HttpServletRequest request
-    ) {
-        return ResponseEntity.ok(
-                cartService.addRecipeIngredients(recipeId, resolveCartKey(request))
-        );
     }
 }

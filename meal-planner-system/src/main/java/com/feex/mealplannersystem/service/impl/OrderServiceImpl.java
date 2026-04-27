@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.common.OrderStatus;
+import com.feex.mealplannersystem.common.order.OrderStatus;
 import com.feex.mealplannersystem.dto.order.OrderDetailsResponse;
 import com.feex.mealplannersystem.dto.order.OrderItemDto;
 import com.feex.mealplannersystem.dto.order.OrderSummaryResponse;
@@ -8,7 +8,7 @@ import com.feex.mealplannersystem.repository.OrderRepository;
 import com.feex.mealplannersystem.repository.entity.order.OrderEntity;
 import com.feex.mealplannersystem.service.CartService;
 import com.feex.mealplannersystem.service.OrderService;
-import jakarta.persistence.EntityNotFoundException;
+import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,15 +28,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void processSuccessfulPayment(String stripeSessionId) {
-        log.info("Обробка успішного платежу для сесії: {}", stripeSessionId);
-
         OrderEntity order = orderRepository.findByStripeSessionId(stripeSessionId)
-                .orElseThrow(() -> new EntityNotFoundException("Замовлення з сесією " + stripeSessionId + " не знайдено"));
-
-        if (order.getStatus() == OrderStatus.PAID) {
-            log.info("Замовлення ID {} вже має статус PAID", order.getId());
-            return;
-        }
+                .orElseThrow(() -> new CustomNotFoundException("Order" , stripeSessionId));
 
         order.setStatus(OrderStatus.PAID);
 
@@ -44,11 +37,9 @@ public class OrderServiceImpl implements OrderService {
         order.setTrackingNumber(mockTtn);
 
         orderRepository.save(order);
-        log.info("Замовлення ID {} успішно оновлено. Згенеровано ТТН: {}", order.getId(), mockTtn);
 
         String userCartKey = "cart:user:" + order.getUser().getId();
         cartService.clearCart(userCartKey);
-        log.info("Кошик {} очищено", userCartKey);
     }
 
     @Override
@@ -69,12 +60,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     public OrderDetailsResponse getOrderDetails(Long orderId, Long userId) {
         OrderEntity order = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new EntityNotFoundException("Замовлення не знайдено або доступ заборонено"));
+                .orElseThrow(() -> new CustomNotFoundException("Order", orderId.toString()));
 
         List<OrderItemDto> items = order.getItems().stream()
                 .map(item -> OrderItemDto.builder()
                         .ingredientId(item.getIngredient().getId())
-                        .name(item.getIngredient().getNormalizedName())
+                        .name(item.getIngredient().getNameUk())
                         .imageUrl(item.getIngredient().getImageUrl())
                         .quantity(item.getQuantity())
                         .priceAtPurchase(item.getPriceAtPurchase())

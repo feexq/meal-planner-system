@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сніданки | FoodMart</title>
+  <style>
+    /* Палітра ModernBerry */
+    :root {
+      --primary: #6C3FC5;
+      --primary-dark: #4E2A96;
+      --primary-light: #F0EAFE;
+      --accent: #F59C0A;
+      --accent-light: #FEF6E4;
+      --neutral: #F7F5FB;
+      --text: #1A1030;
+      --text-muted: #7A6A90;
+      --border: #EAE4F5;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); background-color: #fff; line-height: 1.5; }
+    
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; }
+
+    /* --- Шапка сайту (Full) --- */
+    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; flex-shrink: 0; }
+    
+    .btn-catalog { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    
+    .search-bar { flex-grow: 1; max-width: 500px; display: flex; position: relative; }
+    .search-bar input { width: 100%; padding: 12px 20px 12px 40px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--neutral); outline: none; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; }
+    .nav-links a.active { color: var(--primary); }
+    
+    .header-actions { display: flex; gap: 16px; align-items: center; }
+    .cart-btn { background: none; border: none; cursor: pointer; position: relative; font-size: 22px; color: var(--primary); }
+    .cart-badge { position: absolute; top: -6px; right: -8px; background: var(--accent); color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 10px; }
+    .profile-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid var(--primary); }
+
+    /* --- Сторінка Категорії --- */
+    .category-header { 
+      background: linear-gradient(rgba(108, 63, 197, 0.7), rgba(78, 42, 150, 0.85)), url('test3.jpeg'); 
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--radius-lg);
+      padding: 60px 40px;
+      margin: 24px 0 40px;
+      color: #fff;
+    }
+    .category-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .breadcrumbs { font-size: 14px; opacity: 0.8; margin-bottom: 12px; }
+
+    /* Layout: Sidebar + Grid */
+    .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+
+    /* Sidebar Filters */
+    .sidebar { position: sticky; top: 100px; height: fit-content; }
+    .filter-group { margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .filter-group:last-child { border: none; }
+    .filter-label { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: block; color: var(--text); }
+    
+    .filter-list { list-style: none; }
+    .filter-item { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: color 0.2s; }
+    .filter-item:hover { color: var(--primary); }
+    .filter-item input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+
+    /* Recipe Grid */
+    .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    
+    .recipe-card { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: all 0.3s; background: #fff; }
+    .recipe-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(108, 63, 197, 0.08); border-color: var(--primary-light); }
+    
+    .recipe-img { height: 180px; background: var(--neutral); display: flex; align-items: center; justify-content: center; font-size: 60px; position: relative; }
+    .recipe-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; }
+    .badge-time { background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--text); }
+    .badge-budget { background: var(--accent); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+
+    .recipe-info { padding: 20px; }
+    .recipe-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text); line-height: 1.4; height: 50px; overflow: hidden; }
+    
+    .recipe-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--neutral); }
+    .recipe-cals { font-weight: 700; color: var(--accent); font-size: 14px; }
+    .btn-view { color: var(--primary); font-weight: 600; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+    .btn-view:hover { text-decoration: underline; }
+
+    /* Адаптивність */
+    @media (max-width: 1024px) {
+      .main-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; } /* Можна зробити випадаючим для мобілок */
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">FoodMart</a>
+      <button class="btn-catalog">☰ Каталог</button>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Пошук рецептів у цій категорії...">
+      </div>
+      <nav class="nav-links">
+        <a href="#">Магазин</a>
+        <a href="#" class="active">Рецепти</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn">🛒 <span class="cart-badge">3</span></button>
+        <div class="profile-avatar">О</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <div class="category-header">
+      <div class="breadcrumbs">Рецепти / Категорії / Сніданки</div>
+      <h1>Здорові та швидкі сніданки</h1>
+      <p style="opacity: 0.9; max-width: 500px;">Почніть свій день правильно з нашою підбіркою рецептів, що заряджають енергією.</p>
+    </div>
+
+    <div class="main-layout">
+      
+      <aside class="sidebar">
+        
+        <div class="filter-group">
+          <span class="filter-label">Бюджет</span>
+          <ul class="filter-list">
+            <li class="filter-item"><input type="checkbox"> Економ (до 100 ₴)</li>
+            <li class="filter-item"><input type="checkbox"> Середній (100-300 ₴)</li>
+            <li class="filter-item"><input type="checkbox"> Преміум (300+ ₴)</li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Час приготування</span>
+          <ul class="filter-list">
+            <li class="filter-item"><input type="checkbox"> До 15 хв</li>
+            <li class="filter-item"><input type="checkbox"> 15-30 хв</li>
+            <li class="filter-item"><input type="checkbox"> 30-60 хв</li>
+            <li class="filter-item"><input type="checkbox"> Більше години</li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Тип прийому їжі</span>
+          <ul class="filter-list">
+            <li class="filter-item"><input type="radio" name="meal" checked> Сніданок</li>
+            <li class="filter-item"><input type="radio" name="meal"> Обід</li>
+            <li class="filter-item"><input type="radio" name="meal"> Вечеря</li>
+            <li class="filter-item"><input type="radio" name="meal"> Перекус</li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Дієтичні потреби</span>
+          <ul class="filter-list">
+            <li class="filter-item"><input type="checkbox"> Веган</li>
+            <li class="filter-item"><input type="checkbox"> Кето</li>
+            <li class="filter-item"><input type="checkbox"> Без глютену</li>
+          </ul>
+        </div>
+
+      </aside>
+
+      <section class="recipe-grid">
+        
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🥞
+            <div class="recipe-badges">
+              <div class="badge-time">⏱️ 15 хв</div>
+              <div class="badge-budget">₴ Економ</div>
+            </div>
+          </div>
+          <div class="recipe-info">
+            <h3 class="recipe-title">Класичні панкейки з медом та бананом</h3>
+            <div class="recipe-meta">
+              <span class="recipe-cals">🔥 340 ккал</span>
+              <a href="#" class="btn-view">Рецепт →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🍳
+            <div class="recipe-badges">
+              <div class="badge-time">⏱️ 10 хв</div>
+              <div class="badge-budget">₴ Середній</div>
+            </div>
+          </div>
+          <div class="recipe-info">
+            <h3 class="recipe-title">Шакшука з трьох яєць та чилі</h3>
+            <div class="recipe-meta">
+              <span class="recipe-cals">🔥 410 ккал</span>
+              <a href="#" class="btn-view">Рецепт →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🥣
+            <div class="recipe-badges">
+              <div class="badge-time">⏱️ 5 хв</div>
+              <div class="badge-budget">₴ Економ</div>
+            </div>
+          </div>
+          <div class="recipe-info">
+            <h3 class="recipe-title">Вівсяна каша з горіхами та ягодами</h3>
+            <div class="recipe-meta">
+              <span class="recipe-cals">🔥 290 ккал</span>
+              <a href="#" class="btn-view">Рецепт →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-img">
+            🥑
+            <div class="recipe-badges">
+              <div class="badge-time">⏱️ 12 хв</div>
+              <div class="badge-budget">₴ Середній</div>
+            </div>
+          </div>
+          <div class="recipe-info">
+            <h3 class="recipe-title">Тост з авокадо та яйцем пашот</h3>
+            <div class="recipe-meta">
+              <span class="recipe-cals">🔥 380 ккал</span>
+              <a href="#" class="btn-view">Рецепт →</a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+</body>
+</html>

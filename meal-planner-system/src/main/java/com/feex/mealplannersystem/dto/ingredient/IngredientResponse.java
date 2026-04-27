@@ -1,6 +1,6 @@
 package com.feex.mealplannersystem.dto.ingredient;
 
-import com.feex.mealplannersystem.common.Unit;
+import com.feex.mealplannersystem.common.product.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

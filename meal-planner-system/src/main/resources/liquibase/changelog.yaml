@@ -31,3 +31,23 @@ databaseChangeLog:
       file: liquibase/db.changelog-tracking-and-preferences.yaml
   - include:
       file: liquibase/db.changelog-changes-add-macros-to-meal-plan-slots.yaml
+  - include:
+      file: liquibase/db.changelog-init-ingredients-categories-and-tags.yaml
+  - include:
+      file: liquibase/db.changelog-add-ingredients-raw-str-to-recipes.yaml
+  - include:
+      file: liquibase/db.changelog-changes-add-oauth-fields-to-users.yaml
+  - include:
+      file: liquibase/db.changelog-create-product-table.yaml
+  - include:
+      file: liquibase/db.changelog-seed-products-data.yaml
+  - include:
+      file: liquibase/db.changelog-create-recipe-translations.yaml
+  - include:
+      file: liquibase/db.changelog-add-package-info.yaml
+  - include:
+      file: liquibase/db.changelog-enable-pg-trgm-extension.yaml
+  - include:
+      file: liquibase/db.changelog-init-achievements.yaml
+  - include:
+      file: liquibase/db.changelog-seed-achievements.sql

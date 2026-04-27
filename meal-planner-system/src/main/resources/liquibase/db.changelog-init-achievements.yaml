@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: init-achievements-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: achievements
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: key
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: icon_url
+                  type: VARCHAR(500)
+              - column:
+                  name: target_value
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: init-user-achievements-table
+      author: feex
+      changes:
+        - createTable:
+            tableName: user_achievements
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_achievements_user
+                    references: users(id)
+                    deleteCascade: true
+              - column:
+                  name: achievement_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_achievements_achievement
+                    references: achievements(id)
+                    deleteCascade: true
+              - column:
+                  name: achieved_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: progress
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: user_achievements
+            columnNames: user_id, achievement_id
+            constraintName: uq_user_achievements

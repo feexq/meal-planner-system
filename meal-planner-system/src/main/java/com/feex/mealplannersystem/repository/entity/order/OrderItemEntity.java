@@ -1,6 +1,7 @@
 package com.feex.mealplannersystem.repository.entity.order;
 
 import com.feex.mealplannersystem.repository.entity.ingredient.IngredientEntity;
+import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +26,7 @@ public class OrderItemEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id", nullable = false)
-    private IngredientEntity ingredient;
+    private ProductEntity ingredient;
 
     @Column(nullable = false)
     private Integer quantity;
