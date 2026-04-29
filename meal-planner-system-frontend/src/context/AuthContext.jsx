@@ -14,11 +14,11 @@ export function AuthProvider({ children }) {
         setLoading(false);
         return;
       }
-      // Виправлено: використовуємо правильний ендпоінт /api/profile/me
+
       const { data } = await profileAPI.getProfile();
       setUser(data);
     } catch {
-      // Токени вже видалені interceptor-ом якщо refresh не вдався
+
       setUser(null);
     } finally {
       setLoading(false);
@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     const { data } = await authAPI.login({ email, password });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
-    localStorage.removeItem('cartSessionId'); // ← кошик вже змержено, uuid більше не потрібен
+    localStorage.removeItem('cartSessionId');
     await fetchUser();
     return data;
   };
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
     const { data } = await authAPI.register({ email, password, firstName, lastName });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
-    localStorage.removeItem('cartSessionId'); // ← те саме
+    localStorage.removeItem('cartSessionId');
     await fetchUser();
     return data;
   };
@@ -51,11 +51,11 @@ export function AuthProvider({ children }) {
     try {
       await authAPI.logout();
     } catch {
-      // ignore
+
     }
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('cartSessionId'); // ← новий uuid згенерується автоматично при наступному запиті
+    localStorage.removeItem('cartSessionId');
     setUser(null);
   };
 
@@ -66,7 +66,7 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
-    refetchUser: fetchUser, // корисно після оновлення профілю
+    refetchUser: fetchUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

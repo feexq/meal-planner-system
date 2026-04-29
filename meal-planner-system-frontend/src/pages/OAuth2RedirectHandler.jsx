@@ -18,15 +18,15 @@ export default function OAuth2RedirectHandler() {
             return;
         }
 
-        // 1. Зберігаємо токени
+
         localStorage.setItem('accessToken', token);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
 
-        // 2. Мержимо анонімний кошик з юзерським
+
         cartAPI.mergeCart()
             .catch(err => console.error('Cart merge failed:', err))
             .finally(() => {
-                // 3. Прибираємо session uuid — він вже не потрібен
+
                 localStorage.removeItem('cartSessionId');
 
                 const redirect = localStorage.getItem('postLoginRedirect') || '/';

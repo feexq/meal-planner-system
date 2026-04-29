@@ -14,10 +14,10 @@ export default function AdminCategoryFormModal({ category, onClose, onSave }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch all for the parent dropdown
+
     categoriesAPI.getAll()
       .then(({ data }) => {
-        // Exclude the current category (and ideally its descendants, but flat list is fine for simple parent selection)
+
         let filtered = data;
         if (isEdit) {
           filtered = data.filter((c) => c.id !== category.id);

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+// @Service
 @RequiredArgsConstructor
 public class IngredientTagsBatchService {
 
@@ -19,7 +19,7 @@ public class IngredientTagsBatchService {
     @Transactional
     public void saveBatch(List<IngredientDietaryTagEntity> batch) {
         for (IngredientDietaryTagEntity entity : batch) {
-            entityManager.persist(entity); // Примусовий INSERT без попереднього SELECT
+            entityManager.persist(entity);
         }
 
         entityManager.flush();

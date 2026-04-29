@@ -1,9 +1,9 @@
-/* ── Base ────────────────────────────────────────────────────────────────────── */
+
 .category-recipes-page {
   padding-bottom: 80px;
 }
 
-/* ── Category Header ─────────────────────────────────────────────────────────── */
+
 .category-recipes-page .category-header {
   background: linear-gradient(135deg, rgba(108, 63, 197, 0.82), rgba(78, 42, 150, 0.94)),
     url('/recipe-banner.png');
@@ -70,7 +70,7 @@
   text-decoration: underline;
 }
 
-/* Header stats */
+
 .category-recipes-page .header-stats {
   display: flex;
   gap: 24px;
@@ -100,7 +100,7 @@
   font-weight: 500;
 }
 
-/* ── Main Layout ─────────────────────────────────────────────────────────────── */
+
 .category-recipes-page .main-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -108,7 +108,7 @@
   align-items: start;
 }
 
-/* ── Sidebar ─────────────────────────────────────────────────────────────────── */
+
 .category-recipes-page .sidebar {
   background: #fff;
   border: 1px solid var(--border);
@@ -232,7 +232,7 @@
   font-weight: 600;
 }
 
-/* Local search */
+
 .category-recipes-page .search-group {
   margin-bottom: 20px;
 }
@@ -309,7 +309,7 @@
   padding-right: 2px;
 }
 
-/* Page size select */
+
 .category-recipes-page .page-size-select {
   width: 100%;
   padding: 9px 32px 9px 12px;
@@ -334,7 +334,7 @@
   background-color: #fff;
 }
 
-/* ── Toolbar ─────────────────────────────────────────────────────────────────── */
+
 .category-recipes-page .catalog-toolbar {
   display: flex;
   justify-content: space-between;
@@ -395,14 +395,14 @@
   color: var(--text);
 }
 
-/* ── Recipe Grid ─────────────────────────────────────────────────────────────── */
+
 .category-recipes-page .recipe-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
-/* ── Recipe Card ─────────────────────────────────────────────────────────────── */
+
 .category-recipes-page .recipe-card {
   background: #fff;
   border: 1px solid var(--border);
@@ -421,7 +421,7 @@
   border-color: var(--primary-light);
 }
 
-/* Image */
+
 .category-recipes-page .recipe-img {
   height: 190px;
   background: linear-gradient(135deg, #ede8fa 0%, #f0eafe 100%);
@@ -479,7 +479,7 @@
   width: fit-content;
 }
 
-/* Match percent */
+
 .category-recipes-page .match-pct {
   position: absolute;
   bottom: 10px;
@@ -492,7 +492,7 @@
   border-radius: 7px;
 }
 
-/* Info */
+
 .category-recipes-page .recipe-info {
   padding: 16px 18px;
   flex-grow: 1;
@@ -528,7 +528,7 @@
   color: var(--primary-dark);
 }
 
-/* Macro pills */
+
 .category-recipes-page .macro-mini {
   display: flex;
   gap: 5px;
@@ -598,7 +598,7 @@
   color: var(--primary-dark);
 }
 
-/* ── Pagination ──────────────────────────────────────────────────────────────── */
+
 .category-recipes-page .pagination {
   display: flex;
   justify-content: center;
@@ -672,24 +672,7 @@
   pointer-events: none;
 }
 
-/* ── Plavna zagruzka (Smooth loading mask) ─────────────────────────────────── */
-.catalog-grid-wrapper,
-.cat-list-container {
-  transition: opacity 0.35s ease-in-out, filter 0.35s ease-in-out;
-}
 
-.catalog-grid-wrapper {
-  min-height: 500px;
-}
-
-.catalog-grid-wrapper.fetching-mask,
-.cat-list-container.fetching-mask {
-  opacity: 0.55;
-  filter: grayscale(15%) blur(2px);
-  pointer-events: none;
-}
-
-/* ── Adaptive ────────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .category-recipes-page .main-layout {
     grid-template-columns: 220px 1fr;

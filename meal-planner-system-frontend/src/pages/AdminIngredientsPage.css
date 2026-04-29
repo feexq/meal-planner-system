@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════════
-   Admin Ingredients Page
-   ═══════════════════════════════════════════════ */
+
 
 .admin-page {
   min-height: 100vh;
@@ -13,7 +11,7 @@
   padding: 2rem 1.5rem;
 }
 
-/* ─── Header ──────────────────────────────── */
+
 .admin-header {
   display: flex;
   align-items: flex-start;
@@ -34,7 +32,7 @@
   font-size: 0.9rem;
 }
 
-/* ─── Filters ─────────────────────────────── */
+
 .admin-filters {
   display: flex;
   gap: 0.75rem;
@@ -90,7 +88,7 @@
   border-color: var(--accent-primary);
 }
 
-/* ─── Table ───────────────────────────────── */
+
 .admin-table-wrap {
   overflow-x: auto;
   padding: 0;
@@ -197,7 +195,7 @@
   color: var(--danger);
 }
 
-/* ─── Action Buttons ─────────────────────── */
+
 .admin-action-btn {
   background: var(--bg-glass);
   border: 1px solid var(--border-color);
@@ -223,7 +221,7 @@
   border-color: var(--danger);
 }
 
-/* ─── Pagination ──────────────────────────── */
+
 .admin-pagination {
   display: flex;
   align-items: center;
@@ -260,7 +258,7 @@
   border-color: var(--accent-primary);
 }
 
-/* ─── Shared Buttons ─────────────────────── */
+
 .admin-btn {
   padding: 0.55rem 1.1rem;
   font-size: 0.85rem;
@@ -313,7 +311,7 @@
   font-size: 0.8rem;
 }
 
-/* ─── Loading / Empty / Error ────────────── */
+
 .admin-loading {
   display: flex;
   align-items: center;
@@ -338,9 +336,7 @@
   gap: 0.75rem;
 }
 
-/* ═══════════════════════════════════════════════
-   Modal System
-   ═══════════════════════════════════════════════ */
+
 .admin-modal-overlay {
   position: fixed;
   inset: 0;
@@ -424,9 +420,7 @@
   margin-top: 0.5rem;
 }
 
-/* ═══════════════════════════════════════════════
-   Form Styles
-   ═══════════════════════════════════════════════ */
+
 .admin-modal-form {
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -502,7 +496,7 @@
   font-size: 0.8rem;
 }
 
-/* ─── Alias Tags ─────────────────────────── */
+
 .admin-alias-input-row {
   display: flex;
   gap: 0.5rem;
@@ -551,9 +545,7 @@
   opacity: 1;
 }
 
-/* ═══════════════════════════════════════════════
-   Dietary Tags Table Overrides
-   ═══════════════════════════════════════════════ */
+
 .admin-dietary-table {
   margin-bottom: 0.5rem;
 }
@@ -597,7 +589,7 @@
   border-color: var(--danger);
 }
 
-/* ─── Responsive ─────────────────────────── */
+
 @media (max-width: 768px) {
   .admin-form-row {
     grid-template-columns: 1fr;

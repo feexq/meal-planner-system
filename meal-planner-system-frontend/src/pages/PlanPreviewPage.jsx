@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './PlanPreviewPage.css';
 
-// ─── Helpers ─────────────────────────────────────────────────
+
 
 function getMealIcon(type) {
     const t = (type || '').toLowerCase();
@@ -23,7 +23,7 @@ function getMealLabel(type) {
     return type || 'Прийом їжі';
 }
 
-// ─── Recipe Row ───────────────────────────────────────────────
+
 
 function RecipeRow({ recipe, badge, badgeColor }) {
     if (!recipe) return null;
@@ -47,10 +47,10 @@ function RecipeRow({ recipe, badge, badgeColor }) {
     );
 }
 
-// ─── Meal Slot ────────────────────────────────────────────────
+
 
 function MealSlot({ slot }) {
-    // Бекед віддає об'єкти main та side. Робимо з них масив для рендеру
+
     const recipes = [];
     if (slot.main) recipes.push(slot.main);
     if (slot.side) recipes.push(slot.side);
@@ -75,20 +75,20 @@ function MealSlot({ slot }) {
     );
 }
 
-// ─── Main ─────────────────────────────────────────────────────
+
 
 export default function PlanPreviewPage() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Беремо дані, які передав SurveyPage
+
     const plan = location.state?.plan || {};
 
     const [activeDay, setActiveDay] = useState(0);
     const [approving, setApproving] = useState(false);
     const [approved, setApproved] = useState(false);
 
-    // Адаптація під реальний JSON
+
     const finalizedPlan = plan.finalizedPlan || {};
     const days = finalizedPlan.days || plan.days || [];
 
@@ -98,10 +98,10 @@ export default function PlanPreviewPage() {
     const handleApprove = async () => {
         setApproving(true);
         try {
-            // Ви можете використати plan.planId для запиту активації
-            // const res = await fetch(`/api/meal-plan/status`, { ... });
 
-            // Поки що просто переходимо на трекер
+
+
+
             setApproved(true);
             setTimeout(() => navigate('/tracker'), 1000);
         } catch {
@@ -120,7 +120,7 @@ export default function PlanPreviewPage() {
                     <p>ШІ-асистент проаналізував ваші дані та створив ідеальне меню. Перегляньте страви на тиждень перед тим, як почати трекінг.</p>
                 </div>
 
-                {/* Day Tabs */}
+                {}
                 <div className="days-nav">
                     {days.map((day, i) => (
                         <div
@@ -134,7 +134,7 @@ export default function PlanPreviewPage() {
                     ))}
                 </div>
 
-                {/* Day Summary */}
+                {}
                 <div className="day-summary">
                     <div className="day-title">План на День {currentDay.day || activeDay + 1}</div>
                     <div className="day-macros">
@@ -153,7 +153,7 @@ export default function PlanPreviewPage() {
                     </div>
                 </div>
 
-                {/* Meal Slots */}
+                {}
                 <div style={{ flexGrow: 1 }}>
                     {slots.length > 0 ? (
                         slots.map((slot, i) => <MealSlot key={i} slot={slot} />)
@@ -166,7 +166,7 @@ export default function PlanPreviewPage() {
                 </div>
             </main>
 
-            {/* Floating Action Bar */}
+            {}
             <div className="action-bar">
                 <div className="action-inner">
                     <div className="action-text">

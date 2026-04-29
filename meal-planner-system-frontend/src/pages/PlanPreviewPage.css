@@ -1,9 +1,9 @@
-/* ─── Header ────────────────────────────────── */
-/* Фікс горизонтальних стрибків сторінки */
+
+
 html {
     overflow-y: scroll;
-    /* Завжди показувати скролбар */
-    /* Або сучасніший варіант: */
+    
+    
     scrollbar-gutter: stable;
 }
 
@@ -17,16 +17,16 @@ html {
     z-index: 100;
 }
 
-/* ─── Container ─────────────────────────────── */
+
 .preview-container {
     padding-bottom: 140px;
     min-height: 100vh;
-    /* Фікс вертикальних стрибків */
+    
     display: flex;
     flex-direction: column;
 }
 
-/* ─── Hero ──────────────────────────────────── */
+
 .plan-hero {
     text-align: center;
     padding: 48px 0 32px;
@@ -63,7 +63,7 @@ html {
     }
 }
 
-/* ─── Day Navigation ────────────────────────── */
+
 .days-nav {
     display: flex;
     gap: 12px;
@@ -115,7 +115,7 @@ html {
     font-weight: 800;
 }
 
-/* ─── Day Summary ───────────────────────────── */
+
 .day-summary {
     background: #fff;
     border-radius: 24px;
@@ -162,7 +162,7 @@ html {
     margin-top: 4px;
 }
 
-/* ─── Meal Slot ─────────────────────────────── */
+
 .meal-slot {
     background: #fff;
     border-radius: 24px;
@@ -204,7 +204,7 @@ html {
     border-radius: 20px;
 }
 
-/* ─── Recipe Row ────────────────────────────── */
+
 .recipe-row {
     display: flex;
     gap: 16px;
@@ -277,7 +277,7 @@ html {
     margin-top: 4px;
 }
 
-/* ─── Floating Action Bar ───────────────────── */
+
 .action-bar {
     position: fixed;
     bottom: 0;
@@ -342,7 +342,7 @@ html {
     cursor: not-allowed;
 }
 
-/* ─── Responsive ────────────────────────────── */
+
 @media (max-width: 600px) {
     .day-summary {
         flex-direction: column;

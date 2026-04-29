@@ -47,7 +47,7 @@
   margin-bottom: 8px;
 }
 
-/* --- Period selector --- */
+
 .period-tabs {
   display: flex;
   background: var(--neutral);
@@ -75,7 +75,7 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* --- Cards --- */
+
 .card {
   background: #fff;
   border-radius: var(--radius-lg);
@@ -119,7 +119,7 @@
   border: 1px solid var(--border);
 }
 
-/* KPI Summary */
+
 .kpi-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -181,7 +181,7 @@
   color: var(--text-muted);
 }
 
-/* Weight + Goal */
+
 .row-goals {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -283,7 +283,7 @@
   border: 1px solid #C7D2FE;
 }
 
-/* Zig-Zag + Radar */
+
 .row-ai {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -347,7 +347,7 @@
   display: inline-block;
 }
 
-/* Macro Weekly Bar */
+
 .macro-tabs {
   display: flex;
   gap: 8px;
@@ -384,7 +384,7 @@
   border-color: #A7F3D0;
 }
 
-/* Calorie Heatmap */
+
 .hm-calendar-wrap {
   overflow-x: auto;
 }
@@ -512,7 +512,7 @@
   flex-shrink: 0;
 }
 
-/* Gamification */
+
 .combined-gamification-card {
   display: flex;
   padding: 0 !important;
@@ -570,7 +570,7 @@
 }
 
 .streak-full-card {
-  /* Legacy, keeping for reference if needed, but combined uses streak-section */
+  
 }
 
 .bg-fire {
@@ -765,7 +765,7 @@
   border-color: var(--border);
 }
 
-/* Achievements */
+
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -824,9 +824,9 @@
   color: #B45309;
 }
 
-/* Legacy achievements-card replaced by achievements-section */
 
-/* Food Top */
+
+
 .row-food {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -963,7 +963,7 @@
   color: var(--text-muted);
 }
 
-/* Extra row */
+
 .row-extra {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1039,7 +1039,7 @@
   font-weight: 700;
 }
 
-/* --- Warning Banners --- */
+
 .chart-warning-banner {
   display: flex;
   align-items: center;
@@ -1061,7 +1061,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Achievement Slider Controls --- */
+
 .slider-controls {
   display: flex;
   gap: 4px;
@@ -1105,7 +1105,7 @@
   border-radius: 4px;
 }
 
-/* --- Achievement Modal --- */
+
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;

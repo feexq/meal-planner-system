@@ -1,7 +1,3 @@
-"""
-Food parsing service — natural-language → nutrition estimates.
-Uses LLM with Redis caching.
-"""
 from __future__ import annotations
 
 from core.cache import cache_nutrition, get_cached_nutrition

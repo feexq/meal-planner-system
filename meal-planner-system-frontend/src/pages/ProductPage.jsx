@@ -91,7 +91,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
 
   const galleryImages = ingredient.imageUrls || (ingredient.imageUrl ? [ingredient.imageUrl] : []);
 
-  // Nutrition data (may not always exist in API, gracefully absent)
+
   const nutrition = ingredient.nutrition;
 
   return (
@@ -100,7 +100,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
 
       <main className="product-page-container">
 
-        {/* Breadcrumbs */}
+        {}
         <div className="breadcrumbs">
           <Link to="/">Головна</Link> /
           <Link to="/catalog">Магазин</Link>
@@ -112,7 +112,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
 
         <div className="product-layout">
 
-          {/* Gallery */}
+          {}
           <div className="product-gallery">
             <div className="main-image">
               {!ingredient.available && (
@@ -147,10 +147,10 @@ export default function ProductPage({ cartCount, setCartCount }) {
             )}
           </div>
 
-          {/* Product Details */}
+          {}
           <div className="product-details">
 
-            {/* Dietary tags */}
+            {}
             {dietaryTags.length > 0 && (
               <div className="dietary-tags">
                 {dietaryTags.map(tag => (
@@ -170,7 +170,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
               )}
             </div>
 
-            {/* Price */}
+            {}
             <div className="price-block">
               <div className="price-current">
                 {ingredient.price != null ? `${ingredient.price} ₴` : '—'}
@@ -180,7 +180,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
               )}
             </div>
 
-            {/* Actions */}
+            {}
             <div className="action-block">
               <div className="quantity-selector">
                 <button
@@ -204,7 +204,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
               </button>
             </div>
 
-            {/* Nutrition block — shown if data available */}
+            {}
             {ingredient.calories && (
               <div className="nutrition-block">
                 <div className="nutrition-block-title">Харчова цінність (на 100г). Впевненість ШІ: {Math.round(ingredient.calorieConfidence * 100)}%.</div>
@@ -229,7 +229,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
               </div>
             )}
 
-            {/* Description */}
+            {}
             <div className="description">
               <strong>Про товар</strong>
               <p>
@@ -247,7 +247,7 @@ export default function ProductPage({ cartCount, setCartCount }) {
           </div>
         </div>
 
-        {/* Related recipes */}
+        {}
         {relatedRecipes.length > 0 && (
           <div className="product-recipes-section">
             <h2>В яких рецептах використовується</h2>

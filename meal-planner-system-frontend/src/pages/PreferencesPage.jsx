@@ -25,7 +25,7 @@ const getDisplayName = (enName) => {
   return UKR_DICTIONARY[enName.toLowerCase()] || enName;
 };
 
-// Компонент, який приймає англійську назву і динамічно малює українську
+
 function TranslatedName({ enName }) {
   const lowerName = enName ? enName.toLowerCase() : '';
   const [ukName, setUkName] = useState(translationCache[lowerName] || lowerName);
@@ -41,14 +41,14 @@ function TranslatedName({ enName }) {
             setUkName(translated);
           }
         })
-        .catch(() => { }); // Якщо помилка мережі, залишаємо англійську
+        .catch(() => { });
     }
   }, [lowerName]);
 
   return <>{ukName}</>;
 }
 
-// ─── Sub-components ───────────────────────────────────────────
+
 
 function StepperInput({ id, value, onChange, min, max, label, unit }) {
   const decrement = () => onChange(Math.max(min, value - 1));
@@ -123,7 +123,7 @@ function AiInsight({ icon, children }) {
   );
 }
 
-// ─── Секції (Кроки) ────────────────────────────────────────────────────────
+
 
 function Step1({ data, onChange }) {
   return (
@@ -426,7 +426,7 @@ function Step5({ data, onChange }) {
         <strong>Не хвилюйтесь:</strong> Ці параметри є лише "м'якими" побажаннями. ШІ запропонує найкращі варіанти, навіть якщо вони трохи вийдуть за ці рамки.
       </AiInsight>
 
-      {/* Блок Часу - горизонтально зверху */}
+      {}
       <div className="section-lbl">Бажаний час готування:</div>
       <div className="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', marginBottom: '24px' }}>
         {ctimes.map(c => (
@@ -436,7 +436,7 @@ function Step5({ data, onChange }) {
         ))}
       </div>
 
-      {/* Блоки Складності та Бюджету - у дві колонки */}
+      {}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
         <div>
           <div className="section-lbl">Складність рецептів:</div>
@@ -532,7 +532,7 @@ function Step6({ data, onChange }) {
   );
 }
 
-// ─── Main PreferencesPage ────────────────────────────────────────────────
+
 
 const PreferencesPage = () => {
   const [prefs, setPrefs] = useState({
@@ -553,7 +553,7 @@ const PreferencesPage = () => {
     zigzag: true
   });
 
-  // Зберігаємо початковий стан для порівняння змін
+
   const [initialPrefs, setInitialPrefs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -592,7 +592,7 @@ const PreferencesPage = () => {
         };
 
         setPrefs(mergedPrefs);
-        setInitialPrefs(mergedPrefs); // Фіксуємо чистий стан
+        setInitialPrefs(mergedPrefs);
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -619,7 +619,7 @@ const PreferencesPage = () => {
         currentWeightKg: prefs.weightKg,
       });
 
-      setInitialPrefs(prefs); // Оновлюємо чистий стан після успішного збереження
+      setInitialPrefs(prefs);
       setSaveStatus('✓ Збережено');
       setTimeout(() => setSaveStatus('Зберегти зміни'), 2000);
     } catch (error) {
@@ -631,7 +631,7 @@ const PreferencesPage = () => {
     }
   };
 
-  // --- ЛОГІКА ПОПЕРЕДЖЕННЯ ПРО НЕЗБЕРЕЖЕНІ ЗМІНИ ---
+
   const hasUnsavedChanges = JSON.stringify(prefs) !== JSON.stringify(initialPrefs);
 
   useEffect(() => {
@@ -650,8 +650,8 @@ const PreferencesPage = () => {
         if (link.origin === window.location.origin && link.pathname !== window.location.pathname) {
           e.preventDefault();
           e.stopPropagation();
-          setNextUrl(link.href); // Запам'ятовуємо, куди юзер хотів перейти
-          setShowExitModal(true); // Показуємо красиве вікно
+          setNextUrl(link.href);
+          setShowExitModal(true);
         }
       }
     };
@@ -677,7 +677,7 @@ const PreferencesPage = () => {
           <ProfileSidebar />
 
           <div className="content-area">
-            {/* Оновлений липкий заголовок: margin-top та padding-top розширюють фон вгору */}
+            {}
             <div className="page-header" style={{
               position: 'sticky',
               top: '79px',
@@ -691,7 +691,7 @@ const PreferencesPage = () => {
               <button
                 className="btn-save"
                 onClick={handleSave}
-                disabled={saving || !hasUnsavedChanges} // Можемо блокувати кнопку, якщо змін немає
+                disabled={saving || !hasUnsavedChanges}
                 style={{
                   background: saveStatus === '✓ Збережено' ? 'var(--success)' : '',
                   opacity: (!hasUnsavedChanges && saveStatus === 'Зберегти зміни') ? 0.6 : 1
@@ -713,7 +713,7 @@ const PreferencesPage = () => {
           </div>
         </div>
       </main>
-      {/* КРАСИВЕ МОДАЛЬНЕ ВІКНО ВИХОДУ */}
+      {}
       {showExitModal && (
         <div className="modal-overlay" onClick={() => setShowExitModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '380px', textAlign: 'center', padding: '32px 24px' }}>

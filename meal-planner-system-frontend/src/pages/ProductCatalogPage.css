@@ -1,4 +1,4 @@
-/* ── Base ────────────────────────────────────────────────────────────────────── */
+
 .product-catalog-page {
   padding-bottom: 80px;
   background-color: #fcfcfd;
@@ -10,11 +10,11 @@
   margin: 0 auto;
 }
 
-/* ── Catalog Header (Стилізовано під рецепти) ────────────────────────────────── */
+
 .product-catalog-page .catalog-header {
   background: linear-gradient(135deg, rgba(108, 63, 197, 0.82), rgba(78, 42, 150, 0.94)),
     url('/shop-banner.png');
-  /* Можна змінити картинку на свою, або прибрати url() */
+  
   background-size: cover;
   background-position: center;
   border-radius: var(--radius-lg, 16px);
@@ -78,7 +78,7 @@
   z-index: 1;
 }
 
-/* Glassmorphism Stats */
+
 .product-catalog-page .header-stats {
   display: flex;
   gap: 24px;
@@ -113,7 +113,7 @@
   margin-top: 4px;
 }
 
-/* ── Layout ────────────────────────────────────────────────────────────────── */
+
 .product-catalog-page .main-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -121,7 +121,7 @@
   align-items: start;
 }
 
-/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+
 .product-catalog-page .sidebar {
   background: #fff;
   border: 1px solid var(--border, #e0e0e0);
@@ -193,7 +193,7 @@
   display: block;
 }
 
-/* Search Bar */
+
 .product-catalog-page .search-bar-local {
   position: relative;
   display: flex;
@@ -232,7 +232,7 @@
   font-size: 13px;
 }
 
-/* Categories List */
+
 .product-catalog-page .cat-list-scrollable {
   list-style: none;
   padding: 0;
@@ -321,7 +321,7 @@
   background-color: #fff;
 }
 
-/* ── Main Grid & Toolbar ───────────────────────────────────────────────────── */
+
 .product-catalog-page .catalog-toolbar {
   display: flex;
   justify-content: space-between;
@@ -359,7 +359,7 @@
   gap: 20px;
 }
 
-/* ── Plavna zagruzka (Smooth loading mask) ─────────────────────────────────── */
+
 .catalog-grid-wrapper,
 .cat-list-container {
   transition: opacity 0.35s ease-in-out, filter 0.35s ease-in-out;
@@ -413,7 +413,7 @@
   background: var(--primary-dark);
 }
 
-/* ── Pagination ────────────────────────────────────────────────────────────── */
+
 .product-catalog-page .pagination {
   display: flex;
   justify-content: center;
@@ -482,7 +482,7 @@
   color: var(--text-muted);
 }
 
-/* ── Adaptive ──────────────────────────────────────────────────────────────── */
+
 @media (max-width: 1024px) {
   .product-catalog-page .main-layout {
     grid-template-columns: 220px 1fr;

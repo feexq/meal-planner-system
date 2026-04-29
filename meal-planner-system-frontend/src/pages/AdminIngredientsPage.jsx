@@ -18,10 +18,10 @@ export default function AdminIngredientsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // modals
-  const [formModal, setFormModal] = useState(null); // null | { ingredient? }
-  const [tagsModal, setTagsModal] = useState(null); // null | ingredient
-  const [deleteConfirm, setDeleteConfirm] = useState(null); // null | ingredient
+
+  const [formModal, setFormModal] = useState(null);
+  const [tagsModal, setTagsModal] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const pageSize = 15;
 
@@ -51,12 +51,12 @@ export default function AdminIngredientsPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  // Reset page on filter change
+
   const handleSearch = (value) => { setSearch(value); setPage(0); };
   const handleCategoryFilter = (value) => { setCategoryId(value); setPage(0); };
   const handleAvailabilityFilter = (value) => { setAvailability(value); setPage(0); };
 
-  // CRUD handlers
+
   const handleCreateSave = async (payload) => {
     await ingredientsAPI.create(payload);
     setFormModal(null);
@@ -89,7 +89,7 @@ export default function AdminIngredientsPage() {
     }
   };
 
-  // Smart pagination: show max 10 pages around current page
+
   const getVisiblePages = () => {
     const total = pageMeta.totalPages;
     if (total <= 10) return Array.from({ length: total }, (_, i) => i);
@@ -122,7 +122,7 @@ export default function AdminIngredientsPage() {
           </button>
         </div>
 
-        {/* ─── Filters ──────────────────────────── */}
+        {}
         <div className="admin-filters glass-card">
           <div className="admin-filter-item admin-search-box">
             <span className="admin-search-icon">🔍</span>
@@ -144,7 +144,7 @@ export default function AdminIngredientsPage() {
           </select>
         </div>
 
-        {/* ─── Table ────────────────────────────── */}
+        {}
         <div className="admin-table-wrap glass-card">
           {loading ? (
             <div className="admin-loading"><div className="spinner"></div></div>
@@ -204,7 +204,7 @@ export default function AdminIngredientsPage() {
           )}
         </div>
 
-        {/* ─── Pagination ────────────────────────── */}
+        {}
         {pageMeta.totalPages > 1 && (
           <div className="admin-pagination">
             <button className="admin-btn admin-btn-ghost admin-btn-icon" disabled={page === 0} onClick={() => setPage(0)} title="На початок">
@@ -236,7 +236,7 @@ export default function AdminIngredientsPage() {
         )}
       </div>
 
-      {/* ─── Modals ────────────────────────────── */}
+      {}
       {formModal && (
         <AdminIngredientFormModal
           ingredient={formModal.ingredient || null}

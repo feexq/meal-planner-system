@@ -10,6 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./db-init/init.sql.gz:/docker-entrypoint-initdb.d/init.sql.gz
 
   redis:
     image: redis:7-alpine
@@ -35,12 +36,35 @@ services:
   stripe-webhook:
     image: stripe/stripe-cli
     container_name: meal_planner_stripe
-    command: listen --forward-to http://host.docker.internal:8080/api/webhooks/stripe
+    command: listen --forward-to http://backend:8080/api/webhooks/stripe
     environment:
       - STRIPE_API_KEY=${STRIPE_SECRET_KEY}
     depends_on:
       - postgres
       - redis
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: meal_planner_backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - NORMALIZER_URL=http://normalizer:8000
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+      normalizer:
+        condition: service_started
+      stripe-webhook:
+        condition: service_started
 
 volumes:
   postgres_data:

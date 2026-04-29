@@ -14,7 +14,7 @@ const TIMEZONES = [
   'UTC'
 ];
 
-// --- Хелпери для маски дати (ДД.ММ.РРРР) ---
+
 const formatToDDMMYYYY = (dateStr) => {
   if (!dateStr) return '';
   const d = new Date(dateStr);
@@ -32,7 +32,7 @@ const parseFromDDMMYYYY = (str) => {
 };
 
 const handleMaskedDate = (e, setter) => {
-  let val = e.target.value.replace(/\D/g, ''); // Тільки цифри
+  let val = e.target.value.replace(/\D/g, '');
   if (val.length > 8) val = val.substring(0, 8);
 
   let formatted = val;
@@ -52,7 +52,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [weightHistory, setWeightHistory] = useState([]);
 
-  // --- Стани для модалки ВАГИ ---
+
   const [isWeightModalOpen, setIsWeightModalOpen] = useState(false);
   const [weightInput, setWeightInput] = useState('');
   const [weightNote, setWeightNote] = useState('');
@@ -348,7 +348,7 @@ const ProfilePage = () => {
                       <div className="streak-lbl">днів поспіль!</div>
                     </div>
 
-                    {/* Змінений дизайн для всього та заморозок - тепер це просто текст */}
+                    {}
                     <div className="streak-footer" style={{ gap: '12px', paddingTop: '4px', marginBottom: '12px', display: 'flex' }}>
                       <div title="Всього активних днів" style={{
                         display: 'flex',
@@ -555,14 +555,14 @@ const ProfilePage = () => {
         </div>
       </main>
 
-      {/* --- МОДАЛЬНІ ВІКНА --- */}
+      {}
       {isWeightModalOpen && (
         <div className="modal-backdrop" onClick={() => setIsWeightModalOpen(false)}>
           <div className="custom-modal" onClick={e => e.stopPropagation()}>
             <h3>⚖️ Записати вагу</h3>
             <p className="modal-desc">Введіть вагу та оберіть дату.</p>
 
-            {/* Змінено на текстове поле з маскою */}
+            {}
             <div className="form-group">
               <label>Дата зважування</label>
               <input
@@ -631,7 +631,7 @@ const ProfilePage = () => {
               />
             </div>
 
-            {/* Змінено на текстове поле з маскою */}
+            {}
             <div className="form-group">
               <label>Дата народження</label>
               <input

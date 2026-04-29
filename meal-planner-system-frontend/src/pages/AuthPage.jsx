@@ -4,18 +4,18 @@ import { useAuth } from '../context/AuthContext';
 import './AuthPage.css';
 
 export default function AuthPage() {
-  const [mode, setMode] = useState('login'); // 'login' | 'register'
+  const [mode, setMode] = useState('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login, register } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Pick up redirect path from state or query parameter
+
   const queryParams = new URLSearchParams(location.search);
   const redirectParam = queryParams.get('redirect') || location.state?.redirect || '/';
 
-  // Form state
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -73,7 +73,7 @@ export default function AuthPage() {
     <div className="auth-page">
       <div className="auth-container">
 
-        {/* Banner Section */}
+        {}
         <div className="auth-banner">
           <Link to="/" className="brand-logo">FoodMart</Link>
 
@@ -89,7 +89,7 @@ export default function AuthPage() {
           </div>
         </div>
 
-        {/* Form Section */}
+        {}
         <div className="auth-form-wrapper">
           <div className="auth-header">
             <h2>{mode === 'login' ? 'З поверненням!' : 'Створити акаунт'}</h2>
@@ -123,7 +123,7 @@ export default function AuthPage() {
 
           {error && <div className="auth-error">{error}</div>}
 
-          {/* Login Form */}
+          {}
           <form
             className={`auth-form ${mode === 'login' ? 'active' : ''}`}
             onSubmit={handleSubmit}
@@ -161,7 +161,7 @@ export default function AuthPage() {
             </button>
           </form>
 
-          {/* Register Form */}
+          {}
           <form
             className={`auth-form ${mode === 'register' ? 'active' : ''}`}
             onSubmit={handleSubmit}

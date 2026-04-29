@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import { recipesAPI, recipeTagsAPI } from '../api/api';
 import './RecipesPage.css';
 
-// ─── Константи ────────────────────────────────────────────────────────────────
+
 
 const MEAL_TYPE_LABELS = {
   BREAKFAST: 'Сніданок', LUNCH: 'Обід', DINNER: 'Вечеря',
@@ -43,7 +43,7 @@ const FIXED_FILTERS = [
 const FIXED_TAG_KEYS = new Set(['high-protein', 'vegan', 'keto']);
 const MAX_EXTRA_TAGS = 30;
 
-// ─── Drag scroll hook ────────────────────────────────────────────────────────
+
 function useDragScroll() {
   const ref = useRef(null);
   const isDragging = useRef(false);
@@ -88,7 +88,7 @@ function useDebounce(value, delay) {
   return debouncedValue;
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+
 export default function RecipesPage() {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
@@ -157,12 +157,12 @@ export default function RecipesPage() {
 
       <main className="container">
 
-        {/* ── Hero ── */}
+        {}
         <section className="recipe-hero">
           <h1>Що приготуємо сьогодні?</h1>
           <p>Знайдіть ідеальний рецепт за інгредієнтами, часом приготування або дієтичними вподобаннями.</p>
 
-          {/* Hero stats */}
+          {}
           <div className="hero-stats">
             <div className="hero-stat">
               <span className="hero-stat-val">500+</span>
@@ -192,7 +192,7 @@ export default function RecipesPage() {
           </form>
         </section>
 
-        {/* ── Filter Pills ── */}
+        {}
         <section className="filters-section">
           <div className="filter-pills" ref={pillsRef}>
             {allPills.map((pill) => {
@@ -212,7 +212,7 @@ export default function RecipesPage() {
           </div>
         </section>
 
-        {/* ── Recipe Grid ── */}
+        {}
         <section>
           <div className="section-header">
             <h2 className="section-title">
@@ -247,7 +247,7 @@ export default function RecipesPage() {
                           </div>
                         )}
 
-                        {/* Category badge (shown only when image exists to avoid overlap with emoji-sub) */}
+                        {}
                         {recipe.imageUrl && (
                           <div
                             className="recipe-category-badge"
@@ -257,7 +257,7 @@ export default function RecipesPage() {
                           </div>
                         )}
 
-                        {/* Time badge */}
+                        {}
                         {recipe.cookTime && (
                           <div className="recipe-time-badge">
                             ⏱️ {COOK_TIME_LABELS[recipe.cookTime] || recipe.cookTime}
@@ -268,7 +268,7 @@ export default function RecipesPage() {
                       <div className="recipe-content">
                         <h3 className="recipe-title">{recipe.name}</h3>
 
-                        {/* Macro pills */}
+                        {}
                         <div className="macro-pills">
                           {recipe.calories != null && (
                             <span className="macro-pill" style={{ background: '#FEF3C7', color: '#92400E', borderColor: '#FDE68A' }}>
@@ -286,7 +286,7 @@ export default function RecipesPage() {
                           )}
                         </div>
 
-                        {/* Tags */}
+                        {}
                         {recipe.tags?.length > 0 && (
                           <div className="recipe-tags" style={{ marginTop: '8px' }}>
                             {recipe.tags.slice(0, 2).map(tag => (
@@ -295,7 +295,7 @@ export default function RecipesPage() {
                           </div>
                         )}
 
-                        {/* Bottom row */}
+                        {}
                         <div className="recipe-nutrition">
                           <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 500 }}>
                             {recipe.cookComplexity ? `📊 ${recipe.cookComplexity}` : ''}

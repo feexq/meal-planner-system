@@ -1,13 +1,3 @@
-"""
-Meal-swap service.
-
-Logic:
-- MAIN slot  → scored candidates (existing ILP approach, no LLM needed)
-- SIDE slot  → LLM picks best from the additional-recipes pool
-              (same pool used during initial finalization)
-              Side is NOT filtered by mealType — the LLM decides what
-              best *complements* the main dish in this slot.
-"""
 from __future__ import annotations
 
 import json
@@ -131,10 +121,6 @@ def swap_side_via_llm(
         user_profile: dict,
         calorie_budget: float,
 ) -> dict | None:
-    """
-    Ask LLM to pick the best side from additional_pool.
-    Returns the chosen item dict or None if nothing fits.
-    """
     prompt = _build_swap_side_prompt(
         slot_info, main_recipe, additional_pool, user_profile, calorie_budget
     )
@@ -158,10 +144,6 @@ def swap_main_via_llm(
         user_profile: dict,
         calorie_budget: float,
 ) -> dict | None:
-    """
-    Ask LLM to pick the best main replacement from candidates.
-    Returns the chosen item dict or None.
-    """
     prompt = _build_swap_main_prompt(
         slot_info, current_recipe_id, candidates, user_profile, calorie_budget
     )

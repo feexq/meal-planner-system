@@ -6,7 +6,7 @@ import './UserSurveyPage.css';
 
 const TOTAL_STEPS = 6;
 
-// --- Динамічний словник для зворотного перекладу (кеш) ---
+
 const translationCache = {
     'mushroom': 'гриб', 'mushrooms': 'гриби', 'milk': 'молоко', 'cheese': 'сир',
     'pork': 'свинина', 'garlic': 'часник', 'onion': 'цибуля', 'pepper': 'перець',
@@ -24,7 +24,7 @@ const QUICK_ADDS = [
     { en: 'onion', uk: 'Цибуля' }
 ];
 
-// Компонент, який приймає англійську назву і динамічно малює українську
+
 function TranslatedName({ enName }) {
     const lowerName = enName ? enName.toLowerCase() : '';
     const [ukName, setUkName] = useState(translationCache[lowerName] || lowerName);
@@ -40,14 +40,14 @@ function TranslatedName({ enName }) {
                         setUkName(translated);
                     }
                 })
-                .catch(() => { }); // Якщо помилка мережі, залишаємо англійську
+                .catch(() => { });
         }
     }, [lowerName]);
 
     return <>{ukName}</>;
 }
 
-// ─── Sub-components ───────────────────────────────────────────
+
 
 function StepperInput({ id, value, onChange, min, max, label, unit }) {
     const decrement = () => onChange(Math.max(min, value - 1));
@@ -123,7 +123,7 @@ function AiInsight({ icon, children }) {
     );
 }
 
-// ─── Step Definitions ─────────────────────────────────────────
+
 
 function Step1({ data, onChange }) {
     return (
@@ -347,7 +347,7 @@ function Step4({ data, onChange }) {
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: inputVal ? 8 : 0 }}>
                     {(data.dislikedIngredients || []).map(tag => (
                         <div key={tag} className="excl-tag">
-                            {/* Відображаємо українською за допомогою компонента */}
+                            {}
                             <TranslatedName enName={tag} />
                             <span onClick={() => removeTag(tag)} style={{ cursor: 'pointer', marginLeft: 8 }}>&times;</span>
                         </div>
@@ -378,7 +378,7 @@ function Step4({ data, onChange }) {
                                     >
                                         {ing.imageUrl && <img src={ing.imageUrl} alt="" className="preview-img" />}
                                         <span style={{ textTransform: 'capitalize' }}>
-                                            {/* Відображаємо українською в підказках */}
+                                            {}
                                             <TranslatedName enName={ing.normalizedName} />{' '}
                                             <span style={{ color: '#9ca3af', fontSize: 12, textTransform: 'lowercase' }}>({ing.normalizedName})</span>
                                         </span>
@@ -536,7 +536,7 @@ function Step6({ data, onChange }) {
     );
 }
 
-// ─── Main SurveyPage ─────────────────────────────────────────
+
 
 const DEFAULT_FORM = {
     gender: 'MALE',

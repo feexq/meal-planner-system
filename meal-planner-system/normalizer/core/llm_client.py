@@ -1,11 +1,3 @@
-"""
-LLM Fallback Client
-Порядок спроб:
-  1. gemini-2.5-flash-lite-preview-06-17  (Gemini — primary)
-  2. gemma-4-31b-it                        (Gemini — secondary)
-  3. llama-3.3-70b-versatile              (Groq — tertiary)
-  4. llama-3.1-8b-instant                 (Groq — last resort)
-"""
 from __future__ import annotations
 
 import json
@@ -21,7 +13,6 @@ log = logging.getLogger(__name__)
 GEMINI_API_KEY: str = os.environ.get("GEMINI_API_KEY", "")
 GROQ_API_KEY: str   = os.environ.get("GROQ_API_KEY", "")
 
-# ── Clients (singleton) ─────────────────────────────────────────────────────
 _gemini_client: genai.Client | None = (
     genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 )
@@ -31,22 +22,17 @@ _groq_client: OpenAI | None = (
     else None
 )
 
-# ── Tier definitions ─────────────────────────────────────────────────────────
-# Each tier: (kind, model_id, system_prompt_field, user_prompt_field)
-# kind: "gemini" | "groq"
-
 _GEMINI_MODELS = [
-    "gemini-3.1-flash-lite-preview",  # tier-1: fast & cheap
-    "gemini-3-flash-preview",    # tier-2: local Gemma via Gemini API
+    "gemini-3.1-flash-lite-preview",
+    "gemini-3-flash-preview",
 ]
 _GROQ_MODELS = [
-    "llama-3.3-70b-versatile",   # tier-3
-    "llama-3.1-8b-instant",      # tier-4: last resort
+    "llama-3.3-70b-versatile",
+    "llama-3.1-8b-instant",
 ]
 
 
 def _strip_md(text: str) -> str:
-    """Remove markdown code fences if present."""
     text = text.strip()
     if text.startswith("```"):
         lines = text.splitlines()
@@ -64,12 +50,6 @@ def generate_json_with_fallback(
         max_tokens: int = 14_000,
         temperature: float = 0.2,
 ) -> dict:
-    """
-    Try each LLM tier in order.
-    Gemini tiers use `system_prompt` / `user_prompt` (verbose).
-    Groq tiers prefer `fallback_*` prompts if provided (compressed).
-    Raises if ALL tiers fail.
-    """
     groq_sys  = fallback_system_prompt or system_prompt
     groq_user = fallback_user_prompt   or user_prompt
 

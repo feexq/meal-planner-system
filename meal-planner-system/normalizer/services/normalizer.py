@@ -1,7 +1,3 @@
-"""
-Ingredient text normalisation utilities.
-Extracted verbatim from the original main.py — unchanged logic.
-"""
 import re
 import urllib.parse
 

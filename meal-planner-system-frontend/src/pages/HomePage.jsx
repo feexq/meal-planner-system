@@ -55,7 +55,7 @@ const HERO_SLIDES = [
 
 export default function HomePage() {
   const [rootCategories, setRootCategories] = useState([]);
-  const [categoryData, setCategoryData] = useState([]); // { category, products }[]
+  const [categoryData, setCategoryData] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
@@ -87,21 +87,21 @@ export default function HomePage() {
         })
       );
 
-      // Keep all sections with products, we'll limit the UI manually
+
       setCategoryData(results.filter((r) => r.products.length > 0));
 
       try {
         const { data: cart } = await cartAPI.getCart();
         setCartCount(cart.totalItems || 0);
       } catch {
-        // ignore
+
       }
     } catch (err) {
       setError("Не вдалось завантажити дані. Перевірте з'єднання з сервером.");
       console.error(err);
     } finally {
-      setIsFetching(false);    // Вимикаємо "блюр"
-      setIsInitialLoad(false); // Перше завантаження успішно завершено
+      setIsFetching(false);
+      setIsInitialLoad(false);
     }
   }, []);
 
@@ -137,7 +137,7 @@ export default function HomePage() {
       <Navbar cartCount={cartCount} />
 
       <main>
-        {/* --- Hero Section & Promo --- */}
+        {}
         <section className="section bg-white" style={{ paddingBottom: '32px' }}>
           <div className="container">
             <div className="hero-wrapper" style={{ marginBottom: '32px' }}>
@@ -186,11 +186,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* --- Algorithm Promo Block --- */}
+            {}
             <div className="promo-algorithm-card">
               <div className="promo-algorithm-content">
                 <div className="promo-icon-wrapper">
-                  {/* Мінімалістична іконка "Магії/Алгоритму" замість емоджі */}
+                  {}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
                     <path d="M20 3v4"></path>
@@ -245,7 +245,7 @@ export default function HomePage() {
 
         {!isInitialLoad && !error && rootCategories.length > 0 && (
           <div className={`home-content-wrapper ${isFetching ? 'fetching-mask' : ''}`}>
-            {/* Categories Carousel */}
+            {}
             <section className="section section-alt" style={{ paddingTop: '32px' }}>
               <div className="container">
                 <div className="section-title">
@@ -266,7 +266,7 @@ export default function HomePage() {
               </div>
             </section>
 
-            {/* Render limited grids (max 8 category product lists) */}
+            {}
             {categoryData.slice(0, 8).map(({ category, products }, index) => {
               const isAlt = index % 2 !== 0;
               return (

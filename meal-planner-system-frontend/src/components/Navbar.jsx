@@ -27,12 +27,12 @@ export default function Navbar({ cartCount = 0 }) {
           setInternalCart(res.data.totalItems || 0);
         }
       } catch (e) {
-        // hide error
+
       }
     };
 
-    fetchCartCount(); // Завантажити при відкритті
-    window.addEventListener('cartUpdated', fetchCartCount); // Слухати оновлення
+    fetchCartCount();
+    window.addEventListener('cartUpdated', fetchCartCount);
     return () => window.removeEventListener('cartUpdated', fetchCartCount);
   }, [isAuthenticated]);
 
@@ -48,7 +48,7 @@ export default function Navbar({ cartCount = 0 }) {
     }
   }, [isAuthenticated]);
 
-  // Catalog Menu state
+
   const [categories, setCategories] = useState([]);
   const [catalogOpen, setCatalogOpen] = useState(false);
   const [hoveredRoot, setHoveredRoot] = useState(null);
@@ -83,7 +83,7 @@ export default function Navbar({ cartCount = 0 }) {
 
   const initials = user
     ? `${(user.firstName || user.email || '?')[0]}`.toUpperCase()
-    : 'О'; // Default like mockup
+    : 'О';
 
   return (
     <header className="navbar">

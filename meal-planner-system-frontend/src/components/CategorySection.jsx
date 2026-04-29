@@ -8,7 +8,7 @@ export default function CategorySection({ category, products, onCartUpdate, isAl
 
   const scroll = (direction) => {
     if (scrollRef.current) {
-      const scrollAmount = direction === 'left' ? -260 : 260; // Approximate card width + gap
+      const scrollAmount = direction === 'left' ? -260 : 260;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };

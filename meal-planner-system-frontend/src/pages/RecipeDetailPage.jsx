@@ -45,7 +45,7 @@ export default function RecipeDetailPage() {
         : await recipesAPI.getBySlug(slug);
       setRecipe(data);
 
-      // ─── Fetch products for ingredients ───
+
       if (data.ingredients?.length > 0) {
         const ingredientIds = data.ingredients.map(ing => ing.ingredientId);
         try {
@@ -110,7 +110,7 @@ export default function RecipeDetailPage() {
   );
 
   const { nutrition, ingredients } = recipe;
-  // Перетворюємо об'єкт productsMap на масив для зручного фільтрування
+
   const productsArray = Object.values(productsMap);
 
   const availableCount = productsArray.filter(p => p.available).length || 0;
@@ -148,7 +148,7 @@ export default function RecipeDetailPage() {
 
       <main className="container">
 
-        {/* Breadcrumbs */}
+        {}
         <div className="breadcrumbs">
           <Link to="/">Головна</Link> /
           <Link to="/recipes">Рецепти</Link>
@@ -160,7 +160,7 @@ export default function RecipeDetailPage() {
           / <span>{recipe.name}</span>
         </div>
 
-        {/* Recipe header */}
+        {}
         <div className="recipe-header">
           <h1>{recipe.name}</h1>
           <div className="recipe-meta">
@@ -193,15 +193,15 @@ export default function RecipeDetailPage() {
 
         <div className="recipe-layout">
 
-          {/* ── LEFT ── */}
+          {}
           <div className="main-content">
 
-            {/* Image */}
+            {}
             <div className="recipe-image" style={recipe.imageUrl ? { backgroundImage: `url(${recipe.imageUrl})` } : {}}>
               {!recipe.imageUrl && (MEAL_TYPE_EMOJIS[recipe.mealType] || '🥑')}
             </div>
 
-            {/* Macro cards */}
+            {}
             {nutrition && (
               <div className="macros-grid">
                 <div className="macro-card">
@@ -231,12 +231,12 @@ export default function RecipeDetailPage() {
               </div>
             )}
 
-            {/* Description */}
+            {}
             {recipe.description && (
               <div className="recipe-description">{recipe.description}</div>
             )}
 
-            {/* Tags */}
+            {}
             {recipe.tags?.length > 0 && (
               <div className="recipe-tag-list">
                 {recipe.tags.map(tag => (
@@ -247,7 +247,7 @@ export default function RecipeDetailPage() {
               </div>
             )}
 
-            {/* Steps */}
+            {}
             {sortedSteps.length > 0 && (
               <div className="steps-section">
                 <div className="steps-header">
@@ -257,7 +257,7 @@ export default function RecipeDetailPage() {
                   </span>
                 </div>
 
-                {/* Progress bar */}
+                {}
                 <div className="steps-progress">
                   <div className="steps-progress-fill" style={{ width: `${stepProgress}%` }} />
                 </div>
@@ -280,12 +280,12 @@ export default function RecipeDetailPage() {
             )}
           </div>
 
-          {/* ── RIGHT: Shop Widget ── */}
+          {}
           <aside>
             <div className="sidebar-sticky-wrap">
               <div className="shop-widget">
 
-                {/* Widget header with availability */}
+                {}
                 <div className="widget-header">
                   <div className="widget-title">Продукти</div>
                   <div className="widget-availability">
@@ -294,13 +294,13 @@ export default function RecipeDetailPage() {
                   </div>
                 </div>
 
-                {/* Availability bar */}
+                {}
                 <div className="availability-bar">
                   <div className="availability-bar-fill" style={{ width: `${availabilityPct}%` }} />
                 </div>
 
-                {/* Ingredient list */}
-                {/* Product list */}
+                {}
+                {}
                 <div className="ing-list">
                   {Object.values(productsMap).map((product, i) => (
                     <div
@@ -314,7 +314,7 @@ export default function RecipeDetailPage() {
                         </span>
                       </div>
 
-                      {/* У JSON продукту немає rawAmount, тому тут потрібно буде вирішити, що виводити (наприклад, product.unit) */}
+                      {}
                       <span className="ing-amount">{product.unit.replace(/(\d+)([^\d]+)/, '$1 $2')}</span>
 
                       {product.price > 0 && (
@@ -329,7 +329,7 @@ export default function RecipeDetailPage() {
                   При натисканні "Додати у кошик" система автоматично розрахує та додасть <b>необхідну кількість цілих упаковок. Тому ціна може відрізнятися</b>.
                 </div>
 
-                {/* CTA */}
+                {}
                 {totalCount > 0 && (
                   <button
                     className={`btn-buy ${cartSuccess ? 'success' : ''}`}
@@ -350,7 +350,7 @@ export default function RecipeDetailPage() {
                 )}
               </div>
 
-              {/* Source ingredients (Raw List) */}
+              {}
               {ingredientsRawList.length > 0 && (
                 <div className="ingredients-raw-section">
                   <h3 className="section-title">Склад за рецептом</h3>

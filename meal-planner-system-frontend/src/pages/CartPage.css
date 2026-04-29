@@ -278,7 +278,7 @@
   cursor: not-allowed;
 }
 
-/* Autocomplete */
+
 .autocomplete-wrapper {
   position: relative;
 }
@@ -381,7 +381,7 @@
   font-size: 24px;
 }
 
-/* --- Кнопки каруселі --- */
+
 .carousel-nav {
   display: flex;
   gap: 8px;
@@ -454,17 +454,17 @@
   overflow-x: auto;
   padding-bottom: 16px;
   scrollbar-width: none;
-  /* Приховує скрол у Firefox */
+  
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
 }
 
 .recipes-grid::-webkit-scrollbar {
   display: none;
-  /* Приховує скрол у Chrome/Safari/Edge */
+  
 }
 
-/* Scoped recipe card styles to prevent conflicts with RecipesPage.css */
+
 .cart-page .recipe-card {
   background: #fff;
   border: 1px solid var(--border);
@@ -505,7 +505,7 @@
   transform: scale(1.05);
 }
 
-/* Emoji fallback */
+
 .cart-page .recipe-emoji-wrap {
   display: flex;
   flex-direction: column;

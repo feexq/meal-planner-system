@@ -47,12 +47,12 @@ function MealCard({ slot, adaptation, onMarkEaten, onSwap, isToday = false }) {
     const isEaten = slot.eaten;
     const action = isEaten ? 'NONE' : (adaptation?.action || 'NONE');
 
-    // Визначаємо роль: Side чи Main
+
     const isSide = slot.slotRole === 'side';
     const isMain = slot.slotRole === 'main' || !isSide;
     const ratio = adaptation?.ratio || 1;
 
-    // Складна логіка адаптації в залежності від ролі
+
     const isDropTarget = (action === 'DROP_SIDES' && isSide) || (action === 'DROP_SIDES_AND_SCALE' && isSide);
     const isScaleTarget = (action === 'SCALE_PORTIONS' && isMain) || (action === 'DROP_SIDES_AND_SCALE' && isMain);
     const isSwapTarget = action === 'REQUIRE_SWAP' && isMain;
@@ -60,7 +60,7 @@ function MealCard({ slot, adaptation, onMarkEaten, onSwap, isToday = false }) {
     const displayRatio = isScaleTarget ? ratio : 1;
     const adjustedCalories = isDropTarget ? 0 : slot.calories * displayRatio;
 
-    // Масштабуємо макроси, якщо порція зменшена
+
     const p = Math.round((slot.proteinG || 0) * displayRatio);
     const f = Math.round((slot.fatG || 0) * displayRatio);
     const c = Math.round((slot.carbsG || 0) * displayRatio);
@@ -112,7 +112,7 @@ function MealCard({ slot, adaptation, onMarkEaten, onSwap, isToday = false }) {
                             )}
                         </div>
 
-                        {/* НОВИЙ БЛОК: Мета-дані (Роль + Макроси) */}
+                        {}
                         <div className="m-meta-row">
                             <span className={`role-badge ${isSide ? 'side' : 'main'}`}>
                                 {isSide ? 'Додаток' : 'Основна'}
@@ -124,7 +124,7 @@ function MealCard({ slot, adaptation, onMarkEaten, onSwap, isToday = false }) {
                             </div>
                         </div>
 
-                        {/* Підказки ШІ */}
+                        {}
                         {isDropTarget && !isEaten && <span style={{ fontSize: 11, color: '#F59E0B', fontWeight: 800, marginTop: 4 }}>⚠️ Рекомендуємо пропустити</span>}
                         {isScaleTarget && !isEaten && <span style={{ fontSize: 11, color: '#F59E0B', fontWeight: 800, marginTop: 4 }}>⚖️ Зменште порцію на {Math.round((1 - ratio) * 100)}%</span>}
                         {isSwapTarget && !isEaten && <span style={{ fontSize: 11, color: '#EF4444', fontWeight: 800, marginTop: 4 }}>🔄 Натисніть кнопку заміни ➡️</span>}
@@ -189,7 +189,7 @@ function ExtraFoodItem({ item }) {
                 </div>
                 <div className="ei-meta">{timeStr}</div>
 
-                {/* Компактний вивід макросів для незапланованої їжі */}
+                {}
                 {hasMacros && (
                     <div className="m-macros" style={{ marginTop: '8px' }}>
                         <span className="macro p">Б: {Math.round(item.proteinG)}г</span>
@@ -203,7 +203,7 @@ function ExtraFoodItem({ item }) {
     );
 }
 
-// ─── Main Component ─────────────────────────────────────────
+
 
 export default function TrackerPage() {
     const navigate = useNavigate();
@@ -290,7 +290,7 @@ export default function TrackerPage() {
                 return;
             }
 
-            // 1. Збираємо всі унікальні ID інгредієнтів
+
             const allIngredientIds = new Set();
             recipesData.forEach(recipe => {
                 if (recipe.ingredients) {
@@ -323,20 +323,20 @@ export default function TrackerPage() {
                 }
             }
 
-            // 3. Допоміжні функції для роботи з одиницями
-            // 3. Допоміжні функції для роботи з одиницями
-            // 3. Допоміжні функції для роботи з одиницями
+
+
+
             const convertToCanonical = (amount, unit, fallbackUnit) => {
                 let u = (unit || '').trim().toLowerCase();
 
-                // Якщо в рецепті одиниця не вказана, беремо базову від продукту (з БД)
+
                 if (!u && fallbackUnit) {
                     u = fallbackUnit.trim().toLowerCase();
                 }
 
                 let val = amount;
 
-                // НОВИЙ БЛОК: Розділяємо склеєні числа та одиниці (наприклад, "100g" -> 100 та "g")
+
                 const match = u.match(/^([\d.,]+)\s*([a-zа-яєіїґ]+)$/i);
                 if (match) {
                     const multiplier = parseFloat(match[1].replace(',', '.'));
@@ -344,19 +344,19 @@ export default function TrackerPage() {
                     u = match[2].toLowerCase();
                 }
 
-                // Вага
+
                 if (['kg', 'кг', 'кілограм'].includes(u)) return { val: val * 1000, type: 'г' };
                 if (['ounce', 'ounces', 'oz', 'унція'].includes(u)) return { val: val * 28.35, type: 'г' };
                 if (['gram', 'grams', 'g', 'г', 'грам'].includes(u)) return { val: val, type: 'г' };
 
-                // Об'єм
+
                 if (['l', 'л', 'літр'].includes(u)) return { val: val * 1000, type: 'мл' };
                 if (['cup', 'cups', 'склянка', 'склянки'].includes(u)) return { val: val * 250, type: 'мл' };
                 if (['tablespoon', 'tbsp', 'ст.л.', 'ст. л.', 'столова ложка'].includes(u)) return { val: val * 15, type: 'мл' };
                 if (['teaspoon', 'tsp', 'ч.л.', 'ч. л.', 'чайна ложка'].includes(u)) return { val: val * 5, type: 'мл' };
                 if (['ml', 'мл', 'мілілітр'].includes(u)) return { val: val, type: 'мл' };
 
-                // Якщо одиниця невідома (напр. "щіпка", "упаковка"), залишаємо її, інакше дефолт 'шт'
+
                 return { val: val, type: u || 'шт' };
             };
 
@@ -408,7 +408,7 @@ export default function TrackerPage() {
                 }
 
                 if ((fromUnit === "г" || fromUnit === "г" || fromUnit === "мл" || fromUnit === "ml") && (toUnit === "шт" || toUnit === "штук")) {
-                    return amount / 150.0; // Приблизно 150г/мл на одну шт, якщо інше не вказано
+                    return amount / 150.0;
                 }
 
                 if (fromUnit.includes("смак") || fromUnit.includes("дрібк")) {
@@ -428,20 +428,20 @@ export default function TrackerPage() {
                     return `${Math.round(val)} мл`;
                 }
 
-                // Якщо це щось на кшталт "за смаком" або "щіпка"
+
                 if (type.includes('смак') || type.includes('дрібк') || type.includes('щіпк')) {
-                    return type; // Виводимо просто текст без числа
+                    return type;
                 }
 
-                // Відображаємо цілі числа або акуратно дробові (напр. 1.5 упаковки)
+
                 const displayVal = val % 1 === 0 ? val : Number(val.toFixed(1));
                 return `${displayVal} ${type}`;
             };
 
-            // 4. Агрегуємо продукти
+
             const groceryMap = {};
             recipesData.forEach(recipe => {
-                // Парсимо JSON з розширеною інформацією про інгредієнти (як на бекенді)
+
                 let parsedDetails = [];
                 try {
                     if (recipe.ingredientsRawStr) {
@@ -459,7 +459,7 @@ export default function TrackerPage() {
 
                         if (!product) return;
 
-                        // ШУКАЄМО ДЕТАЛІ В JSON (Аналог бекенд-фільтрації по імені)
+
                         const productNameUk = (product.nameUk || product.name_uk || product.name || "").toLowerCase();
                         const detail = (Array.isArray(parsedDetails) ? parsedDetails : []).find(d => {
                             const jsonName = (d.name_uk || d.nameUk || d.name || "").toLowerCase();
@@ -474,13 +474,13 @@ export default function TrackerPage() {
                             recipeAmount = parseFloat(detail.amount);
                             recipeUnit = detail.unit.toLowerCase();
                         } else {
-                            // Фолбек до полів об'єкта ing, якщо в JSON не знайшли
+
                             recipeAmount = parseFloat(ing.amount || ing.rawAmount || ing.quantity || ing.raw_amount || ing.total_amount) || 0;
                             recipeUnit = (ing.unit || '').toLowerCase();
                         }
 
-                        // Якщо все ще 0, пробуємо розпарсити з тексту або ставимо 1
-                        // Якщо все ще 0, пробуємо розпарсити з тексту або ставимо 1
+
+
                         if (recipeAmount <= 0) {
                             const rawName = (ing.rawName || '').toLowerCase();
                             const numMatch = rawName.match(/^([\d\s\.,\/\-]+)\s+(.*)/);
@@ -490,30 +490,30 @@ export default function TrackerPage() {
                                 recipeUnit = numMatch[2].trim().split(' ')[0];
                             } else {
                                 recipeAmount = 1;
-                                recipeUnit = ''; // Змінено: залишаємо порожнім, щоб спрацював фолбек на базу продукту
+                                recipeUnit = '';
                             }
                         }
 
-                        // Логіка розрахунку упаковок (аналог бекенда)
+
                         const packageUnit = (product.packageUnit || product.unit || recipeUnit).toLowerCase();
                         const convertedAmount = convertToMatchShopUnit(recipeAmount, recipeUnit, packageUnit);
 
-                        let qtyToAdd = 1; // За замовчуванням додаємо 1 упаковку/товар
+                        let qtyToAdd = 1;
 
                         if (product.packageAmount && product.packageAmount > 0) {
-                            // Якщо бекенд передав об'єм упаковки (напр. 500мл), рахуємо скільки упаковок треба
+
                             qtyToAdd = Math.ceil(convertedAmount / product.packageAmount);
                         } else if (convertedAmount > 0 && (packageUnit === 'шт' || packageUnit === 'штук')) {
-                            // Якщо товар поштучний (яблука, яйця), беремо стільки штук, скільки в рецепті
+
                             qtyToAdd = Math.ceil(convertedAmount);
                         }
 
-                        // Запобіжник від нулів та NaN
+
                         if (isNaN(qtyToAdd) || qtyToAdd < 1) {
                             qtyToAdd = 1;
                         }
 
-                        // Канонічна кількість для відображення
+
                         const canonical = convertToCanonical(recipeAmount, recipeUnit, product.unit || product.packageUnit);
 
                         const productId = product.id;
@@ -572,7 +572,7 @@ export default function TrackerPage() {
     const handleAddToCart = async () => {
         setCartLoading(true);
         try {
-            // Отримуємо всі ID рецептів для поточного дня
+
             const currentRecipeIds = [...new Set(sortedSlots
                 .map(slot => slot.recipeId)
                 .filter(id => id != null)
@@ -580,7 +580,7 @@ export default function TrackerPage() {
 
             if (currentRecipeIds.length === 0) return;
 
-            // Відправляємо паралельні запити на додавання кожного рецепта в кошик
+
             const promises = currentRecipeIds.map(id =>
                 fetch(`/api/cart/add-recipe/${id}`, {
                     method: 'POST',
@@ -596,11 +596,11 @@ export default function TrackerPage() {
 
             if (failed) {
                 alert('Частину продуктів додано, але виникли помилки з деякими рецептами.');
-                window.dispatchEvent(new Event('cartUpdated')); // <--- ДОДАЄМО ТУТ
+                window.dispatchEvent(new Event('cartUpdated'));
             } else {
                 alert('✅ Всі доступні продукти успішно додано до вашого кошика!');
                 setGroceryModalOpen(false);
-                window.dispatchEvent(new Event('cartUpdated')); // <--- ДОДАЄМО ТУТ
+                window.dispatchEvent(new Event('cartUpdated'));
             }
         } catch (err) {
             console.error("Помилка кошика:", err);
@@ -620,7 +620,7 @@ export default function TrackerPage() {
                 },
                 body: JSON.stringify({ slotId, actualCalories })
             });
-            await fetchStatus(); // Перезавантажуємо, щоб бекенд перерахував тижневий баланс
+            await fetchStatus();
         } catch (err) {
             console.error(err);
         }
@@ -673,7 +673,7 @@ export default function TrackerPage() {
 
     const sortedSlots = [...(currentDay.slots || [])].sort((a, b) => (MEAL_ORDER[(a.mealType || '').toLowerCase()] || 99) - (MEAL_ORDER[(b.mealType || '').toLowerCase()] || 99));
 
-    // Групуємо додаткову їжу (Яблуко x2)
+
     const extraFoodRaw = currentDay.extraFood || [];
     const groupedExtraObj = extraFoodRaw.reduce((acc, item) => {
         const name = item.rawInput || item.name || item.recognizedName || 'Невідома їжа';
@@ -704,10 +704,10 @@ export default function TrackerPage() {
     const weeklyRemaining = balance.remainingBudget || 0;
     const weeklyPct = weeklyGoal > 0 ? Math.round(((weeklyGoal - weeklyRemaining) / weeklyGoal) * 100) : 0;
 
-    // Отримуємо цілі для поточного вибраного дня (з об'єкта updatedTargets)
+
     const dayTargetInfo = planData.updatedTargets?.find(t => t.dayNumber === currentDay.dayNumber);
     const targetDelta = dayTargetInfo?.delta || 0;
-    const suggestedAction = dayTargetInfo?.suggestedAction || 'NONE'; // NONE, DROP_SIDES, SCALE_PORTIONS, REQUIRE_SWAP
+    const suggestedAction = dayTargetInfo?.suggestedAction || 'NONE';
     const adjustedTarget = dayTargetInfo?.adjustedTarget || currentDay.plannedCalories;
 
     let mainCals = 0;
@@ -717,11 +717,11 @@ export default function TrackerPage() {
     if (suggestedAction === 'SCALE_PORTIONS' && currentDay.plannedCalories > 0) {
         adaptationRatio = adjustedTarget / currentDay.plannedCalories;
     } else if (suggestedAction === 'DROP_SIDES_AND_SCALE' && mainCals > 0) {
-        // Оскільки сайди обнуляються, нова ціль (adjustedTarget) лягає тільки на основні страви
+
         adaptationRatio = adjustedTarget / mainCals;
     }
 
-    const adaptation = { action: suggestedAction, ratio: Math.min(1, Math.max(0.5, adaptationRatio)) }; // Обмеження ratio (від 50% до 100%)
+    const adaptation = { action: suggestedAction, ratio: Math.min(1, Math.max(0.5, adaptationRatio)) };
 
     const displayDate = new Date();
     if (planData.weekStartDate) {
@@ -734,11 +734,11 @@ export default function TrackerPage() {
     const isToday = displayDate.getTime() === todayZero.getTime();
     const displayDateStr = displayDate.toLocaleDateString('uk-UA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Якщо список вже завантажено, показуємо точну цифру. Інакше - не виводимо число взагалі.
+
     const exactIngredientsCount = groceryList.length > 0 ? groceryList.length : null;
 
-    // 1. Розрахунок макросів зі слотів (з урахуванням адаптації ШІ)
-    // 1. Розрахунок макросів зі слотів (з урахуванням адаптації ШІ)
+
+
     const dailyTotals = sortedSlots.reduce((acc, slot) => {
         const isSide = slot.slotRole === 'side';
         const isDropped = (suggestedAction === 'DROP_SIDES' || suggestedAction === 'DROP_SIDES_AND_SCALE') && isSide;
@@ -754,7 +754,7 @@ export default function TrackerPage() {
         return acc;
     }, { p: 0, f: 0, c: 0 });
 
-    // 2. ДОДАЄМО макроси від незапланованої їжі (Яблуко, перекуси тощо)
+
     extraFoodRaw.forEach(extra => {
         dailyTotals.p += (extra.proteinG || 0);
         dailyTotals.f += (extra.fatG || 0);
@@ -799,14 +799,14 @@ export default function TrackerPage() {
                             <span className="w-val">
                                 {Math.round(currentDay.plannedCalories || 0)}
 
-                                {/* Використовуємо надійний інлайн-стиль */}
+                                {}
                                 {extraTotal > 0 && (
                                     <span style={{ color: '#EF4444', marginLeft: '4px', fontSize: '14px', fontWeight: '800', letterSpacing: '-0.5px' }}>
                                         +{Math.round(extraTotal)}
                                     </span>
                                 )}
 
-                                {/* Якщо ШІ змінив норму (Мінус або Плюс з бекенду) */}
+                                {}
                                 {targetDelta !== 0 && (
                                     <span style={{ color: targetDelta < 0 ? '#F59E0B' : '#10B981', marginLeft: 4 }}>
                                         {targetDelta > 0 ? '+' : ''}{Math.round(targetDelta)}
@@ -839,7 +839,7 @@ export default function TrackerPage() {
                                 </div>
                             </div>
                         )}
-                        {/* Банер покупок */}
+                        {}
                         <div className="day-grocery-banner">
                             <div className="grocery-info">
                                 <h3>🛒 Купити продукти на день</h3>
@@ -862,8 +862,8 @@ export default function TrackerPage() {
                                         recipeName: slot.recipeName,
                                         recipeSlug: slot.recipeSlug,
                                         calories: slot.targetCalories,
-                                        slotRole: slot.slotRole, // Передаємо роль
-                                        proteinG: slot.proteinG, // Передаємо макроси
+                                        slotRole: slot.slotRole,
+                                        proteinG: slot.proteinG,
                                         fatG: slot.fatG,
                                         carbsG: slot.carbsG,
                                         eaten: slot.status === 'EATEN' || slot.actualCalories !== null,
@@ -924,7 +924,7 @@ export default function TrackerPage() {
                     </aside>
                 </div>
             </main>
-            {/* Модальне вікно інгредієнтів */}
+            {}
             {groceryModalOpen && (
                 <div className="grocery-modal-overlay" onClick={() => setGroceryModalOpen(false)}>
                     <div className="grocery-modal-content" onClick={e => e.stopPropagation()}>

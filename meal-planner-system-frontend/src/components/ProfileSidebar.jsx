@@ -15,7 +15,7 @@ const ProfileSidebar = () => {
       navigate('/auth');
     } catch (error) {
       console.error('Logout failed:', error);
-      // Even if API fails, clear tokens and redirect
+
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       navigate('/auth');

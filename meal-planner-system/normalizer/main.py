@@ -17,7 +17,6 @@ import os
 
 from fastapi import FastAPI
 
-# Make sure sibling packages are importable when running via uvicorn from /nlp_service
 sys.path.insert(0, os.path.dirname(__file__))
 
 from routers import classify, finalize, food, normalize, swap

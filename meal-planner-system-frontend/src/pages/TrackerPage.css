@@ -1,10 +1,10 @@
-/* ─── Layout ────────────────────────────────── */
+
 .tracker-main {
     padding-top: 40px;
     padding-bottom: 60px;
 }
 
-/* ─── Dashboard Header ──────────────────────── */
+
 .dash-header {
     display: flex;
     justify-content: space-between;
@@ -24,7 +24,7 @@
     font-size: 15px;
 }
 
-/* ─── Day Selector ──────────────────────────── */
+
 .day-selector {
     display: flex;
     gap: 6px;
@@ -56,7 +56,7 @@
     color: #fff;
 }
 
-/* ─── Weekly Progress Card ──────────────────── */
+
 .weekly-card {
     background: #fff;
     border-radius: 20px;
@@ -150,7 +150,7 @@
     color: var(--danger);
 }
 
-/* ─── AI Adjustment ─────────────────────────── */
+
 .ai-adjustment {
     background: linear-gradient(135deg, #F0EAFE 0%, #EAE0FE 100%);
     border-radius: 14px;
@@ -176,14 +176,14 @@
     font-weight: 700;
 }
 
-/* ─── Main Grid ─────────────────────────────── */
+
 .main-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 32px;
 }
 
-/* ─── Meal Cards ────────────────────────────── */
+
 .meal-list {
     display: flex;
     flex-direction: column;
@@ -285,7 +285,7 @@
     color: var(--text-muted);
 }
 
-/* ─── Мета-інформація (Макроси та Ролі) ────────── */
+
 .m-meta-row {
     display: flex;
     align-items: center;
@@ -334,21 +334,21 @@
     background: #FEF3C7;
 }
 
-/* Білки - Жовтий */
+
 .macro.f {
     color: #BE185D;
     background: #FCE7F3;
 }
 
-/* Жири - Рожевий */
+
 .macro.c {
     color: #047857;
     background: #D1FAE5;
 }
 
-/* Вуглеводи - Зелений */
 
-/* ─── Meal Actions ──────────────────────────── */
+
+
 .meal-actions {
     display: flex;
     gap: 8px;
@@ -404,7 +404,7 @@
     color: #fff;
 }
 
-/* ─── Extra Food Panel ──────────────────────── */
+
 .extra-food-panel {
     background: #fff;
     border: 1px solid var(--border);
@@ -511,7 +511,7 @@
     margin-top: 2px;
 }
 
-/* ─── Responsive ────────────────────────────── */
+
 @media (max-width: 1024px) {
     .weekly-stats {
         grid-template-columns: repeat(2, 1fr);
@@ -547,7 +547,7 @@
         position: static;
     }
 
-    /* ─── Extra Food Panel ──────────────────────── */
+    
     .extra-food-panel {
         background: #fff;
         border: 1px solid var(--border);
@@ -556,7 +556,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         position: sticky;
         top: 100px;
-        /* Панель буде "прилипати" при скролі вниз */
+        
     }
 
     .extra-header {
@@ -571,9 +571,9 @@
 
     .extra-badge {
         background: #FEE2E2;
-        /* Світло-червоний фон */
+        
         color: #EF4444;
-        /* Червоний текст */
+        
         padding: 4px 10px;
         border-radius: 8px;
         font-size: 13px;
@@ -632,7 +632,7 @@
     }
 }
 
-/* ─── Оновлення картки страви (MealCard) ───────────────── */
+
 .meal-card {
     transition: box-shadow 0.2s, transform 0.2s;
     overflow: hidden;
@@ -658,10 +658,10 @@
 
 .meal-info.clickable:hover {
     background: rgba(108, 63, 197, 0.03);
-    /* Легкий фіолетовий фон при наведенні */
+    
 }
 
-/* ─── Нова кнопка заміни (SVG) ───────────────────────── */
+
 .swap-btn-clean {
     background: #f1f5f9;
     color: #64748b;
@@ -680,7 +680,7 @@
     background: #e2e8f0;
     color: var(--primary);
     transform: rotate(30deg);
-    /* Легкий ефект прокрутки при наведенні */
+    
 }
 
 .swap-btn-clean:disabled {
@@ -688,7 +688,7 @@
     cursor: not-allowed;
 }
 
-/* ─── Форма підтвердження калорій ────────────────────── */
+
 .meal-confirm-panel {
     margin-top: 16px;
     padding-top: 16px;
@@ -789,7 +789,7 @@
     }
 }
 
-/* ─── Grocery Modal (Спливаюче вікно) ───────────────────────────────────── */
+
 .grocery-modal-overlay {
     position: fixed;
     top: 0;
@@ -916,7 +916,7 @@
     }
 }
 
-/* ─── AI Adaptation Styles ──────────────────── */
+
 .meal-card.swap-suggested {
     border-color: rgba(239, 68, 68, 0.4) !important;
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.05);
@@ -962,10 +962,10 @@
     font-size: 14px;
     font-weight: 800;
     color: #F59E0B;
-    /* Помаранчевий для адаптованих калорій */
+    
 }
 
-/* ─── Банер "Кошик продуктів" ────────────────────────── */
+
 .day-grocery-banner {
     background: linear-gradient(135deg, rgba(108, 63, 197, 0.05), rgba(78, 42, 150, 0.1));
     border: 1px solid rgba(108, 63, 197, 0.2);
@@ -1028,7 +1028,7 @@
     background: var(--primary-dark);
 }
 
-/* ─── Додаткова їжа (Блокування та Бейджі) ─────────────── */
+
 .ei-badge-count {
     background: var(--neutral);
     color: var(--primary);
@@ -1066,27 +1066,27 @@
     letter-spacing: 0.02em;
 }
 
-/* Кольори для БЖВ */
+
 .w-macro-tag.p {
     background: #FEF3C7;
     color: #D97706;
 }
 
-/* Білки - Жовтий */
+
 .w-macro-tag.f {
     background: #FCE7F3;
     color: #BE185D;
 }
 
-/* Жири - Рожевий */
+
 .w-macro-tag.c {
     background: #D1FAE5;
     color: #047857;
 }
 
-/* Вуглеводи - Зелений */
 
-/* Додатково: адаптивність для мобільних */
+
+
 @media (max-width: 600px) {
     .w-macros-summary {
         flex-wrap: wrap;

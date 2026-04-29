@@ -85,19 +85,19 @@ export default function CartPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const { isAuthenticated } = useAuth();
 
-  // --- Recommendations ---
+
   const [recommendedRecipes, setRecommendedRecipes] = useState([]);
   const [addingRecipeId, setAddingRecipeId] = useState(null);
 
-  // --- City autocomplete ---
+
   const [cityQuery, setCityQuery] = useState('');
   const [citySuggestions, setCitySuggestions] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null); // {ref, name}
+  const [selectedCity, setSelectedCity] = useState(null);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
   const cityRef = useRef(null);
 
-  // --- Warehouse autocomplete ---
+
   const [whQuery, setWhQuery] = useState('');
   const [whSuggestions, setWhSuggestions] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
@@ -109,7 +109,7 @@ export default function CartPage() {
   const debouncedWhQuery = useDebounce(whQuery, 350);
   const recipesScrollRef = useRef(null);
 
-  // --- Cart ---
+
   const fetchCart = async () => {
     try {
       const { data } = await cartAPI.getCart();
@@ -130,7 +130,7 @@ export default function CartPage() {
 
   const scrollRecipes = (dir) => {
     if (recipesScrollRef.current) {
-      // Отримуємо ширину видимого контейнера
+
       const scrollAmount = recipesScrollRef.current.clientWidth;
       const amt = dir === 'left' ? -scrollAmount : scrollAmount;
       recipesScrollRef.current.scrollBy({ left: amt, behavior: 'smooth' });
@@ -148,7 +148,7 @@ export default function CartPage() {
 
   useEffect(() => { fetchCart(); }, []);
 
-  // --- City search ---
+
   useEffect(() => {
     if (!debouncedCityQuery || debouncedCityQuery.length < 2) {
       setCitySuggestions([]);
@@ -171,7 +171,7 @@ export default function CartPage() {
     search();
   }, [debouncedCityQuery]);
 
-  // --- Warehouse search ---
+
   useEffect(() => {
     if (!selectedCity) {
       setWhSuggestions([]);
@@ -198,7 +198,7 @@ export default function CartPage() {
     search();
   }, [debouncedWhQuery, selectedCity]);
 
-  // --- Close dropdowns on outside click ---
+
   useEffect(() => {
     const handler = (e) => {
       if (cityRef.current && !cityRef.current.contains(e.target)) setShowCityDropdown(false);
@@ -213,7 +213,7 @@ export default function CartPage() {
     setCityQuery(city.name);
     setShowCityDropdown(false);
     setCitySuggestions([]);
-    // Reset warehouse
+
     setSelectedWarehouse(null);
     setWhQuery('');
     setWhSuggestions([]);
@@ -242,7 +242,7 @@ export default function CartPage() {
     }
   };
 
-  // --- Cart actions ---
+
   const handleUpdateQuantity = async (ingredientId, quantity) => {
     if (quantity < 1) return;
     setUpdatingId(ingredientId);
@@ -337,7 +337,7 @@ export default function CartPage() {
         ) : (
           <div className="cart-layout">
 
-            {/* Left column: Cart Items */}
+            {}
             <div className="cart-items-container">
               {cart.items.map((item) => (
                 <div key={item.ingredientId} className={`cart-item ${updatingId === item.ingredientId ? 'updating' : ''}`}>
@@ -390,17 +390,17 @@ export default function CartPage() {
               ))}
             </div>
 
-            {/* Right column: Delivery + Summary */}
+            {}
             <div className="right-sidebar">
 
-              {/* Delivery Section with Autocomplete */}
+              {}
               <div className="sidebar-card">
                 <h2 className="sidebar-title">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
                   Доставка
                 </h2>
 
-                {/* City autocomplete */}
+                {}
                 <div className="form-group" ref={cityRef}>
                   <label>Місто</label>
                   <div className="autocomplete-wrapper">
@@ -426,7 +426,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {/* Warehouse autocomplete */}
+                {}
                 <div className="form-group" ref={whRef} style={{ marginBottom: 0 }}>
                   <label>Відділення Нової Пошти</label>
                   <div className="autocomplete-wrapper">
@@ -454,7 +454,7 @@ export default function CartPage() {
                 </div>
               </div>
 
-              {/* Summary Section */}
+              {}
               <div className="sidebar-card">
                 <h2 className="sidebar-title">Ваше замовлення</h2>
 
@@ -476,13 +476,13 @@ export default function CartPage() {
                   disabled={!selectedCity || !selectedWarehouse || checkoutLoading}
                   onClick={() => {
                     if (!isAuthenticated) {
-                      // Зберігаємо дані доставки щоб відновити після логіну
+
                       sessionStorage.setItem('pendingDelivery', JSON.stringify({
                         city: selectedCity,
                         warehouse: selectedWarehouse
                       }));
 
-                      // ПЕРЕДАЄМО параметр redirect через state роутера
+
                       navigate('/auth', { state: { redirect: '/checkout' } });
                       return;
                     }
@@ -500,11 +500,11 @@ export default function CartPage() {
           </div>
         )}
 
-        {/* Recipe recommendations */}
+        {}
         {cart?.items?.length > 0 && recommendedRecipes.length > 0 && (
           <section className="recommendations-section">
 
-            {/* Нова шапка зі стрілками навігації */}
+            {}
             <div className="recommendations-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
               <div>
                 <div className="section-title" style={{ marginBottom: '8px' }}>Що приготувати з цих продуктів?</div>

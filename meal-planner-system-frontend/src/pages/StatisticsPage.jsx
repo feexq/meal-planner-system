@@ -25,7 +25,7 @@ ChartJS.register(
   RadialLinearScale, ArcElement, Title, Tooltip, Legend, Filler
 );
 
-// --- Date helpers ---
+
 const formatToDDMMYYYY = (dateStr) => {
   if (!dateStr) return '';
   const d = new Date(dateStr);
@@ -46,7 +46,7 @@ const handleMaskedDateInput = (e, setter) => {
   setter(formatted);
 };
 
-// --- Norms calculation ---
+
 const calculateNorms = (prefs) => {
   if (!prefs) return { calories: 2000, protein: 120, fat: 65, carbs: 230 };
   const { gender, weightKg, heightCm, age, activityLevel, goal, dietType } = prefs;
@@ -69,7 +69,7 @@ const calculateNorms = (prefs) => {
   return { calories: targetCalories, protein, fat, carbs };
 };
 
-// --- Contextual warning messages ---
+
 const getWeightChartWarning = (history) => {
   if (!history || history.length === 0) return { type: 'info', msg: 'Додайте перший запис ваги — і ми відстежимо ваш прогрес 📊' };
   if (history.length < 3) return { type: 'info', msg: `Поки лише ${history.length} запис${history.length === 1 ? '' : 'и'} ваги. Чим більше — тим точніший графік! 📈` };
@@ -113,7 +113,7 @@ const WarningBanner = ({ warning }) => {
   );
 };
 
-// --- Achievement Modal ---
+
 const AchievementModal = ({ achievement, onClose }) => {
   if (!achievement) return null;
   const progress = achievement.targetValue > 0
@@ -156,7 +156,7 @@ const AchievementModal = ({ achievement, onClose }) => {
   );
 };
 
-// --- Ingredient word cloud (uses ingredientId as key for deduplication) ---
+
 const INGREDIENT_BLACKLIST = [
   'сіль', 'вода', 'цукор', 'перець', 'олія', 'соль', 'сахар', 'масло',
   'оливкова олія', 'соняшникова олія', 'чорний перець', 'часник', 'лук',
@@ -165,8 +165,8 @@ const INGREDIENT_BLACKLIST = [
 ];
 
 const buildIngredientCloud = (topRecipeDetails) => {
-  // Use ingredientId-based deduplication — same ingredient across recipes counted once per recipe
-  const ingredientMap = {}; // ingredientId -> { name, count }
+
+  const ingredientMap = {};
   topRecipeDetails?.forEach(recipe => {
     const seenInThisRecipe = new Set();
     recipe?.ingredients?.forEach(ing => {
@@ -211,7 +211,7 @@ const StatisticsPage = () => {
   const [weightNote, setWeightNote] = useState('');
   const [weightDate, setWeightDate] = useState('');
 
-  // Period-aware date range for weight/heatmap
+
   const getDateRange = useCallback((p) => {
     const today = new Date();
     const from = new Date();
@@ -228,7 +228,7 @@ const StatisticsPage = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const { from: heatFrom, to: heatTo } = getDateRange('180'); // heatmap always 6mo
+      const { from: heatFrom, to: heatTo } = getDateRange('180');
       const { from: weightFrom } = getDateRange(period);
 
       const [profileRes, prefRes, weightRes, heatmapRes, achRes, topRes, ordRes, statusRes] = await Promise.all([
@@ -249,13 +249,13 @@ const StatisticsPage = () => {
         topDetails = detailResponses.map(res => res.data);
       }
 
-      // Sort achievements: earned first
+
       const sortedAchievements = (achRes.data || []).sort((a, b) => {
         if (a.achieved === b.achieved) return 0;
         return a.achieved ? -1 : 1;
       });
 
-      // Extract ingredientIds for the word cloud products
+
       const allIngredientIds = Array.from(new Set(
         topDetails.flatMap(r => r.ingredients?.map(ing => ing.ingredientId) || [])
           .filter(id => !!id)
@@ -316,12 +316,12 @@ const StatisticsPage = () => {
     return grid;
   }, [data.heatmap]);
 
-  // Dynamic averages based on selected period (calculated from heatmap data)
+
   const periodAverages = useMemo(() => {
     if (!data.heatmap.length) return null;
     const { from } = getDateRange(period);
 
-    // Filter heatmap data for the selected period using string comparison
+
     const filtered = data.heatmap.filter(d => d.date >= from);
     if (!filtered.length) return null;
 
@@ -360,7 +360,7 @@ const StatisticsPage = () => {
 
   const norms = calculateNorms(data.preferences);
 
-  // Weight chart
+
   const weightLabels = data.weightHistory.length > 0
     ? [...data.weightHistory].reverse().map(d => new Date(d.recordedDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' }))
     : ['Немає даних'];
@@ -413,7 +413,7 @@ const StatisticsPage = () => {
     }
   };
 
-  // Goal donut
+
   const weightProgress = data.profile?.weightProgressPercent || 0;
   const goalChartData = {
     labels: ['Пройдено', 'Залишилось'],
@@ -421,7 +421,7 @@ const StatisticsPage = () => {
   };
 
 
-  // Calories plan vs fact
+
   const last7Days = data.planStatus?.days || [];
   const zigzagLabels = last7Days.map(d => `День ${d.dayNumber}`);
   const zigzagData = {
@@ -445,7 +445,7 @@ const StatisticsPage = () => {
     ]
   };
 
-  // Aggregates for radar
+
   const aggregates = useMemo(() => {
     const days = data.planStatus?.days || [];
     const divisor = Math.max(days.length, 1);
@@ -521,9 +521,9 @@ const StatisticsPage = () => {
     ]
   };
 
-  // Product cloud logic
+
   const sortedProducts = useMemo(() => {
-    const counts = {}; // slug -> { name, count, slug }
+    const counts = {};
     const blacklist = [
       'сіль', 'вода', 'цукор', 'перець', 'олія', 'соль', 'сахар', 'масло',
       'оливкова олія', 'соняшникова олія', 'чорний перець', 'часник', 'лук',
@@ -531,7 +531,7 @@ const StatisticsPage = () => {
       'кмин', 'паприка', 'куркума', 'зелень', 'лимонний сік', 'сіль і перець'
     ];
 
-    // Quick lookup for products by their ID
+
     const productById = {};
     data.topProducts?.forEach(p => {
       if (p.id) productById[p.id] = p;
@@ -539,7 +539,7 @@ const StatisticsPage = () => {
 
     data.topRecipeDetails?.forEach(recipe => {
       recipe?.ingredients?.forEach(ing => {
-        // Link recipe ingredient to product via productId
+
         const prod = productById[ing.productId];
         if (!prod) return;
 
@@ -559,7 +559,7 @@ const StatisticsPage = () => {
       .slice(0, 16);
   }, [data.topProducts, data.topRecipeDetails]);
 
-  // Completion by meal type — include SIDE slots as snacks
+
   const calculateCompletion = (mealType) => {
     if (!data.planStatus) return { percent: 0, count: 0, eaten: 0 };
     const allDays = data.planStatus.days || [];
@@ -567,7 +567,7 @@ const StatisticsPage = () => {
     allDays.forEach(day => {
       let slots = [];
       if (mealType === 'SNACK') {
-        // Include both SNACK and SIDE slot roles
+
         slots = day.slots?.filter(s =>
           s.mealType?.toUpperCase() === 'SNACK' ||
           s.slotRole?.toUpperCase() === 'SIDE'
@@ -583,7 +583,7 @@ const StatisticsPage = () => {
         if (slot.status?.toUpperCase() === 'EATEN') eaten++;
       });
     });
-    if (count === 0) return null; // null = no slots of this type at all
+    if (count === 0) return null;
     return { percent: Math.round((eaten / count) * 100), count, eaten };
   };
 
@@ -595,7 +595,7 @@ const StatisticsPage = () => {
     plugins: { legend: { display: false } }
   };
 
-  // Achievements slider
+
   const achievementsPerPage = 3;
   const achPages = Math.ceil((data.achievements?.length || 0) / achievementsPerPage);
   const visibleAchievements = data.achievements.slice(sliderIdx * achievementsPerPage, (sliderIdx + 1) * achievementsPerPage);
@@ -755,7 +755,7 @@ const StatisticsPage = () => {
               </div>
             </div>
 
-            {/* Heatmap */}
+            {}
             <div className="card">
               <div className="card-header" style={{ marginBottom: '12px' }}>
                 <div className="card-title">🗓️ Календар дисципліни (Останні 6 місяців)</div>
@@ -787,7 +787,7 @@ const StatisticsPage = () => {
               </div>
             </div>
 
-            {/* Combined Streak + Achievements card */}
+            {}
             <div className="card combined-gamification-card">
               <div className="streak-section">
                 <WarningBanner warning={getStreakWarning(data.profile)} />
@@ -855,7 +855,7 @@ const StatisticsPage = () => {
               </div>
             </div>
 
-            {/* Top recipes + Ingredient cloud */}
+            {}
             <div className="row-food">
               <div className="card">
                 <div className="card-header"><div className="card-title">🏆 Топ-5 улюблених страв</div></div>
@@ -895,14 +895,14 @@ const StatisticsPage = () => {
               </div>
             </div>
 
-            {/* Meal completion + Spending */}
+            {}
             <div className="row-extra">
               <div className="card">
                 <div className="card-header"><div className="card-title">🍽️ Виконання по прийомах їжі</div></div>
                 <div className="completion-bar-list">
                   {mealTypes.map(meal => {
                     const result = calculateCompletion(meal.type);
-                    if (result === null) return null; // skip if no slots at all
+                    if (result === null) return null;
                     const { percent } = result;
                     return (
                       <div key={meal.type} className="comp-item">
@@ -954,7 +954,7 @@ const StatisticsPage = () => {
         </div>
       </main>
 
-      {/* Weight modal */}
+      {}
       {isWeightModalOpen && (
         <div className="modal-backdrop" onClick={() => setIsWeightModalOpen(false)}>
           <div className="custom-modal" onClick={e => e.stopPropagation()}>
@@ -980,7 +980,7 @@ const StatisticsPage = () => {
         </div>
       )}
 
-      {/* Achievement modal */}
+      {}
       {selectedAchievement && (
         <AchievementModal achievement={selectedAchievement} onClose={() => setSelectedAchievement(null)} />
       )}

@@ -1,61 +1,61 @@
 #######################################
-# 🛑 Excluded Folders
+# Excluded Folders
 #######################################
 /AlgorithmRecipe/
 /FoodParser/
+/PrototypeFiles/
 /mealplan/
-/meal-plan-integration.zip
-/meal-plan-integration-v2.zip
-/INTEGRATION_GUIDE.md
 
 #######################################
-# 🔐 Environment variables
+# SQL Dumps (large files)
 #######################################
-/meal-planner-system/.env
-/meal-planner-system/.env.local
-/meal-planner-system/.env.development.local
-/meal-planner-system/.env.test.local
-/meal-planner-system/.env.production.local
+*.sql
+!meal-planner-system/src/main/resources/liquibase/*.sql
 
 #######################################
-# ⚛️ React / Node.js (Frontend)
+# Archive files
 #######################################
-# dependencies
+*.zip
+
+#######################################
+# Environment variables
+#######################################
+.env
+.env.local
+.env.*.local
+!.env.example
+
+#######################################
+# React / Node.js (Frontend)
+#######################################
 node_modules/
 .pnp
 .pnp.js
-
-# testing
 coverage/
-
-# production
-build/
 dist/
-
-# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
 #######################################
-# ☕ Java / Spring Boot (Backend)
+# Java / Spring Boot (Backend)
 #######################################
 target/
+build/
+bin/
+.gradle/
 .mvn/
 !/.mvn/wrapper/maven-wrapper.jar
-
-# compiled class files
 *.class
 *.jar
 *.war
 *.ear
-
-# crash logs
 hs_err_pid*
+HELP.md
 
 #######################################
-# 🧠 IDEs and Editors
+# IDEs and Editors
 #######################################
 .idea/
 *.iml
@@ -65,7 +65,7 @@ hs_err_pid*
 out/
 
 #######################################
-# 💻 OS files & temp files
+# OS files & temp
 #######################################
 .DS_Store
 Thumbs.db
@@ -75,5 +75,9 @@ logs/
 tmp/
 temp/
 *.tmp
-meal-planner-system-frontend/.env
+
+#######################################
+# Misc
+#######################################
+INTEGRATION_GUIDE.md
 meal-planner-system/etc/main_old.py

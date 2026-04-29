@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { categoriesAPI } from '../api/api';
 import Navbar from '../components/Navbar';
 import AdminCategoryFormModal from '../components/AdminCategoryFormModal';
-import '../pages/AdminIngredientsPage.css'; // Reusing global admin styles
+import '../pages/AdminIngredientsPage.css';
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState([]);
@@ -10,17 +10,17 @@ export default function AdminCategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // modals
-  const [formModal, setFormModal] = useState(null); // null | { category? }
-  const [deleteConfirm, setDeleteConfirm] = useState(null); // null | category
+
+  const [formModal, setFormModal] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      // The API doesn't have paginated category search in api-docs, so we fetch all 
-      // and do frontend filtering if search is typed. We can fetch either getRoots() or getAll()
-      // Let's use getAll() to see flat list of all categories to make table rendering simpler.
+
+
+
       const { data } = await categoriesAPI.getAll();
       setCategories(data);
     } catch (err) {
@@ -33,13 +33,13 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  // Frontend filtering
+
   const filteredCategories = categories.filter((c) => 
     c.name.toLowerCase().includes(search.toLowerCase()) || 
     c.slug.toLowerCase().includes(search.toLowerCase())
   );
 
-  // CRUD handlers
+
   const handleCreateSave = async (payload) => {
     await categoriesAPI.create(payload);
     setFormModal(null);
@@ -65,7 +65,7 @@ export default function AdminCategoriesPage() {
 
   const openEdit = async (cat) => {
     try {
-      // Detail fetch
+
       const { data } = await categoriesAPI.getById(cat.id);
       setFormModal({ category: data });
     } catch {
@@ -98,7 +98,7 @@ export default function AdminCategoriesPage() {
           </button>
         </div>
 
-        {/* ─── Filters ──────────────────────────── */}
+        {}
         <div className="admin-filters glass-card">
           <div className="admin-filter-item admin-search-box">
             <span className="admin-search-icon">🔍</span>
@@ -111,7 +111,7 @@ export default function AdminCategoriesPage() {
           </div>
         </div>
 
-        {/* ─── Table ────────────────────────────── */}
+        {}
         <div className="admin-table-wrap glass-card">
           {loading ? (
             <div className="admin-loading"><div className="spinner"></div></div>
@@ -160,7 +160,7 @@ export default function AdminCategoriesPage() {
         </div>
       </div>
 
-      {/* ─── Modals ────────────────────────────── */}
+      {}
       {formModal && (
         <AdminCategoryFormModal
           category={formModal.category || null}

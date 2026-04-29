@@ -101,7 +101,38 @@ databaseChangeLog:
   - changeSet:
       id: seed-root-categories
       author: feex
+      validCheckSum: ANY
       changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Water"}
+              - column: {name: slug, value: "water"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Beer"}
+              - column: {name: slug, value: "beer"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Wine"}
+              - column: {name: slug, value: "wine"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Vodka"}
+              - column: {name: slug, value: "vodka"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Juice"}
+              - column: {name: slug, value: "juice"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Soda"}
+              - column: {name: slug, value: "soda"}
         - insert:
             tableName: categories
             columns:

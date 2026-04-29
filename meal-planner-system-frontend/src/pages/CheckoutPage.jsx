@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { cartAPI, ordersAPI } from '../api/api';
 import './CheckoutPage.css';
 
-// Initialize Stripe with the public key from env, or fallback to test key
+
 const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx';
 const stripePromise = loadStripe(stripePublicKey);
 
@@ -214,7 +214,6 @@ export default function CheckoutPage() {
       return;
     }
 
-    // 3. Якщо дані є, ініціалізуємо оплату
     const initCheckout = async () => {
       try {
         const cartRes = await cartAPI.getCart();

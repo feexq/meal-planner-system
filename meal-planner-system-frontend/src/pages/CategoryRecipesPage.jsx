@@ -123,7 +123,7 @@ export default function CategoryRecipesPage() {
 
       <main className="container">
 
-        {/* Banner */}
+        {}
         <div className="category-header">
           <div className="breadcrumbs">
             <Link to="/recipes">Рецепти</Link>
@@ -151,7 +151,7 @@ export default function CategoryRecipesPage() {
 
         <div className="main-layout">
 
-          {/* Sidebar */}
+          {}
           <aside className="sidebar">
             <div className="sidebar-header">
               <h2>Фільтри</h2>
@@ -160,7 +160,7 @@ export default function CategoryRecipesPage() {
               )}
             </div>
 
-            {/* Local search */}
+            {}
             <div className="filter-group search-group">
               <div className="search-bar-local">
                 <span className="search-icon">🔍</span>
@@ -173,7 +173,7 @@ export default function CategoryRecipesPage() {
               </div>
             </div>
 
-            {/* Dynamic tags */}
+            {}
             {availableTags.length > 0 && (
               <div className="filter-group">
                 <span className="filter-label">Категорії та Теги</span>
@@ -218,7 +218,7 @@ export default function CategoryRecipesPage() {
               </div>
             )}
 
-            {/* Meal type */}
+            {}
             <div className="filter-group">
               <span className="filter-label">Прийом їжі</span>
               <ul className="filter-list">
@@ -237,7 +237,7 @@ export default function CategoryRecipesPage() {
               </ul>
             </div>
 
-            {/* Budget */}
+            {}
             <div className="filter-group">
               <span className="filter-label">Бюджет</span>
               <ul className="filter-list">
@@ -250,7 +250,7 @@ export default function CategoryRecipesPage() {
               </ul>
             </div>
 
-            {/* Cook time */}
+            {}
             <div className="filter-group">
               <span className="filter-label">Час приготування</span>
               <ul className="filter-list">
@@ -273,7 +273,7 @@ export default function CategoryRecipesPage() {
             </div>
           </aside>
 
-          {/* Main content */}
+          {}
           <section className="catalog-content">
             <div className="catalog-toolbar">
               <span className="results-count">
@@ -309,7 +309,7 @@ export default function CategoryRecipesPage() {
                             <div className="badge-budget">{BUDGET_LABELS[recipe.cookBudget]}</div>
                           )}
                         </div>
-                        {/* Match percent if available */}
+                        {}
                         {recipe.matchPercent != null && (
                           <div className="match-pct">✓ {Math.round(recipe.matchPercent)}%</div>
                         )}
@@ -318,7 +318,7 @@ export default function CategoryRecipesPage() {
                       <div className="recipe-info">
                         <h3 className="recipe-title">{recipe.name}</h3>
 
-                        {/* Macro mini pills */}
+                        {}
                         <div className="macro-mini">
                           {recipe.calories != null && (
                             <span className="macro-mini-pill m-kcal">🔥 {Math.round(recipe.calories)} ккал</span>
@@ -334,7 +334,7 @@ export default function CategoryRecipesPage() {
                           )}
                         </div>
 
-                        {/* Tags */}
+                        {}
                         {recipe.tags?.length > 0 && (
                           <div className="recipe-tags">
                             {recipe.tags.slice(0, 2).map(tag => (
@@ -356,7 +356,7 @@ export default function CategoryRecipesPage() {
               </div>
             )}
 
-            {/* Pagination */}
+            {}
             {totalPages > 1 && (
               <div className="pagination">
                 <button disabled={currentPage === 0} onClick={() => setCurrentPage(p => p - 1)} className="page-btn">← Назад</button>

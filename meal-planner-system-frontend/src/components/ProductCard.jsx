@@ -12,7 +12,7 @@ const UNIT_LABELS = {
   BUNCH: 'пучок',
 };
 
-// Expanded mapping for fallback icons based on UA/EN words
+
 const getFallbackIcon = (name) => {
   if (!name) return '🥗';
   const lower = name.toLowerCase();
@@ -38,7 +38,7 @@ export default function ProductCard({ product, onCartUpdate }) {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    // Fetch tags for this product
+
     let isMounted = true;
     ingredientsAPI.getTags(product.id)
       .then(res => {
@@ -52,7 +52,7 @@ export default function ProductCard({ product, onCartUpdate }) {
   }, [product.id]);
 
   const handleAddToCart = async (e) => {
-    e.preventDefault(); // Prevent link click if added
+    e.preventDefault();
     if (adding || !product.available) return;
     setAdding(true);
     try {

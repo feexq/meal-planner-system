@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import './HomePage.css'; // Reusing some base styles
+import './HomePage.css';
 
 export default function ErrorPage({ code, message }) {
   const navigate = useNavigate();

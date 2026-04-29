@@ -64,12 +64,12 @@
   transform: none;
 }
 
-/* --- ВЕРТИКАЛЬНИЙ КОНТЕЙНЕР ДЛЯ КРОКІВ --- */
+
 .steps-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  /* Відстань між картками-кроками */
+  
 }
 
 .card {
@@ -82,7 +82,7 @@
   flex-direction: column;
 }
 
-/* Заголовки всередині карток */
+
 .step-title {
   font-size: 20px;
   font-weight: 800;
@@ -106,9 +106,9 @@
   display: block;
 }
 
-/* --- КОМПОНЕНТИ З SURVEY --- */
 
-/* Ai Insight */
+
+
 .ai-insight {
   background: var(--neutral);
   border-left: 3px solid var(--primary);
@@ -137,7 +137,7 @@
   font-weight: 600;
 }
 
-/* Stepper Input */
+
 .input-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -213,7 +213,7 @@
   font-weight: 500;
 }
 
-/* Radio Cards (Квадратні з іконкою) */
+
 .grid-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -268,7 +268,7 @@
   line-height: 1.3;
 }
 
-/* List Cards (Вертикальні списки) */
+
 .list-cards {
   display: flex;
   flex-direction: column;
@@ -322,7 +322,7 @@
   color: var(--text-muted);
 }
 
-/* Tag Clouds */
+
 .tag-cloud {
   display: flex;
   flex-wrap: wrap;
@@ -370,7 +370,7 @@
   width: 100%;
 }
 
-/* Exclusion wrapper */
+
 .exclusion-wrapper {
   border: 2px solid var(--border);
   border-radius: 16px;
@@ -445,7 +445,7 @@
   border-color: #FCA5A5;
 }
 
-/* Zig-Zag Chart */
+
 .chart-box {
   display: flex;
   align-items: flex-end;
@@ -466,7 +466,7 @@
   opacity: 0.8;
 }
 
-/* Пошук інгредієнтів (Модалка) */
+
 .search-preview-box {
   margin-top: 12px;
   padding: 16px;

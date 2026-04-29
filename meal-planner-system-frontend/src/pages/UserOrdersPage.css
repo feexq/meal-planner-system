@@ -41,7 +41,7 @@
   letter-spacing: -0.5px;
 }
 
-/* Фільтр замовлень */
+
 .order-filters {
   display: flex;
   gap: 8px;
@@ -156,7 +156,7 @@
   border: 1px solid #FECACA;
 }
 
-/* --- ТРЕКЕР ДОСТАВКИ --- */
+
 .delivery-tracker {
   display: flex;
   position: relative;
@@ -240,7 +240,7 @@
   font-weight: 800;
 }
 
-/* --- БЛОК НОВОЇ ПОШТИ --- */
+
 .np-card {
   display: flex;
   align-items: center;
@@ -308,7 +308,7 @@
   color: var(--text);
 }
 
-/* Прев'ю інгредієнтів */
+
 .oc-items-preview {
   display: flex;
   align-items: center;
@@ -361,7 +361,7 @@
   color: var(--text-muted);
 }
 
-/* Футер картки */
+
 .oc-footer {
   display: flex;
   justify-content: space-between;
@@ -427,7 +427,7 @@
   text-decoration: none;
 }
 
-/* --- СТИЛІ ДЛЯ TOAST СПОВІЩЕННЯ --- */
+
 .toast-notification {
   position: fixed;
   bottom: 30px;
@@ -455,16 +455,16 @@
 
 .toast-notification.success {
   background: #10B981;
-  /* Зелений для успіху */
+  
 }
 
 .toast-notification.error {
   background: #EF4444;
-  /* Червоний для помилки */
+  
 }
 
 
-/* --- СТИЛІ ДЛЯ МОДАЛКИ ДЕТАЛЕЙ ЗАМОВЛЕННЯ --- */
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -532,7 +532,7 @@
   margin-bottom: 20px;
 }
 
-/* Scrollbar for modal list */
+
 .details-items-list::-webkit-scrollbar {
   width: 6px;
 }

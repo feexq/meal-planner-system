@@ -13,7 +13,6 @@ def classify_ingredients(req: ClassifyRequest):
 
     valid, failed = classify_batch(req.ingredients)
 
-    # one retry for failed ones
     if failed:
         retry_valid, still_failed = classify_batch(failed)
         valid.update(retry_valid)

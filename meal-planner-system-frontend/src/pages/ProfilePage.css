@@ -7,11 +7,11 @@
 .profile-layout {
   display: grid;
   grid-template-columns: 240px 1fr;
-  /* Прибираємо minmax для стабільності */
+  
   gap: 32px;
   margin-top: 24px;
   align-items: stretch;
-  /* Змінюємо на stretch, щоб картки були однієї висоти в ряду */
+  
 }
 
 .sidebar {
@@ -24,7 +24,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
-/* --- Софт Банер --- */
+
 .survey-banner {
   background: var(--primary-light);
   border: 1px dashed var(--primary);
@@ -71,22 +71,22 @@
   background: var(--primary-dark);
 }
 
-/* --- Контентна частина --- */
+
 .content-area {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  /* Чіткий відступ між секціями */
+  
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 40px;
-  /* Збільшуємо бокові відступи як у макеті */
+  
 }
 
-/* Картка: Головна інфо */
+
 .profile-card {
   background: #fff;
   border-radius: var(--radius-lg);
@@ -205,20 +205,20 @@
   border-color: #D1D5DB;
 }
 
-/* Грід для віджетів (Верхній ряд) */
+
 .widgets-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
 }
 
-/* Картка: Streak (Вогник) */
-/* Основна картка стріка */
+
+
 .streak-card {
   background: linear-gradient(135deg, #FFF9F0 0%, #FFF0D4 100%) !important;
   border: 1px solid #FDE6B5 !important;
   padding: 20px !important;
-  /* Фіксований відступ як у HTML */
+  
   border-radius: 20px;
   position: relative;
   overflow: hidden;
@@ -226,10 +226,10 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 220px;
-  /* Додаємо фіксовану висоту для стабільності */
+  
 }
 
-/* Великий вогник на фоні */
+
 .bg-fire {
   position: absolute;
   right: -10px;
@@ -331,7 +331,7 @@
   padding-top: 12px;
   border-top: 1px dashed rgba(217, 119, 6, 0.2);
   margin-top: auto;
-  /* Притискаємо до низу */
+  
 }
 
 .tier {
@@ -386,7 +386,7 @@
   background: #FCD34D;
 }
 
-/* Картка: Прогрес ваги */
+
 .weight-card {
   display: flex;
   flex-direction: column;
@@ -484,7 +484,7 @@
   text-align: right;
 }
 
-/* HEATMAP */
+
 .heatmap-card {
   background: #fff;
   border-radius: var(--radius-lg);
@@ -572,7 +572,7 @@
   gap: 4px;
 }
 
-/* --- НИЖНІ ВІДЖЕТИ --- */
+
 .bottom-widgets {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
@@ -622,9 +622,9 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 16px;
-  /* Було 20px */
+  
   padding-bottom: 16px;
-  /* Було 20px */
+  
   border-bottom: 1px solid var(--border);
 }
 
@@ -703,7 +703,7 @@
   border-radius: 3px;
 }
 
-/* ВІДЖЕТ 4: Останнє замовлення */
+
 .order-card {
   padding: 24px;
   display: flex;
@@ -783,7 +783,7 @@
   border-color: var(--primary-light);
 }
 
-/* --- АДАПТИВНІСТЬ --- */
+
 @media (max-width: 900px) {
   .profile-layout {
     grid-template-columns: 1fr;
@@ -833,7 +833,7 @@
   }
 }
 
-/* --- СТАН ДЛЯ ПОРОЖНІХ БЛОКІВ ТА МОТИВАЦІЇ --- */
+
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -891,12 +891,12 @@
   margin-top: 12px;
 }
 
-/* --- ПРАВИЛЬНА СІТКА HEATMAP (GitHub Style) --- */
+
 .hm-scroll-container {
   width: 100%;
   overflow-x: auto;
   padding-bottom: 8px;
-  /* Для красивого скролу */
+  
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
@@ -906,17 +906,17 @@
   grid-template-rows: repeat(7, 1fr);
   grid-auto-flow: column;
   gap: 3px;
-  /* Трохи менший відступ для красивої матриці */
+  
   width: max-content;
 }
 
 .hm-cell {
   width: 11px;
-  /* Як у гітхаба */
+  
   height: 11px;
   border-radius: 2px;
   background: #ebedf0;
-  /* Світло-сірий для порожніх днів */
+  
   transition: transform 0.1s, box-shadow 0.1s;
   cursor: pointer;
   border: 1px solid rgba(27, 31, 35, 0.06);
@@ -929,7 +929,7 @@
   position: relative;
 }
 
-/* Кольори активності */
+
 .hm-cell[data-level="0"] {
   background: #ebedf0;
 }
@@ -954,7 +954,7 @@
   border-color: transparent;
 }
 
-/* --- КАСТОМНІ МОДАЛЬНІ ВІКНА --- */
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -1079,7 +1079,7 @@ textarea.modal-input {
   transform: none;
 }
 
-/* Стилі для загрузки аватара */
+
 .avatar-preview-wrap {
   width: 120px;
   height: 120px;
@@ -1142,7 +1142,7 @@ textarea.modal-input {
   }
 }
 
-/* --- ЯСКРАВІ МОТИВАЦІЙНІ БЛОКИ --- */
+
 .motivation-box {
   display: flex;
   align-items: flex-start;
@@ -1181,7 +1181,7 @@ textarea.modal-input {
   line-height: 1.4;
 }
 
-/* Відступи */
+
 .mt-1 {
   margin-top: 12px;
 }
@@ -1190,7 +1190,7 @@ textarea.modal-input {
   margin-top: 20px;
 }
 
-/* Виправляємо інпут дати в модалці */
+
 input[type="date"].modal-input {
   cursor: pointer;
   color: var(--text-dark);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// ─── Cart Session (guest UUID) ─────────────────
+
 
 function getCartSessionId() {
   let id = localStorage.getItem('cartSessionId');
@@ -22,7 +22,7 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor — attach JWT token
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -32,7 +32,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor — auto-refresh on 401
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -58,7 +58,7 @@ api.interceptors.response.use(
   }
 );
 
-// ─── Auth ──────────────────────────────────────
+
 
 export const authAPI = {
   login: (credentials) => {
@@ -78,10 +78,10 @@ export const authAPI = {
     return api.post('/auth/logout', null, { headers: { Authorization: `Bearer ${token}` } });
   },
   refresh: (refreshToken) => api.post('/auth/refresh', { refreshToken }),
-  // me: () => api.get('/user/me'),
+
 };
 
-// ─── Profile ───────────────────────────────────
+
 
 export const profileAPI = {
   getProfile: () => api.get('/profile/me'),
@@ -99,18 +99,18 @@ export const profileAPI = {
   getAchievements: () => api.get('/profile/achievements'),
 };
 
-// ─── User Preferences ──────────────────────────
+
 
 export const preferencesAPI = {
-  // GET existing preferences (to pre-fill survey)
+
   get: () => api.get('/user/preference'),
-  // POST/PUT to save preferences
+
   save: (data) => api.post('/user/preference', data),
   update: (data) => api.put('/user/preference', data),
   exists: () => api.get('/user/preference/exists'),
 };
 
-// ─── Meal Plan ─────────────────────────────────
+
 
 export const mealPlanAPI = {
   generateFinal: (preferencesData) => api.post('/meal-plan/generate/final', preferencesData),
@@ -121,7 +121,7 @@ export const mealPlanAPI = {
   logFood: (text) => api.post('/meal-plan/log-food', { text }),
 };
 
-// ─── Categories ────────────────────────────────
+
 
 export const categoriesAPI = {
   getRoots: () => api.get('/categories'),
@@ -133,7 +133,7 @@ export const categoriesAPI = {
   remove: (id) => api.delete(`/categories/${id}`),
 };
 
-// ─── Ingredients ───────────────────────────────
+
 
 export const ingredientsAPI = {
   getAll: (params) => api.get('/ingredients', { params }),
@@ -147,14 +147,14 @@ export const ingredientsAPI = {
   getTags: (id) => api.get(`/ingredients/${id}/tags`),
 };
 
-// ─── Dietary ───────────────────────────────────
+
 
 export const dietaryAPI = {
   getConditions: () => api.get('/dietary/conditions'),
   getByType: (type) => api.get(`/dietary/conditions/type/${type}`),
 };
 
-// ─── Products ───────────────────────────────────
+
 export const productsAPI = {
   findAllByIngredients: (ids) =>
     api.get(`/products/by-ingredients?${ids.map(id => `ingredientIds=${id}`).join('&')}`)
@@ -167,7 +167,7 @@ export const productsAPI = {
   remove: (id) => api.delete(`/products/${id}`),
 };
 
-// ─── Recipes ───────────────────────────────────
+
 
 export const recipesAPI = {
   getAll: (params) => api.get('/recipes', { params }),
@@ -182,7 +182,7 @@ export const recipesAPI = {
     }),
 };
 
-// ─── Recipe Tags ───────────────────────────────
+
 
 export const recipeTagsAPI = {
   getAll: () => api.get('/tags-recipes'),
@@ -227,7 +227,7 @@ export const cartAPI = {
   },
 };
 
-// ─── Delivery ──────────────────────────────────
+
 
 export const deliveryAPI = {
   searchCities: (name) => api.get('/delivery/cities', { params: { name } }),
@@ -235,7 +235,7 @@ export const deliveryAPI = {
     api.get('/delivery/warehouses', { params: { cityRef, search } }),
 };
 
-// ─── Orders ────────────────────────────────────
+
 
 export const ordersAPI = {
   checkout: (npCityRef, npWarehouseRef) =>

@@ -2,6 +2,7 @@ databaseChangeLog:
     - changeSet:
         id: seed-products-data
         author: feex
+        validCheckSum: ANY
         changes:
           - sqlFile:
               path: update_products.sql

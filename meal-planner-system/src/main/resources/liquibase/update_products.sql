@@ -1,4 +1,4 @@
-
+--changes category_id by -6, means was 56 for example must be 50 etc. was 6 may stay 1.
 WITH inserted_product AS (
     INSERT INTO public.products (
         name_uk, slug, description, price, unit, stock, is_available, 

@@ -1,8 +1,3 @@
-"""
-Meal-plan finalization service.
-Builds Gemini (verbose) and Groq/Llama (compressed) prompts,
-calls generate_json_with_fallback, and returns structured days.
-"""
 from __future__ import annotations
 
 import json
@@ -255,10 +250,6 @@ Return STRICT JSON ONLY.
 # ─── Public API ───────────────────────────────────────────────────────────────
 
 def finalize_plan(request: dict) -> dict:
-    """
-    request: dict matching FinalizeRequest pydantic shape (model_dump()).
-    Returns parsed dict with 'days' key.
-    """
     gemini_prompt = build_gemini_finalize_prompt(request)
     llama_prompt  = build_llama_finalize_prompt(request)
 

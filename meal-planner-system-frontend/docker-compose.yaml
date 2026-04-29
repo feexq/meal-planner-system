@@ -1,0 +1,17 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: meal_planner_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://backend:8080
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true

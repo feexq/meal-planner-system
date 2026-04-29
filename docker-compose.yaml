@@ -1,0 +1,5 @@
+name: meal-planner
+
+include:
+  - meal-planner-system/docker-compose.yaml
+  - meal-planner-system-frontend/docker-compose.yaml

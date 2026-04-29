@@ -1,4 +1,3 @@
-"""Redis cache singleton + helpers."""
 import json
 import os
 

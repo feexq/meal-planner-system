@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProfileSidebar from '../components/ProfileSidebar';
-import { ordersAPI, cartAPI } from '../api/api'; // Додано cartAPI
+import { ordersAPI, cartAPI } from '../api/api';
 import './UserOrdersPage.css';
 
 const UserOrdersPage = () => {
@@ -144,7 +144,7 @@ const UserOrdersPage = () => {
     const details = detailsMap[order.id];
     const items = details?.items || [];
 
-    // Беремо перші 4 товари для прев'ю
+
     const previewItems = items.slice(0, 4);
     const remainingCount = items.length - 4;
 
@@ -204,7 +204,7 @@ const UserOrdersPage = () => {
           </div>
         )}
 
-        {/* Динамічний блок з реальними картинками */}
+        {}
         {items.length > 0 && (
           <div className="oc-items-preview">
             {previewItems.map((item, idx) => (
@@ -225,7 +225,7 @@ const UserOrdersPage = () => {
           <div className="oc-actions">
             {order.status === 'IN_TRANSIT' && <button className="btn-outline">Відстежити посилку</button>}
 
-            {/* Повторити замовлення */}
+            {}
             {(order.status === 'DELIVERED' || order.status === 'FAILED' || order.status === 'PENDING') && (
               <button className="btn-outline" onClick={() => handleRepeatOrder(order.id)}>Повторити замовлення</button>
             )}
@@ -273,7 +273,7 @@ const UserOrdersPage = () => {
         </div>
       </main>
 
-      {/* --- МОДАЛЬНЕ ВІКНО ДЕТАЛЕЙ ЗАМОВЛЕННЯ --- */}
+      {}
       {selectedOrder && (
         <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
           <div className="custom-modal details-modal" onClick={e => e.stopPropagation()}>
@@ -309,7 +309,7 @@ const UserOrdersPage = () => {
         </div>
       )}
 
-      {/* --- TOAST СПОВІЩЕННЯ --- */}
+      {}
       <div className={`toast-notification ${toast.show ? 'show' : ''} ${toast.type}`}>
         {toast.message}
       </div>

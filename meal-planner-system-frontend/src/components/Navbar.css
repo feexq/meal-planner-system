@@ -1,4 +1,4 @@
-/* ─── Header ──────────────────────────────── */
+
 header.navbar {
   padding: 16px 0;
   border-bottom: 1px solid var(--border);
@@ -147,7 +147,7 @@ header.navbar {
   user-select: none;
 }
 
-/* ─── User Dropdown ────────────────────────── */
+
 .user-dropdown {
   position: absolute;
   top: calc(100% + 8px);
@@ -189,7 +189,7 @@ header.navbar {
   background: rgba(248, 113, 113, 0.1);
 }
 
-/* ─── Responsive ───────────────────────────── */
+
 @media (max-width: 1024px) {
   .search-bar {
     max-width: 300px;
@@ -213,7 +213,7 @@ header.navbar {
   }
 }
 
-/* ─── Mega Menu (Catalog) ───────────────────────── */
+
 .catalog-wrapper {
   position: relative;
 }
@@ -253,7 +253,7 @@ header.navbar {
   overflow-y: auto;
 }
 
-/* Scrollbar for roots */
+
 .mega-menu-roots::-webkit-scrollbar {
   width: 4px;
 }

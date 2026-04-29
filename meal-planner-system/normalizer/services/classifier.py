@@ -1,7 +1,3 @@
-"""
-Ingredient classification service — diet/health-condition tags.
-Uses LLM fallback pipeline.
-"""
 from __future__ import annotations
 
 import json

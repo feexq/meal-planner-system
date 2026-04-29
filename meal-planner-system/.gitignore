@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Data Files ###
+src/main/resources/data/recipes.json
+src/main/resources/data/nutrition.json
+src/main/resources/data/ingredient_tags.json

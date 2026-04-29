@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* ModernBerry Palette */
+  
   --primary: #6C3FC5;
   --primary-dark: #4E2A96;
   --primary-light: #F0EAFE;
@@ -16,7 +16,7 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
-  --radius: 16px; /* For compatibility with mockup */
+  --radius: 16px; 
 
   --bg-primary: #ffffff;
   --bg-secondary: #F7F5FB;
@@ -98,7 +98,7 @@ input {
   outline: none;
 }
 
-/* Scrollbar */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -117,7 +117,7 @@ input {
   background: var(--primary-light);
 }
 
-/* Glass card utility */
+
 .glass-card {
   background: var(--bg-glass);
   backdrop-filter: blur(20px);
@@ -126,7 +126,7 @@ input {
   border-radius: var(--radius-lg);
 }
 
-/* Gradient text */
+
 .gradient-text {
   background: var(--accent-gradient);
   -webkit-background-clip: text;
@@ -134,7 +134,7 @@ input {
   background-clip: text;
 }
 
-/* Loading spinner */
+
 .spinner {
   width: 40px;
   height: 40px;
@@ -157,7 +157,7 @@ input {
   min-height: 100vh;
 }
 
-/* Fade-in animation */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -188,7 +188,7 @@ input {
   animation: slideUp 0.6s ease forwards;
 }
 
-/* Base utility classes from mockup */
+
 .container {
   max-width: 1400px;
   margin: 0 auto;

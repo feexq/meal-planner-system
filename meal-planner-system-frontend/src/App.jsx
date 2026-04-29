@@ -52,11 +52,11 @@ export default function App() {
           <Route path="/auth" element={<PublicOnlyRoute><AuthPage /></PublicOnlyRoute>} />
           <Route path="/" element={<HomePage />} />
 
-          {/* Admin */}
+          {}
           <Route path="/admin/ingredients" element={<ProtectedRoute><AdminIngredientsPage /></ProtectedRoute>} />
           <Route path="/admin/categories" element={<ProtectedRoute><AdminCategoriesPage /></ProtectedRoute>} />
 
-          {/* Shop */}
+          {}
           <Route path="/product/:slug" element={<ProductPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
@@ -64,18 +64,18 @@ export default function App() {
           <Route path="/catalog" element={<ProductCatalogPage />} />
           <Route path="/catalog/category/:slug" element={<ProductCatalogPage />} />
 
-          {/* Recipes */}
+          {}
           <Route path="/recipes" element={<RecipesPage />} />
           <Route path="/recipes/catalog" element={<CategoryRecipesPage />} />
           <Route path="/recipes/category/:slug" element={<CategoryRecipesPage />} />
           <Route path="/recipe/:slug" element={<RecipeDetailPage />} />
 
-          {/* Meal Plan flow: survey → preview → tracker */}
+          {}
           <Route path="/survey" element={<ProtectedRoute><UserSurveyPage /></ProtectedRoute>} />
           <Route path="/plan-preview" element={<ProtectedRoute><PlanPreviewPage /></ProtectedRoute>} />
           <Route path="/tracker" element={<ProtectedRoute><TrackerPage /></ProtectedRoute>} />
 
-          {/* Profile */}
+          {}
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/profile/orders" element={<ProtectedRoute><UserOrdersPage /></ProtectedRoute>} />
           <Route path="/profile/preferences" element={<ProtectedRoute><PreferencesPage /></ProtectedRoute>} />
@@ -83,7 +83,7 @@ export default function App() {
 
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
-          {/* Errors */}
+          {}
           <Route path="/401" element={<ErrorPage code="401" message="В доступі відмовлено (Не авторизовано)" />} />
           <Route path="/403" element={<ErrorPage code="403" message="Заборонено (Немає права доступу)" />} />
           <Route path="*" element={<ErrorPage code="404" message="Сторінку не знайдено" />} />

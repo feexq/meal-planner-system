@@ -28,7 +28,7 @@ export default function ProductCatalogPage() {
   const [isCatExpanded, setIsCatExpanded] = useState(false);
   const [catSearchQuery, setCatSearchQuery] = useState('');
 
-  // Ініціалізація пошуку з URL
+
   useEffect(() => {
     const s = searchParams.get('search');
     if (s) {
@@ -37,13 +37,13 @@ export default function ProductCatalogPage() {
     }
   }, [searchParams]);
 
-  // Debounce для пошуку
+
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchQuery), 500);
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Завантаження категорій
+
   useEffect(() => {
     setIsCategoriesLoading(true);
     categoriesAPI.getAll()
@@ -61,14 +61,14 @@ export default function ProductCatalogPage() {
       .finally(() => setIsCategoriesLoading(false));
   }, [slug]);
 
-  // Скидання сторінки при зміні фільтрів
+
   useEffect(() => {
     setCurrentPage(0);
   }, [slug, debouncedSearch, pageSize]);
 
-  // Завантаження товарів
+
   const fetchProducts = useCallback(async () => {
-    // ВАЖЛИВО: Чекаємо поки завантажаться категорії, щоб уникнути подвійного рендеру і блимання
+
     if (isCategoriesLoading) return;
 
     if (!isInitialLoad) setIsFetching(true);

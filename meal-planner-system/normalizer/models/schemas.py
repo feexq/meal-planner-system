@@ -1,6 +1,3 @@
-"""
-Shared Pydantic models for all routers.
-"""
 from __future__ import annotations
 
 from pydantic import BaseModel
@@ -156,27 +153,25 @@ class FinalizeResponse(BaseModel):
 # ─── Swap slot ────────────────────────────────────────────────────────────────
 
 class SwapSlotMainRequest(BaseModel):
-    """Swap the MAIN dish of a slot. Uses scored candidates (no LLM by default)."""
     slotId: int
     mealType: str
     currentRecipeId: int
     calorieBudget: float
     userProfile: UserProfileRequest
     candidates: list[CandidateItem]
-    useLlm: bool = False  # set True to also confirm via LLM
+    useLlm: bool = False
 
 class SwapSlotSideRequest(BaseModel):
-    """Swap (or add) the SIDE dish of a slot via LLM."""
     slotId: int
     mealType: str
     calorieBudget: float
-    mainRecipe: dict          # {recipeId, name, calories, ...}
+    mainRecipe: dict
     additionalPool: list[AdditionalRecipeItem]
     userProfile: UserProfileRequest
 
 class SwapSlotSideResponse(BaseModel):
     slotId: int
-    chosen: dict | None       # null if nothing fits
+    chosen: dict | None
     message: str
 
 class SwapSlotMainResponse(BaseModel):
