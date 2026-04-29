@@ -41,23 +41,25 @@ The frontend is a full grocery e-commerce UI — users can browse a product cata
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| **Backend** | Java (Eclipse Temurin) | 17 |
-| | Spring Boot | 4.0.3 |
-| | Liquibase | 5.0.1 |
-| | Stripe Java SDK | 32.1.0 |
-| | JJWT / MapStruct / OpenAPI | Latest |
-| **Frontend** | React | 19.2.4 |
-| | Vite | 8.0.1 |
-| | Chart.js | 4.5.1 |
-| | Stripe React | 6.1.0 |
-| **AI Service** | Python | 3.11 |
-| | FastAPI | 0.115.0 |
-| | Google GenAI / Groq / OpenAI | Latest |
-| **Infrastructure** | PostgreSQL | 15 |
-| | Redis | 7 (Alpine) |
-| | Docker Compose | v2 |
+### ☕ Backend
+* **Java 17 & Spring Boot 4** — Core application framework
+* **PostgreSQL 15** — Primary relational database
+* **Liquibase 5** — Database schema versioning & data seeding
+* **Stripe SDK & MapStruct** — Payment processing and DTO mapping
+
+### ⚛️ Frontend
+* **React 19 & Vite 8** — High-performance SPA with fast HMR
+* **Chart.js 4.5** — Interactive data visualizations (weight dynamics, macros)
+* **Stripe Elements** — Secure embedded checkout UI
+
+### 🧠 AI Microservice
+* **Python 3.11 & FastAPI** — Asynchronous API for ML tasks
+* **Redis 7** — In-memory caching for LLM responses
+* **LLM Pipeline** — Multi-tier integration (Gemini, Groq, OpenAI) for food parsing
+
+### 🐳 Infrastructure
+* **Docker Compose** — Multi-container orchestration (6 services)
+* **Azure Blob Storage** — Cloud object storage for user avatars
 
 ---
 
