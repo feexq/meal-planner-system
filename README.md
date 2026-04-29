@@ -6,7 +6,6 @@ Full-stack meal planning platform with algorithmic diet generation, AI-powered f
 ![Spring Boot 4.0.3](https://img.shields.io/badge/Spring%20Boot-4.0.3-brightgreen?logo=springboot)
 ![React 19](https://img.shields.io/badge/React-19-blue?logo=react)
 ![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ---
 
