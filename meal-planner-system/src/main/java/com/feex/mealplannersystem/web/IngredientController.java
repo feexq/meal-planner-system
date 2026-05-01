@@ -6,7 +6,9 @@ import com.feex.mealplannersystem.dto.ingredient.CreateIngredientRequest;
 import com.feex.mealplannersystem.dto.ingredient.IngredientResponse;
 import com.feex.mealplannersystem.dto.ingredient.IngredientSummaryResponse;
 import com.feex.mealplannersystem.dto.ingredient.UpdateIngredientRequest;
+import com.feex.mealplannersystem.dto.tag.base.BaseTagResponse;
 import com.feex.mealplannersystem.service.DietaryTagService;
+import com.feex.mealplannersystem.service.IngTagService;
 import com.feex.mealplannersystem.service.IngredientService;
 import com.feex.mealplannersystem.service.mapper.IngredientMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,7 @@ import java.util.List;
 public class IngredientController {
 
     private final IngredientService ingredientService;
+    private final IngTagService tagProductService;
     private final IngredientMapper mapper;
     private final DietaryTagService dietaryTagService;
 
@@ -45,7 +48,7 @@ public class IngredientController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{ingredientId}")
     public ResponseEntity<IngredientResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(ingredientService.getById(id)));
     }
@@ -62,7 +65,7 @@ public class IngredientController {
                 .body(mapper.toResponse(ingredientService.create(request)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{ingredientId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<IngredientResponse> update(
             @PathVariable Long id,
@@ -71,21 +74,45 @@ public class IngredientController {
         return ResponseEntity.ok(mapper.toResponse(ingredientService.update(id, request)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{ingredientId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ingredientService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("{id}/dietary-tags")
+    @GetMapping("/{ingredientId}/tags")
+    public ResponseEntity<List<BaseTagResponse>> getTagsForIngredient(
+            @PathVariable Long ingredientId) {
+        return ResponseEntity.ok(tagProductService.getTagsForIngredient(ingredientId));
+    }
+
+    @PostMapping("/{ingredientId}/tags/{tagId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> addTagToIngredient(
+            @PathVariable Long ingredientId,
+            @PathVariable Long tagId) {
+        tagProductService.addTagToIngredient(ingredientId, tagId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{ingredientId}/tags/{tagId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> removeTagFromIngredient(
+            @PathVariable Long ingredientId,
+            @PathVariable Long tagId) {
+        tagProductService.removeTagFromIngredient(ingredientId, tagId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{ingredientId}/dietary-tags")
     public ResponseEntity<List<IngredientDietaryTagResponse>> getTagsByIngredient(
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(dietaryTagService.getTagsByIngredient(id));
     }
 
-    @PutMapping("{id}/dietary-tags")
+    @PutMapping("{ingredientId}/dietary-tags")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateTags(
             @PathVariable Long id,

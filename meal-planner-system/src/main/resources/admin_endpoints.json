@@ -1,0 +1,178 @@
+[
+  {
+    "controller": "AchievementController",
+    "method": "GET",
+    "path": "/api/achievements",
+    "description": "Get all achievements (Admin)",
+    "requestBody": null,
+    "response": "List<AchievementEntity>"
+  },
+  {
+    "controller": "AchievementController",
+    "method": "POST",
+    "path": "/api/achievements",
+    "description": "Create an achievement (Admin)",
+    "requestBody": "CreateAchievementRequest (key, title, description, iconUrl, targetValue, type)",
+    "response": "AchievementEntity (201 Created)"
+  },
+  {
+    "controller": "AchievementController",
+    "method": "PUT",
+    "path": "/api/achievements/{id}",
+    "description": "Update an achievement (Admin)",
+    "requestBody": "UpdateAchievementRequest (title, description, iconUrl, targetValue)",
+    "response": "AchievementEntity (200 OK)"
+  },
+  {
+    "controller": "AchievementController",
+    "method": "DELETE",
+    "path": "/api/achievements/{id}",
+    "description": "Delete an achievement (Admin)",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "BaseTagController",
+    "method": "POST",
+    "path": "/api/tags-base",
+    "description": "Create a new base tag",
+    "requestBody": "BaseTagCreateRequest (name, slug, iconUrl)",
+    "response": "BaseTagResponse (201 Created)"
+  },
+  {
+    "controller": "BaseTagController",
+    "method": "PATCH",
+    "path": "/api/tags-base/{id}",
+    "description": "Update an existing base tag",
+    "requestBody": "BaseTagUpdateRequest (name, slug, iconUrl)",
+    "response": "BaseTagResponse (200 OK)"
+  },
+  {
+    "controller": "BaseTagController",
+    "method": "DELETE",
+    "path": "/api/tags-base/{id}",
+    "description": "Delete a base tag",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "CategoryController",
+    "method": "POST",
+    "path": "/api/categories",
+    "description": "Create a new category",
+    "requestBody": "CreateCategoryRequest (name, slug, description, imageUrl, parentId)",
+    "response": "CategoryResponse (201 Created)"
+  },
+  {
+    "controller": "CategoryController",
+    "method": "PUT",
+    "path": "/api/categories/{id}",
+    "description": "Update an existing category",
+    "requestBody": "UpdateCategoryRequest (name, slug, description, imageUrl, parentId)",
+    "response": "CategoryResponse (200 OK)"
+  },
+  {
+    "controller": "CategoryController",
+    "method": "DELETE",
+    "path": "/api/categories/{id}",
+    "description": "Delete a category",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "DietaryTagController",
+    "method": "POST",
+    "path": "/api/dietary-conditions/trigger-classification",
+    "description": "Trigger classification of dietary tags",
+    "requestBody": null,
+    "response": "Void (200 OK)"
+  },
+  {
+    "controller": "IngredientController",
+    "method": "POST",
+    "path": "/api/ingredients",
+    "description": "Create ingredient",
+    "requestBody": "CreateIngredientRequest",
+    "response": "IngredientResponse (201 Created)"
+  },
+  {
+    "controller": "IngredientController",
+    "method": "PUT",
+    "path": "/api/ingredients/{ingredientId}",
+    "description": "Update ingredient",
+    "requestBody": "UpdateIngredientRequest",
+    "response": "IngredientResponse (200 OK)"
+  },
+  {
+    "controller": "IngredientController",
+    "method": "DELETE",
+    "path": "/api/ingredients/{ingredientId}",
+    "description": "Delete ingredient",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "IngredientController",
+    "method": "POST",
+    "path": "/api/ingredients/{ingredientId}/tags/{tagId}",
+    "description": "Add tag to ingredient",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "IngredientController",
+    "method": "DELETE",
+    "path": "/api/ingredients/{ingredientId}/tags/{tagId}",
+    "description": "Remove tag from ingredient",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "IngredientController",
+    "method": "PUT",
+    "path": "/api/ingredients/{ingredientId}/dietary-tags",
+    "description": "Update dietary tags",
+    "requestBody": "UpdateDietaryTagsRequest",
+    "response": "Void (204 No Content)"
+  },
+  {
+    "controller": "MealPlanController",
+    "method": "POST",
+    "path": "/api/meal-plan/generate/{email}",
+    "description": "Generate meal plan for user",
+    "requestBody": null,
+    "response": "WeeklyMealPlanDto (200 OK)"
+  },
+  {
+    "controller": "MealPlanController",
+    "method": "POST",
+    "path": "/api/meal-plan/generate/final/{email}",
+    "description": "Generate final meal plan for user",
+    "requestBody": null,
+    "response": "GenerateFinalResponse (200 OK)"
+  },
+  {
+    "controller": "ProductController",
+    "method": "POST",
+    "path": "/api/products",
+    "description": "Create a new product",
+    "requestBody": "CreateProductRequest (nameUk, slug, description, imageUrl, price, unit, stock, isAvailable, calories, proteinG, fatG, carbsG, calorieConfidence, categoryId, tagIds)",
+    "response": "ProductResponse (201 Created)"
+  },
+  {
+    "controller": "ProductController",
+    "method": "PUT",
+    "path": "/api/products/{id}",
+    "description": "Update an existing product",
+    "requestBody": "UpdateProductRequest",
+    "response": "ProductResponse (200 OK)"
+  },
+  {
+    "controller": "ProductController",
+    "method": "DELETE",
+    "path": "/api/products/{id}",
+    "description": "Delete a product",
+    "requestBody": null,
+    "response": "Void (204 No Content)"
+  }
+]

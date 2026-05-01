@@ -4,7 +4,7 @@ import com.feex.mealplannersystem.common.survey.CookBudget;
 import com.feex.mealplannersystem.common.survey.CookComplexity;
 import com.feex.mealplannersystem.common.survey.CookTime;
 import com.feex.mealplannersystem.common.mealplan.MealType;
-import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
+import com.feex.mealplannersystem.repository.entity.tag.RecipeTagEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -81,7 +81,7 @@ public class RecipeEntity {
     )
     @Builder.Default
     @BatchSize(size = 100)
-    private Set<TagEntity> tags = new HashSet<>();
+    private Set<RecipeTagEntity> tags = new HashSet<>();
 
     @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL)
     private RecipeNutritionEntity nutrition;

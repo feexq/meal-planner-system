@@ -1,11 +1,11 @@
 package com.feex.mealplannersystem.service.impl;
 
-import com.feex.mealplannersystem.dto.tag.ingredient.IngredientTagRequest;
-import com.feex.mealplannersystem.dto.tag.ingredient.IngredientTagResponse;
-import com.feex.mealplannersystem.service.mapper.TagMapper;
+import com.feex.mealplannersystem.dto.tag.recipe.RecipeTagRequest;
+import com.feex.mealplannersystem.dto.tag.recipe.RecipeTagResponse;
+import com.feex.mealplannersystem.service.mapper.RecipeTagMapper;
 import com.feex.mealplannersystem.repository.TagRepository;
-import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
-import com.feex.mealplannersystem.service.TagService;
+import com.feex.mealplannersystem.repository.entity.tag.RecipeTagEntity;
+import com.feex.mealplannersystem.service.RecipeTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,36 +15,36 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TagServiceImpl implements TagService {
+public class RecipeTagServiceImpl implements RecipeTagService {
 
     private final TagRepository tagRepository;
-    private final TagMapper tagMapper;
+    private final RecipeTagMapper recipeTagMapper;
 
     @Override
-    public IngredientTagResponse create(IngredientTagRequest request) {
-        TagEntity entity = tagMapper.toEntity(request);
+    public RecipeTagResponse create(RecipeTagRequest request) {
+        RecipeTagEntity entity = recipeTagMapper.toEntity(request);
 
-        return tagMapper.toResponse(
+        return recipeTagMapper.toResponse(
                 tagRepository.save(entity)
         );
     }
 
     @Override
-    public IngredientTagResponse update(Long id, IngredientTagRequest request) {
-        TagEntity tag = tagRepository.findById(id)
+    public RecipeTagResponse update(Long id, RecipeTagRequest request) {
+        RecipeTagEntity tag = tagRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tag not found"));
 
         tag.setName(request.name());
 
-        return tagMapper.toResponse(
+        return recipeTagMapper.toResponse(
                 tagRepository.save(tag)
         );
     }
 
     @Override
     @Transactional(readOnly = true)
-    public IngredientTagResponse getById(Long id) {
-        return tagMapper.toResponse(
+    public RecipeTagResponse getById(Long id) {
+        return recipeTagMapper.toResponse(
                 tagRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Tag not found"))
         );
@@ -52,10 +52,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<IngredientTagResponse> getAll() {
+    public List<RecipeTagResponse> getAll() {
         return tagRepository.findAll()
                 .stream()
-                .map(tagMapper::toResponse)
+                .map(recipeTagMapper::toResponse)
                 .toList();
     }
 

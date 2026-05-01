@@ -9,5 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCategoryRequest {
     private String name;
+    private String slug;
+    private String imageUrl;
     private Long parentId;
 }

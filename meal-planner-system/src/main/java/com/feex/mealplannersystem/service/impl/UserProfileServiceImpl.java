@@ -48,7 +48,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     private final DailyNutritionSummaryService summaryService;
     private final BlobServiceClient blobServiceClient;
 
-    @Value("${spring.azure.storage.container}")
+    @Value("${spring.azure.storage.profile_container}")
     private String avatarContainer;
 
     @Transactional

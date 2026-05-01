@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:15
-    container_name: meal_planner_db
+    container_name: meal_planner_db_test
     environment:
       POSTGRES_DB: meal_planner_db
       POSTGRES_USER: ${DB_USER}
@@ -14,7 +14,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: meal_planner_redis
+    container_name: meal_planner_redis_test
     ports:
       - "6379:6379"
     volumes:
@@ -24,7 +24,7 @@ services:
     build:
       context: ./normalizer
       dockerfile: Dockerfile
-    container_name: meal_planner_normalizer
+    container_name: meal_planner_normalizer_test
     ports:
       - "8000:8000"
     environment:
@@ -35,7 +35,7 @@ services:
 
   stripe-webhook:
     image: stripe/stripe-cli
-    container_name: meal_planner_stripe
+    container_name: meal_planner_stripe_test
     command: listen --forward-to http://backend:8080/api/webhooks/stripe
     environment:
       - STRIPE_API_KEY=${STRIPE_SECRET_KEY}
@@ -43,28 +43,28 @@ services:
       - postgres
       - redis
 
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: meal_planner_backend
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
-    environment:
-      - DB_HOST=postgres
-      - REDIS_HOST=redis
-      - NORMALIZER_URL=http://normalizer:8000
-    depends_on:
-      postgres:
-        condition: service_started
-      redis:
-        condition: service_started
-      normalizer:
-        condition: service_started
-      stripe-webhook:
-        condition: service_started
+#  backend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: meal_planner_backend
+#    ports:
+#      - "8080:8080"
+#    env_file:
+#      - .env
+#    environment:
+#      - DB_HOST=postgres
+#      - REDIS_HOST=redis
+#      - NORMALIZER_URL=http://normalizer:8000
+#    depends_on:
+#      postgres:
+#        condition: service_started
+#      redis:
+#        condition: service_started
+#      normalizer:
+#        condition: service_started
+#      stripe-webhook:
+#        condition: service_started
 
 volumes:
   postgres_data:

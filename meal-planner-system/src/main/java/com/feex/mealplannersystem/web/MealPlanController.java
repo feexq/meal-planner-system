@@ -15,8 +15,10 @@ import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
 import com.feex.mealplannersystem.service.FoodLogService;
 import com.feex.mealplannersystem.service.MealSwapService;
+import com.feex.mealplannersystem.util.MealPlanHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ public class MealPlanController {
     private final MealPlanService mealPlanService;
     private final MealPlanFinalizeService finalizeService;
     private final FoodLogService foodLogService;
+    private final MealPlanHelper mealPlanHelper;
     private final MealSwapService mealSwapService;
 
     @PostMapping("/generate")
@@ -114,11 +117,13 @@ public class MealPlanController {
                 result.getPlanId(), result.getFinalizedPlan()));
     }
     @PostMapping("/generate/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<WeeklyMealPlanDto> generateForUser(@PathVariable String email) {
         return ResponseEntity.ok(mealPlanService.generateForUser(email));
     }
 
     @PostMapping("/generate/final/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenerateFinalResponse> generateFinalForUser(@PathVariable String email) {
         SavedPlanResult result = finalizeService.generateAndFinalize(email);
         return ResponseEntity.ok(new GenerateFinalResponse(
@@ -130,7 +135,7 @@ public class MealPlanController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody LogFoodRequest request) {
 
-        Long userId = extractUserId(userDetails);
+        Long userId = mealPlanHelper.extractUserId(userDetails);
         return ResponseEntity.ok(foodLogService.logFood(userId, request));
     }
 
@@ -139,7 +144,7 @@ public class MealPlanController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody MarkSlotEatenRequest request) {
 
-        Long userId = extractUserId(userDetails);
+        Long userId = mealPlanHelper.extractUserId(userDetails);
         return ResponseEntity.ok(foodLogService.markSlotEaten(userId, request));
     }
 
@@ -147,17 +152,9 @@ public class MealPlanController {
     public ResponseEntity<PlanStatusDto> status(
             @AuthenticationPrincipal UserDetails userDetails) {
 
-        Long userId = extractUserId(userDetails);
+        Long userId = mealPlanHelper.extractUserId(userDetails);
         return ResponseEntity.ok(foodLogService.getPlanStatus(userId));
     }
 
-    private Long extractUserId(UserDetails userDetails) {
-        if (userDetails instanceof UserEntity u)
-            return u.getId();
-        try {
-            return Long.parseLong(userDetails.getUsername());
-        } catch (NumberFormatException e) {
-            throw new IllegalStateException("Cannot resolve user ID");
-        }
-    }
+
 }

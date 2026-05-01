@@ -1,6 +1,6 @@
-package com.feex.mealplannersystem.dto.tag.product;
+package com.feex.mealplannersystem.dto.tag.base;
 
-public record ProductTagResponse(
+public record BaseTagResponse(
         Long   id,
         String name,
         String slug,

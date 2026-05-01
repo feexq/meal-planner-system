@@ -70,7 +70,8 @@ export default function HomePage() {
     setError(null);
     try {
       const { data: categories } = await categoriesAPI.getRoots();
-      setRootCategories(categories);
+      const sorted = [...categories].sort((a, b) => (b.imageUrl ? 1 : 0) - (a.imageUrl ? 1 : 0));
+      setRootCategories(sorted);
 
       const results = await Promise.all(
         categories.map(async (cat) => {
@@ -137,7 +138,7 @@ export default function HomePage() {
       <Navbar cartCount={cartCount} />
 
       <main>
-        {}
+        { }
         <section className="section bg-white" style={{ paddingBottom: '32px' }}>
           <div className="container">
             <div className="hero-wrapper" style={{ marginBottom: '32px' }}>
@@ -186,11 +187,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            {}
+            { }
             <div className="promo-algorithm-card">
               <div className="promo-algorithm-content">
                 <div className="promo-icon-wrapper">
-                  {}
+                  { }
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
                     <path d="M20 3v4"></path>
@@ -245,7 +246,7 @@ export default function HomePage() {
 
         {!isInitialLoad && !error && rootCategories.length > 0 && (
           <div className={`home-content-wrapper ${isFetching ? 'fetching-mask' : ''}`}>
-            {}
+            { }
             <section className="section section-alt" style={{ paddingTop: '32px' }}>
               <div className="container">
                 <div className="section-title">
@@ -257,16 +258,22 @@ export default function HomePage() {
                 </div>
                 <div className="carousel" ref={categoryScrollRef}>
                   {rootCategories.map((category) => (
-                    <div className="category-card" key={`root-cat-${category.id}`} onClick={() => navigate(`/catalog/category/${category.slug}`)} style={{ cursor: 'pointer' }}>
-                      <div className="category-icon">{getCategoryIcon(category.name)}</div>
-                      <div className="category-name">{category.name}</div>
+                    <div className={`category-card ${!category.imageUrl ? 'no-image' : ''}`} key={`root-cat-${category.id}`} onClick={() => navigate(`/catalog/category/${category.slug}`)} title={category.name}>
+                      {category.imageUrl ? (
+                        <img src={category.imageUrl} alt={category.name} className="category-img" />
+                      ) : (
+                        <div className="category-content">
+                          <div className="category-emoji">{getCategoryIcon(category.name)}</div>
+                          <div className="category-name">{category.name}</div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
             </section>
 
-            {}
+            { }
             {categoryData.slice(0, 8).map(({ category, products }, index) => {
               const isAlt = index % 2 !== 0;
               return (

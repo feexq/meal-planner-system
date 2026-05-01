@@ -1,7 +1,7 @@
 package com.feex.mealplannersystem.repository.entity.product;
 
 import com.feex.mealplannersystem.repository.entity.category.CategoryEntity;
-import com.feex.mealplannersystem.repository.entity.tag.IngTagEntity;
+import com.feex.mealplannersystem.repository.entity.tag.BaseTagEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,19 +38,24 @@ public class ProductEntity {
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "unit")
     private String unit;
 
+    @Column(name = "stock")
     private Integer stock;
 
     @Column(name = "is_available")
     private boolean available;
 
-    // Нутриціологія на 100г/100мл
+    @Column(name = "calories")
     private Double calories;
+
     @Column(name = "protein_g")
     private Double proteinG;
+
     @Column(name = "fat_g")
     private Double fatG;
+
     @Column(name = "carbs_g")
     private Double carbsG;
 
@@ -67,7 +72,7 @@ public class ProductEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<IngTagEntity> tags = new HashSet<>();
+    private Set<BaseTagEntity> tags = new HashSet<>();
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -79,26 +84,7 @@ public class ProductEntity {
     private String packageUnit;
 
     @PrePersist
-    @PreUpdate
-    protected void onSave() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-        if (this.unit != null && !this.unit.isBlank()) {
-            String rawUnit = this.unit.trim();
-            String numberPart = rawUnit.replaceAll("[^0-9.,]", "").replace(",", ".");
-            String textPart = rawUnit.replaceAll("[0-9.,\\s]", "").toLowerCase();
-
-            try {
-                this.packageAmount = numberPart.isEmpty() ? 1.0 : Double.parseDouble(numberPart);
-                this.packageUnit = textPart.isEmpty() ? "шт" : textPart;
-            } catch (Exception e) {
-                this.packageAmount = 1.0;
-                this.packageUnit = "шт";
-            }
-        } else {
-            this.packageAmount = 1.0;
-            this.packageUnit = "шт";
-        }
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }

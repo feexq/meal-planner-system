@@ -3,7 +3,7 @@ package com.feex.mealplannersystem.repository.entity.ingredient;
 import com.feex.mealplannersystem.common.product.Unit;
 import com.feex.mealplannersystem.repository.entity.category.CategoryEntity;
 import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
-import com.feex.mealplannersystem.repository.entity.tag.IngTagEntity;
+import com.feex.mealplannersystem.repository.entity.tag.BaseTagEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -66,7 +66,7 @@ public class IngredientEntity {
             joinColumns        = @JoinColumn(name = "ingredient_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<IngTagEntity> tags = new HashSet<>();
+    private Set<BaseTagEntity> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

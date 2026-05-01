@@ -6,15 +6,20 @@ import com.feex.mealplannersystem.dto.category.CreateCategoryRequest;
 import com.feex.mealplannersystem.dto.category.UpdateCategoryRequest;
 import com.feex.mealplannersystem.service.CategoryService;
 import com.feex.mealplannersystem.service.mapper.CategoryMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -73,6 +78,23 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, String>> uploadImage(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        String imageUrl = categoryService.uploadImage(id, file);
+        return ResponseEntity.ok(Map.of("imageUrl", imageUrl));
+    }
+
+    @DeleteMapping("/{id}/image")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
+        categoryService.deleteImage(id);
         return ResponseEntity.noContent().build();
     }
 }

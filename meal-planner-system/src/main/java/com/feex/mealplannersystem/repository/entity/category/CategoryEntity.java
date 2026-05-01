@@ -25,6 +25,9 @@ public class CategoryEntity {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)

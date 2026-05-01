@@ -1,8 +1,8 @@
-package com.feex.mealplannersystem.dto.tag.ingredient;
+package com.feex.mealplannersystem.dto.tag.recipe;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record IngredientTagRequest(
+public record RecipeTagRequest(
         @NotBlank
         String name
 ) {}

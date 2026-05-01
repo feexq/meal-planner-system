@@ -46,7 +46,9 @@ spring:
   azure:
     storage:
       connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
-      container: ${IMAGE_CONTAINER_NAME}
+      profile_container: ${IMAGE_CONTAINER_NAME}
+      product_container: ${PRODUCT_CONTAINER_NAME}
+      recipe_container: ${RECIPE_CONTAINER_NAME}
   security:
     oauth2:
       client:

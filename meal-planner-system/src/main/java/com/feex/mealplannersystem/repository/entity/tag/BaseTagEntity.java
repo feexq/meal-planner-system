@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class IngTagEntity {
+public class BaseTagEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

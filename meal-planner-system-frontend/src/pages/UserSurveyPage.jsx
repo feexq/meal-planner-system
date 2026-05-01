@@ -644,9 +644,11 @@ export default function UserSurveyPage() {
 
             if (!hasExistingPlan) {
                 await preferencesAPI.save(backendPayload);
+            } else {
+                await preferencesAPI.update(backendPayload);
             }
 
-            const response = await mealPlanAPI.generateFinal(backendPayload);
+            const response = await mealPlanAPI.generateFinal();
             const planData = response.data || response;
 
             navigate('/plan-preview', { state: { plan: planData } });

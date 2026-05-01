@@ -1,17 +1,14 @@
 package com.feex.mealplannersystem.service.mapper;
 
 import com.feex.mealplannersystem.dto.recipe.*;
-import com.feex.mealplannersystem.repository.IngredientRepository;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeIngredientEntity;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeStepEntity;
-import com.feex.mealplannersystem.repository.entity.tag.TagEntity;
-import lombok.extern.slf4j.Slf4j;
+import com.feex.mealplannersystem.repository.entity.tag.RecipeTagEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,8 +42,8 @@ public interface RecipeMapper {
         return e != null ? e.name() : null;
     }
 
-    default Set<String> mapTags(Set<TagEntity> tags) {
-        return tags == null ? null : tags.stream().map(TagEntity::getName).collect(Collectors.toSet());
+    default Set<String> mapTags(Set<RecipeTagEntity> tags) {
+        return tags == null ? null : tags.stream().map(RecipeTagEntity::getName).collect(Collectors.toSet());
     }
 
     default Set<String> mapSteps(Set<RecipeStepEntity> steps) {

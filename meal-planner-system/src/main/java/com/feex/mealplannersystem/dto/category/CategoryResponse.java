@@ -15,6 +15,7 @@ public class CategoryResponse {
     private Long id;
     private String name;
     private String slug;
+    private String imageUrl;
     private Long parentId;
     private String parentName;
     private List<CategoryResponse> children;

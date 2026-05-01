@@ -3,20 +3,26 @@ package com.feex.mealplannersystem.service.impl;
 import com.feex.mealplannersystem.dto.product.CreateProductRequest;
 import com.feex.mealplannersystem.dto.product.UpdateProductRequest;
 import com.feex.mealplannersystem.repository.CategoryRepository;
-import com.feex.mealplannersystem.repository.IngTagRepository;
+import com.feex.mealplannersystem.repository.BaseTagRepository;
 import com.feex.mealplannersystem.repository.ProductRepository;
 import com.feex.mealplannersystem.repository.entity.category.CategoryEntity;
 import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
-import com.feex.mealplannersystem.repository.entity.tag.IngTagEntity;
+import com.feex.mealplannersystem.repository.entity.tag.BaseTagEntity;
+import com.feex.mealplannersystem.service.ImageUploadService;
 import com.feex.mealplannersystem.service.ProductService;
 import com.feex.mealplannersystem.service.exception.CustomAlreadyExistsException;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
+import com.feex.mealplannersystem.util.UnitParser;
+import com.feex.mealplannersystem.util.record.ParsedUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +33,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final IngTagRepository tagRepository;
+    private final BaseTagRepository tagRepository;
+    private final UnitParser unitParser;
+    private final ImageUploadService imageUploadService;
+
+    @Value("${spring.azure.storage.product_container}")
+    private String productContainer;
 
     @Override
     @Transactional(readOnly = true)
@@ -52,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductEntity create(CreateProductRequest request) {
+        ParsedUnit parsed = unitParser.parse(request.getUnit());
         if (productRepository.existsByNameUk(request.getNameUk())) {
             throw new CustomAlreadyExistsException("Product", request.getNameUk());
         }
@@ -75,6 +87,8 @@ public class ProductServiceImpl implements ProductService {
                 .fatG(request.getFatG())
                 .carbsG(request.getCarbsG())
                 .calorieConfidence(request.getCalorieConfidence())
+                .packageAmount(parsed.amount())
+                .packageUnit(parsed.unit())
                 .build();
 
         updateCategoryAndTags(entity, request.getCategoryId(), request.getTagIds());
@@ -113,6 +127,11 @@ public class ProductServiceImpl implements ProductService {
         if (request.getFatG() != null) entity.setFatG(request.getFatG());
         if (request.getCarbsG() != null) entity.setCarbsG(request.getCarbsG());
         if (request.getCalorieConfidence() != null) entity.setCalorieConfidence(request.getCalorieConfidence());
+        if (request.getUnit() != null) {
+            ParsedUnit parsed = unitParser.parse(request.getUnit());
+            entity.setPackageAmount(parsed.amount());
+            entity.setPackageUnit(parsed.unit());
+        }
 
         updateCategoryAndTags(entity, request.getCategoryId(), request.getTagIds());
 
@@ -122,10 +141,39 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new CustomNotFoundException("Product", id.toString());
+        ProductEntity product = getById(id);
+        if (product.getImageUrl() != null) {
+            imageUploadService.deleteImage(product.getImageUrl(), productContainer);
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public String uploadImage(Long id, MultipartFile file) throws IOException {
+        ProductEntity product = getById(id);
+
+        if (product.getImageUrl() != null) {
+            imageUploadService.deleteImage(product.getImageUrl(), productContainer);
+        }
+
+        String imageUrl = imageUploadService.uploadImage(file, product.getSlug(), productContainer);
+
+        product.setImageUrl(imageUrl);
+        productRepository.save(product);
+
+        return imageUrl;
+    }
+
+    @Override
+    @Transactional
+    public void deleteImage(Long id) {
+        ProductEntity product = getById(id);
+        if (product.getImageUrl() != null) {
+            imageUploadService.deleteImage(product.getImageUrl(), productContainer);
+            product.setImageUrl(null);
+            productRepository.save(product);
+        }
     }
 
     private void updateCategoryAndTags(ProductEntity entity, Long categoryId, Set<Long> tagIds) {
@@ -136,7 +184,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (tagIds != null) {
-            Set<IngTagEntity> tags = new HashSet<>(tagRepository.findAllById(tagIds));
+            Set<BaseTagEntity> tags = new HashSet<>(tagRepository.findAllById(tagIds));
             entity.setTags(tags);
         }
     }

@@ -5,6 +5,7 @@ import com.feex.mealplannersystem.dto.cart.CartResponse;
 import com.feex.mealplannersystem.dto.cart.UpdateCartItemRequest;
 import com.feex.mealplannersystem.repository.entity.auth.UserEntity;
 import com.feex.mealplannersystem.service.CartService;
+import com.feex.mealplannersystem.util.ResolveCartKeyHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,10 +28,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class CartController {
 
     private final CartService cartService;
+    private final ResolveCartKeyHelper resolveCartKeyHelper;
 
     @GetMapping
     public ResponseEntity<CartResponse> getCart(HttpServletRequest request) {
-        return ResponseEntity.ok(cartService.getCart(resolveCartKey(request)));
+        return ResponseEntity.ok(cartService.getCart(resolveCartKeyHelper.resolveCartKey(request)));
     }
 
     @PostMapping("/items")
@@ -38,7 +40,7 @@ public class CartController {
             HttpServletRequest request,
             @RequestBody @Valid AddToCartRequest body
     ) {
-        return ResponseEntity.ok(cartService.addItem(resolveCartKey(request), body));
+        return ResponseEntity.ok(cartService.addItem(resolveCartKeyHelper.resolveCartKey(request), body));
     }
 
     @PutMapping("/items/{ingredientId}")
@@ -47,7 +49,7 @@ public class CartController {
             @PathVariable Long ingredientId,
             @RequestBody @Valid UpdateCartItemRequest body
     ) {
-        return ResponseEntity.ok(cartService.updateItem(resolveCartKey(request), ingredientId, body));
+        return ResponseEntity.ok(cartService.updateItem(resolveCartKeyHelper.resolveCartKey(request), ingredientId, body));
     }
 
     @DeleteMapping("/items/{ingredientId}")
@@ -55,12 +57,12 @@ public class CartController {
             HttpServletRequest request,
             @PathVariable Long ingredientId
     ) {
-        return ResponseEntity.ok(cartService.removeItem(resolveCartKey(request), ingredientId));
+        return ResponseEntity.ok(cartService.removeItem(resolveCartKeyHelper.resolveCartKey(request), ingredientId));
     }
 
     @DeleteMapping
     public ResponseEntity<Void> clearCart(HttpServletRequest request) {
-        cartService.clearCart(resolveCartKey(request));
+        cartService.clearCart(resolveCartKeyHelper.resolveCartKey(request));
         return ResponseEntity.noContent().build();
     }
 
@@ -70,7 +72,7 @@ public class CartController {
             HttpServletRequest request
     ) {
         return ResponseEntity.ok(
-                cartService.addRecipeIngredients(recipeId, resolveCartKey(request))
+                cartService.addRecipeIngredients(recipeId, resolveCartKeyHelper.resolveCartKey(request))
         );
     }
 
@@ -84,18 +86,5 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    private String resolveCartKey(HttpServletRequest request) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            UserEntity user = (UserEntity) auth.getPrincipal();
-            return "cart:user:" + user.getId();
-        }
 
-        String sessionId = request.getHeader("X-Cart-Session");
-        if (sessionId != null && !sessionId.isBlank()) {
-            return "cart:session:" + sessionId;
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "X-Cart-Session header is required for guests");
-    }
 }

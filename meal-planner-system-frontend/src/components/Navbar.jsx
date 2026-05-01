@@ -12,6 +12,19 @@ export default function Navbar({ cartCount = 0 }) {
 
   const navigate = useNavigate();
 
+  // Читаємо роль з JWT
+  const isAdmin = (() => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return false;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const authorities = payload.role || payload.authorities || [];
+      return Array.isArray(authorities)
+        ? authorities.includes('ADMIN')
+        : authorities === 'ADMIN';
+    } catch { return false; }
+  })();
+
   const [internalCart, setInternalCart] = useState(cartCount);
   const [hasSurvey, setHasSurvey] = useState(false);
 
@@ -179,20 +192,15 @@ export default function Navbar({ cartCount = 0 }) {
                   >
                     👤 Мій профіль
                   </Link>
-                  <Link
-                    to="/admin/ingredients"
-                    className="user-dropdown-btn"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    ⚙️ Інгредієнти
-                  </Link>
-                  <Link
-                    to="/admin/categories"
-                    className="user-dropdown-btn"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    📂 Категорії
-                  </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="user-dropdown-btn"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      🛡️ Адмін панель
+                    </Link>
+                  )}
                   <button className="user-dropdown-btn danger" onClick={handleLogout}>
                     Вийти
                   </button>

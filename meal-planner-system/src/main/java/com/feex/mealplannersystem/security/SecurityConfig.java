@@ -15,7 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +30,7 @@ import org.springframework.security.web.context.RequestAttributeSecurityContextR
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -36,6 +39,15 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2SuccessHandler;
+
+    private static final String INGREDIENTS_API = "/api/ingredients/**";
+    private static final String DELIVERY_API = "/api/delivery/**";
+    private static final String CATEGORIES_API = "/api/categories/**";
+    private static final String PRODUCTS_API = "/api/products/**";
+    private static final String RECIPE_API = "/api/recipes/**";
+    private static final String BASE_TAG_API = "/api/tags-base/**";
+    private static final String RECIPE_TAG_API = "/api/tags-recipes/**";
+    private static final String CART_API = "/api/cart/**";
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -46,7 +58,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                .cors(Customizer.withDefaults())
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
@@ -57,52 +69,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh").permitAll()
                         .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                         .requestMatchers("/api/webhooks/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/delivery/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/ingredients").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/ingredients/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/ingredients/{id}/dietary-tags").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/categories/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/categories/all").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/slug/{slug}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/recipes").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/recipes/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/recipes/slug/{slug}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/cart/add-recipe/{recipeId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/recipes/by-ingredient/{ingredientId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/tags").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/tags-recipes").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/tags-recipes/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/dietary-conditions").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/ingredients/{id}/tags").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/cart").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/cart").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/cart/items").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/cart/items/{ingredientId}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/cart/items/{ingredientId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/recipes/search/by-ingredients").permitAll()
-                        .requestMatchers("/api/orders/**").authenticated()
-                        .requestMatchers("/api/profile/**").authenticated()
-                        .requestMatchers("/api/user/**").authenticated()
-                        .requestMatchers("/api/meal-plans/**").authenticated()
-                        .requestMatchers("/api/nutrition/**").authenticated()
-                        .requestMatchers("/api/food-logs/**").authenticated()
-                        .requestMatchers("/api/analytics/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/ingredients").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/ingredients/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/ingredients/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/ingredients/{id}/dietary-tags").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/categories/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/categories/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/products/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/products/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/tags").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/tags-recipes").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/tags-recipes/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, INGREDIENTS_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, DELIVERY_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, CATEGORIES_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, PRODUCTS_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, RECIPE_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, BASE_TAG_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, RECIPE_TAG_API).permitAll()
+                        .requestMatchers(CART_API).permitAll()
                         .anyRequest().authenticated()
                 ).oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))

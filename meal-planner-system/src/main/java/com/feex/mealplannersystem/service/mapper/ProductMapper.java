@@ -2,9 +2,8 @@ package com.feex.mealplannersystem.service.mapper;
 
 import com.feex.mealplannersystem.dto.product.ProductResponse;
 import com.feex.mealplannersystem.dto.product.ProductSummaryResponse;
-import com.feex.mealplannersystem.repository.entity.category.CategoryEntity;
 import com.feex.mealplannersystem.repository.entity.product.ProductEntity;
-import com.feex.mealplannersystem.repository.entity.tag.IngTagEntity;
+import com.feex.mealplannersystem.repository.entity.tag.BaseTagEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -27,12 +26,12 @@ public interface ProductMapper {
     ProductSummaryResponse toSummaryResponse(ProductEntity entity);
 
     @Named("mapTagsToStrings")
-    default Set<String> mapTagsToStrings(Set<IngTagEntity> tags) {
+    default Set<String> mapTagsToStrings(Set<BaseTagEntity> tags) {
         if (tags == null) {
             return Collections.emptySet();
         }
         return tags.stream()
-                .map(IngTagEntity::getName)
+                .map(BaseTagEntity::getName)
                 .collect(Collectors.toSet());
     }
 }

@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TagEntity {
+public class RecipeTagEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

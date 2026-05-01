@@ -12,6 +12,11 @@ public class CreateCategoryRequest {
 
     @NotBlank
     private String name;
+    
+    @NotBlank
+    private String slug;
+    
+    private String imageUrl;
 
     private Long parentId;
 }

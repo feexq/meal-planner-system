@@ -103,21 +103,23 @@ export const profileAPI = {
 
 export const preferencesAPI = {
 
-  get: () => api.get('/user/preference'),
+  get: () => api.get('/preference'),
 
-  save: (data) => api.post('/user/preference', data),
-  update: (data) => api.put('/user/preference', data),
-  exists: () => api.get('/user/preference/exists'),
+  save: (data) => api.post('/preference', data),
+  update: (data) => api.put('/preference', data),
+  exists: () => api.get('/preference/exists'),
 };
 
 
 
 export const mealPlanAPI = {
-  generateFinal: (preferencesData) => api.post('/meal-plan/generate/final', preferencesData),
+  generateFinal: () => api.post('/meal-plan/generate/final'),
   getStatus: () => api.get('/meal-plan/status'),
   activatePlan: (planId) => api.post('/meal-plan/status', { planId, action: 'ACTIVATE' }),
-  markEaten: (slotId) => api.post(`/meal-plan/mark-eaten/${slotId}`),
+  markEaten: (slotId, actualCalories) => api.post('/meal-plan/mark-eaten', { slotId, actualCalories }),
   swapSlot: (slotId) => api.post(`/meal-plan/swap-slot/${slotId}`),
+  swapMainSlot: (slotId) => api.post(`/meal-plan/swap-slot/main/${slotId}`),
+  swapSideSlot: (slotId) => api.post(`/meal-plan/swap-slot/side/${slotId}`),
   logFood: (text) => api.post('/meal-plan/log-food', { text }),
 };
 
