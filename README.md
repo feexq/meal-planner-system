@@ -29,13 +29,7 @@ FoodMart is an advanced full-stack platform that generates personalized weekly m
    docker-compose up -d --build
    ```
 
-> The database initialises from a compressed SQL dump on first launch. All 12,000+ recipes and product data are loaded automatically — no manual seeding required.
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Frontend | `http://localhost:3000` | React SPA |
-| Backend API | `http://localhost:8080` | Spring Boot REST API |
-| Swagger UI | `http://localhost:8080/swagger-ui/index.html` | Interactive API docs |
 
 ## 🛠 Tech Stack
 <details>
