@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
@@ -19,6 +20,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final JwtTokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -33,7 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         refreshTokenService.deleteByUser(user);
         String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
 
-        String targetUrl = "http://localhost:3000/oauth2/redirect"
+        String targetUrl = frontendUrl + "/oauth2/redirect"
                 + "?token=" + accessToken
                 + "&refreshToken=" + refreshToken;
 

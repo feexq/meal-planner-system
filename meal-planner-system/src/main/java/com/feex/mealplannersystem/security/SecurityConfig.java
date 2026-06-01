@@ -80,6 +80,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, BASE_TAG_API).permitAll()
                         .requestMatchers(HttpMethod.GET, RECIPE_TAG_API).permitAll()
                         .requestMatchers(CART_API).permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
