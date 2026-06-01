@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { mealPlanAPI } from '../api/api';
+import { useToast } from '../context/ToastContext';
 import './TrackerPage.css';
 
 const DAY_NAMES = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
@@ -19,6 +21,36 @@ function getMealIcon(type) {
 function getMealLabel(type) {
     return MEAL_LABELS[(type || '').toUpperCase()] || type || 'Прийом їжі';
 }
+
+const formatDietaryNote = (note) => {
+    if (!note) return '';
+    
+    const ingredientMap = {
+        'salt': 'сіль',
+        'black pepper': 'чорний перець',
+        'pepper': 'перець',
+        'salt black pepper': 'сіль та перець',
+        'sugar': 'цукор',
+        'oil': 'олія',
+        'garlic': 'часник',
+        'onion': 'цибуля',
+        'honey': 'мед',
+        'soy sauce': 'соєвий соус',
+        'lemon juice': 'лимонний сік',
+        'vinegar': 'оцет'
+    };
+
+    const match = note.match(/Contains acceptable amount of (.+)/i);
+    if (match) {
+        const ingredient = match[1].toLowerCase();
+        return `${ingredientMap[ingredient] || ingredient}`;
+    }
+
+    if (note.toLowerCase().includes('lactose-free')) return 'Радимо безлактозні молочні продукти';
+    if (note.toLowerCase().includes('gluten-free soy sauce')) return 'Радимо безглютеновий соєвий соус';
+
+    return note;
+};
 
 function ProgressRing({ pct, danger }) {
     const clamped = Math.min(100, Math.max(0, pct));
@@ -95,6 +127,25 @@ function MealCard({ slot, adaptation, onMarkEaten, onSwap, isToday = false }) {
                         <span className="m-type">
                             {getMealLabel(slot.mealType || slot.type)}
                             {slot.aiAdapted && <span className="ai-badge">Адаптовано</span>}
+                            {slot.dietaryNotes && (Array.isArray(slot.dietaryNotes) ? slot.dietaryNotes : [slot.dietaryNotes]).filter(Boolean).length > 0 && (
+                                <div className="dietary-info-trigger" onClick={(e) => e.stopPropagation()}>
+                                    <span className="dietary-i-icon">i</span>
+                                    <div className="dietary-popover">
+                                        <div className="popover-title">Особливості раціону</div>
+                                        <div className="popover-content">
+                                            <div className="dietary-general-warning">
+                                                Рецепт може містити нерекомендовані інгредієнти. Будьте обережні з кількістю (не рекомендовано — це не заборонено).
+                                            </div>
+                                            {(Array.isArray(slot.dietaryNotes) ? slot.dietaryNotes : [slot.dietaryNotes]).map((note, i) => (
+                                                <div key={i} className="dietary-note-item">
+                                                    <span className="dot"></span>
+                                                    {formatDietaryNote(note)}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </span>
 
                         <span className="m-name" style={{ textDecoration: isDropTarget ? 'line-through' : 'none' }}>
@@ -150,7 +201,7 @@ function MealCard({ slot, adaptation, onMarkEaten, onSwap, isToday = false }) {
                 <div className="meal-confirm-panel">
                     {isDropTarget && (
                         <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C', padding: '14px', borderRadius: '12px', marginBottom: '16px', fontSize: '13.5px' }}>
-                            ⚠️ <strong>ШІ рекомендував пропустити цю страву</strong><br />
+                            ⚠️ <strong>Рекомендовано пропустити цю страву</strong><br />
                             Якщо ви її з'їсте, на наступні дні будуть застосовані жорсткіші фільтри.
                         </div>
                     )}
@@ -207,6 +258,7 @@ function ExtraFoodItem({ item }) {
 
 export default function TrackerPage() {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const today = new Date();
 
     const [planData, setPlanData] = useState(null);
@@ -229,7 +281,21 @@ export default function TrackerPage() {
             });
             if (res.status === 404) { navigate('/survey'); return; }
             if (!res.ok) throw new Error('Не вдалось завантажити план');
-            setPlanData(await res.json());
+            const data = await res.json();
+            console.log('Meal Plan Status Data:', data);
+            
+            // Логуємо ID кожного рецепта
+            if (data.days) {
+                data.days.forEach(day => {
+                    if (day.slots) {
+                        day.slots.forEach(slot => {
+                            console.log(`Day ${day.dayNumber}, Slot ${slot.slotId}: Recipe ID = ${slot.recipeId} (${slot.recipeName})`);
+                        });
+                    }
+                });
+            }
+
+            setPlanData(data);
         } catch (err) {
             setError("Не вдалось завантажити план");
         } finally {
@@ -563,7 +629,7 @@ export default function TrackerPage() {
             setGroceryList(aggregatedList);
         } catch (err) {
             console.error("Помилка завантаження інгредієнтів:", err);
-            alert("Не вдалося завантажити список продуктів. Перевірте з'єднання.");
+            showToast("Не вдалося завантажити список продуктів. Перевірте з'єднання.", 'error');
         } finally {
             setGroceryLoading(false);
         }
@@ -595,16 +661,16 @@ export default function TrackerPage() {
             const failed = responses.some(res => !res.ok);
 
             if (failed) {
-                alert('Частину продуктів додано, але виникли помилки з деякими рецептами.');
+                showToast('Частину продуктів додано, але виникли помилки з деякими рецептами.', 'error');
                 window.dispatchEvent(new Event('cartUpdated'));
             } else {
-                alert('✅ Всі доступні продукти успішно додано до вашого кошика!');
+                showToast('Всі доступні продукти успішно додано до вашого кошика!', 'success');
                 setGroceryModalOpen(false);
                 window.dispatchEvent(new Event('cartUpdated'));
             }
         } catch (err) {
             console.error("Помилка кошика:", err);
-            alert('Помилка при додаванні продуктів у кошик.');
+            showToast('Помилка при додаванні продуктів у кошик.', 'error');
         } finally {
             setCartLoading(false);
         }
@@ -634,7 +700,7 @@ export default function TrackerPage() {
             });
             if (res.ok) await fetchStatus();
         } catch {
-            alert('Не вдалось замінити страву. Спробуйте ще раз.');
+            showToast('Не вдалось замінити страву. Спробуйте ще раз.', 'error');
         }
     };
 
@@ -658,8 +724,35 @@ export default function TrackerPage() {
         }
     };
 
+    const handleRegeneratePlan = () => {
+        navigate('/survey');
+    };
+
     if (loading) return <div style={{ textAlign: 'center', paddingTop: 80 }}><div className="spinner" style={{ margin: '0 auto 16px' }} /></div>;
-    if (error) return <div style={{ textAlign: 'center', paddingTop: 80 }}>{error}</div>;
+    if (error) return (
+        <>
+            <Navbar />
+            <div style={{ textAlign: 'center', paddingTop: 80 }}>
+                <p style={{ color: 'var(--danger)', marginBottom: '24px', fontSize: '18px' }}>{error}</p>
+                <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+                    <button 
+                        onClick={fetchStatus} 
+                        className="btn-back"
+                        style={{ padding: '10px 24px', cursor: 'pointer' }}
+                    >
+                        Перезавантажити
+                    </button>
+                    <button 
+                        onClick={() => navigate('/survey')} 
+                        className="btn-submit"
+                        style={{ padding: '10px 24px', cursor: 'pointer' }}
+                    >
+                        Згенерувати раціон
+                    </button>
+                </div>
+            </div>
+        </>
+    );
     if (!planData || !planData.days) return null;
 
     let startDow = 1;
@@ -765,10 +858,22 @@ export default function TrackerPage() {
         <>
             <Navbar />
             <main className="container tracker-main">
+                <div style={{ background: '#FFF7ED', color: '#B45309', padding: '12px 16px', borderRadius: '12px', fontSize: '14px', marginBottom: '16px', marginTop: '24px', border: '1px solid #FED7AA' }}>
+                    ℹ️ <strong>Увага:</strong> Згенерований раціон несе виключно рекомендаційний характер. Якщо ви маєте проблеми зі здоров'ям, обов'язково проконсультуйтесь у лікаря перед початком дієти.
+                </div>
                 <div className="dash-header">
-                    <div className="dash-title">
-                        <h1>{isToday ? 'Сьогодні' : `План на День ${currentDay.dayNumber}`}</h1>
-                        <p>{displayDateStr} • День {currentDay.dayNumber} з {planData.days.length}</p>
+                    <div className="dash-title" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                        <div>
+                            <h1>{isToday ? 'Сьогодні' : `План на День ${currentDay.dayNumber}`}</h1>
+                            <p>{displayDateStr} • День {currentDay.dayNumber} з {planData.days.length}</p>
+                        </div>
+                        <button 
+                            className="btn-back" 
+                            style={{ padding: '8px 16px', fontSize: '14px', height: 'fit-content' }}
+                            onClick={handleRegeneratePlan}
+                        >
+                            🔄 Перегенерувати
+                        </button>
                     </div>
                     <div className="day-selector">
                         {tabs.map((tab) => (
@@ -829,7 +934,7 @@ export default function TrackerPage() {
                             <div className="ai-adjustment">
                                 <div className="ai-adj-icon">🤖</div>
                                 <div className="ai-adj-text">
-                                    <strong>План адаптовано ШІ!</strong> Ваша ціль на цей день змінена на <strong><span style={{ color: '#EF4444' }}>{Math.round(targetDelta)} ккал</span></strong>.
+                                    <strong>План адаптовано!</strong> Ваша ціль на цей день змінена на <strong><span style={{ color: '#EF4444' }}>{Math.round(targetDelta)} ккал</span></strong>.
                                     <br />
                                     {suggestedAction === 'DROP_SIDES' && 'Ми перекреслили другорядні страви. Рекомендуємо їх пропустити.'}
                                     {suggestedAction === 'DROP_1_SIDE' && 'Для балансу рекомендуємо пропустити одну з другорядних страв (гарнір або снек).'}
@@ -866,6 +971,7 @@ export default function TrackerPage() {
                                         proteinG: slot.proteinG,
                                         fatG: slot.fatG,
                                         carbsG: slot.carbsG,
+                                        dietaryNotes: slot.dietaryNotes,
                                         eaten: slot.status === 'EATEN' || slot.actualCalories !== null,
                                     }}
                                     adaptation={adaptation}

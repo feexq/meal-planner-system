@@ -38,10 +38,11 @@ public class ProductController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Boolean available,
             @RequestParam(required = false) List<Long> categoryIds,
+            @RequestParam(required = false) Boolean hasImage,
             @PageableDefault(size = 20) Pageable pageable
     ) {
         Page<ProductSummaryResponse> response = productService
-                .getAll(search, available, categoryIds, pageable)
+                .getAll(search, available, categoryIds, hasImage, pageable)
                 .map(mapper::toSummaryResponse);
         return ResponseEntity.ok(response);
     }

@@ -10,25 +10,24 @@ from openai import OpenAI
 
 log = logging.getLogger(__name__)
 
+OPENAI_API_KEY: str = os.environ.get("OPENAI_API_KEY", "")
 GEMINI_API_KEY: str = os.environ.get("GEMINI_API_KEY", "")
-GROQ_API_KEY: str   = os.environ.get("GROQ_API_KEY", "")
 
+_openai_client: OpenAI | None = (
+    OpenAI(api_key=OPENAI_API_KEY, max_retries=0, timeout=200.0) if OPENAI_API_KEY else None
+)
 _gemini_client: genai.Client | None = (
     genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 )
-_groq_client: OpenAI | None = (
-    OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
-    if GROQ_API_KEY
-    else None
-)
 
-_GEMINI_MODELS = [
-    "gemini-3.1-flash-lite-preview",
-    "gemini-3-flash-preview",
+# ── Model fallback chain ─────────────────────────────────────────────────────
+_OPENAI_MODELS = [
+    "gpt-5-mini",         # primary — cheapest, reasoning
+    "gpt-4.1-mini",       # fallback
+    "gpt-5.4-nano",       # lightweight fallback
 ]
-_GROQ_MODELS = [
-    "llama-3.3-70b-versatile",
-    "llama-3.1-8b-instant",
+_GEMINI_MODELS = [
+    "gemini-3-flash-preview",  # 1M ctx, 65K out — last-resort fallback
 ]
 
 
@@ -45,17 +44,42 @@ def generate_json_with_fallback(
         *,
         system_prompt: str,
         user_prompt: str,
-        fallback_system_prompt: str | None = None,
-        fallback_user_prompt: str | None = None,
         max_tokens: int = 14_000,
         temperature: float = 0.2,
 ) -> dict:
-    groq_sys  = fallback_system_prompt or system_prompt
-    groq_user = fallback_user_prompt   or user_prompt
-
     errors: list[str] = []
 
-    # ── Gemini tiers ──────────────────────────────────────────────────────────
+    # ── OpenAI tiers (primary) ───────────────────────────────────────────────
+    if _openai_client:
+        for model in _OPENAI_MODELS:
+            try:
+                log.info("[LLM] Trying OpenAI model=%s", model)
+                with open("/tmp/llm_request.txt", "w", encoding="utf-8") as f:
+                    f.write(f"=== SYSTEM ===\n{system_prompt}\n\n=== USER ===\n{user_prompt}\n")
+                
+                resp = _openai_client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user",   "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                
+                raw_content = resp.choices[0].message.content or ""
+                with open("/tmp/llm_response.txt", "w", encoding="utf-8") as f:
+                    f.write(raw_content)
+                    
+                log.info(f"Raw OpenAI response saved to /tmp/llm_response.txt")
+                return json.loads(_strip_md(raw_content))
+            except Exception as exc:
+                msg = f"OpenAI/{model}: {exc}"
+                log.warning("[LLM] %s", msg)
+                errors.append(msg)
+    else:
+        errors.append("OpenAI client not configured (no OPENAI_API_KEY)")
+
+    # ── Gemini fallback ──────────────────────────────────────────────────────
     if _gemini_client:
         for model in _GEMINI_MODELS:
             try:
@@ -77,28 +101,6 @@ def generate_json_with_fallback(
                 errors.append(msg)
     else:
         errors.append("Gemini client not configured (no GEMINI_API_KEY)")
-
-    # ── Groq tiers ────────────────────────────────────────────────────────────
-    if _groq_client:
-        for model in _GROQ_MODELS:
-            try:
-                log.info("[LLM] Trying Groq model=%s", model)
-                resp = _groq_client.chat.completions.create(
-                    model=model,
-                    messages=[
-                        {"role": "system", "content": groq_sys},
-                        {"role": "user",   "content": groq_user},
-                    ],
-                    response_format={"type": "json_object"},
-                    temperature=temperature,
-                )
-                return json.loads(_strip_md(resp.choices[0].message.content))
-            except Exception as exc:
-                msg = f"Groq/{model}: {exc}"
-                log.warning("[LLM] %s", msg)
-                errors.append(msg)
-    else:
-        errors.append("Groq client not configured (no GROQ_API_KEY)")
 
     raise RuntimeError(
         "CRITICAL: All LLM tiers failed.\n" + "\n".join(errors)

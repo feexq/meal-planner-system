@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import { preferencesAPI, profileAPI } from '../api/api';
+import { useToast } from '../context/ToastContext';
 import './PreferencesPage.css';
 
 const translationCache = {
@@ -206,6 +207,8 @@ function Step2({ data, onChange }) {
 }
 
 function Step3({ data, onChange }) {
+  const { showToast } = useToast();
+
   const diets = [
     { value: 'OMNIVORE', label: '🍗 Omnivore' },
     { value: 'VEGETARIAN', label: '🥚 Vegetarian' },
@@ -235,6 +238,10 @@ function Step3({ data, onChange }) {
 
   const toggleMedical = (val) => {
     const arr = data.healthConditions || [];
+    if (!arr.includes(val) && arr.length >= 3) {
+        showToast("Ви можете обрати максимум 3 медичні обмеження.", "error");
+        return;
+    }
     const next = arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val];
     onChange('healthConditions', next);
   };
@@ -573,11 +580,19 @@ const PreferencesPage = () => {
         const prefData = prefRes.data || {};
         const profileData = profileRes.data || {};
 
+        let calculatedAge = null;
+        if (profileData.dateOfBirth) {
+            const birthDate = new Date(profileData.dateOfBirth);
+            const ageDifMs = Date.now() - birthDate.getTime();
+            const ageDate = new Date(ageDifMs);
+            calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
+        }
+
         const mergedPrefs = {
-          gender: profileData.gender || 'MALE',
-          age: profileData.age || 20,
-          heightCm: profileData.heightCm || 180,
-          weightKg: profileData.currentWeightKg || profileData.weightKg || 75,
+          gender: prefData.gender || 'MALE',
+          age: calculatedAge || prefData.age || 20,
+          heightCm: prefData.heightCm || 180,
+          weightKg: profileData.currentWeightKg || prefData.weightKg || 75,
           goal: prefData.goal || 'WEIGHT_LOSS',
           activityLevel: prefData.activityLevel || 'MODERATE',
           goalIntensity: prefData.goalIntensity || 'NORMAL',

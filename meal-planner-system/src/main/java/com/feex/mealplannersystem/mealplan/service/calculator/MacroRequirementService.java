@@ -17,7 +17,7 @@ public class MacroRequirementService {
         double[] proteinRange = resolveProteinRange(user, conditions);
         int[] proteinTargets = calculateProteinTargets(user, effectiveTdee, proteinRange);
         int[] fatAndCarbs = calculateFatAndCarbs(user, effectiveTdee, conditions, proteinTargets[0]);
-        fatAndCarbs = adjustCarbsMinimum(fatAndCarbs, conditions);
+        fatAndCarbs = adjustCarbsMinimum(fatAndCarbs, conditions, user.getDietType());
 
         return buildMacroTarget(proteinTargets, fatAndCarbs, effectiveTdee, conditions, user.getMealsPerDay());
     }
@@ -84,9 +84,16 @@ public class MacroRequirementService {
     private int[] calculateFatAndCarbs(UserProfileModel user, double tdee,
                                        List<String> conditions, int proteinTargetG) {
         String goal = upper(user.getGoal(), "MAINTENANCE");
+        String diet = upper(user.getDietType(), "OMNIVORE");
         boolean hasIbs = conditions.contains("IBS");
 
         int remaining = Math.max((int) Math.round(tdee) - proteinTargetG * 4, 0);
+
+        if ("KETO".equals(diet)) {
+            int carbsTarget = Math.min((int) Math.round((tdee * 0.05) / 4), 40);
+            int fatTarget = Math.max((remaining - carbsTarget * 4) / 9, 0);
+            return new int[]{ fatTarget, carbsTarget };
+        }
 
         if (conditions.contains("DIABETES")) {
             int carbsCals = Math.min((int) Math.round(tdee * 0.40), remaining);
@@ -104,7 +111,10 @@ public class MacroRequirementService {
         return new int[]{ fatTarget, carbsTarget };
     }
 
-    private int[] adjustCarbsMinimum(int[] fatAndCarbs, List<String> conditions) {
+    private int[] adjustCarbsMinimum(int[] fatAndCarbs, List<String> conditions, String dietType) {
+        String diet = upper(dietType, "OMNIVORE");
+        if ("KETO".equals(diet)) return fatAndCarbs;
+
         final int CARBS_MIN = 130;
         int fat = fatAndCarbs[0];
         int carbs = fatAndCarbs[1];

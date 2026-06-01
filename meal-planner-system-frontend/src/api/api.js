@@ -182,6 +182,9 @@ export const recipesAPI = {
       params: { ingredientIds },
       paramsSerializer: { indexes: null },
     }),
+  create: (data) => api.post('/recipes', data),
+  update: (id, data) => api.put(`/recipes/${id}`, data),
+  remove: (id) => api.delete(`/recipes/${id}`),
 };
 
 

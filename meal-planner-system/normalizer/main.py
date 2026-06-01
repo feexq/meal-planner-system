@@ -29,7 +29,7 @@ logging.basicConfig(
 app = FastAPI(
     title="Meal Planner NLP Service",
     version="2.0.0",
-    description="LLM-powered nutrition microservice with 4-tier model fallback",
+    description="LLM-powered nutrition microservice with OpenAI + Gemini fallback chain",
 )
 
 app.include_router(normalize.router)

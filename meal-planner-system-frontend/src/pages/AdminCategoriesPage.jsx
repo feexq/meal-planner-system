@@ -76,7 +76,7 @@ export default function AdminCategoriesPage() {
   const getParentName = (parentId) => {
     if (!parentId) return '—';
     const parent = categories.find((c) => c.id === parentId);
-    return parent ? parent.name : parentId;
+    return parent ? `${parent.name} (ID: ${parent.id})` : `ID: ${parentId}`;
   };
 
   return (
@@ -136,7 +136,11 @@ export default function AdminCategoriesPage() {
               <tbody>
                 {filteredCategories.map((cat) => (
                   <tr key={cat.id}>
-                    <td className="td-id">{cat.id}</td>
+                    <td className="td-id">
+                      <span className="admin-badge type-diet" style={{ fontSize: '0.8rem', fontWeight: '800' }}>
+                        ID: {cat.id}
+                      </span>
+                    </td>
                     <td className="td-name">
                       <span style={{ fontSize: '0.95rem' }}>{cat.name}</span>
                     </td>

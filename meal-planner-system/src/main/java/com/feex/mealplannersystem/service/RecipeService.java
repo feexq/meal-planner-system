@@ -4,9 +4,7 @@ import com.feex.mealplannersystem.common.survey.CookBudget;
 import com.feex.mealplannersystem.common.survey.CookComplexity;
 import com.feex.mealplannersystem.common.survey.CookTime;
 import com.feex.mealplannersystem.common.mealplan.MealType;
-import com.feex.mealplannersystem.dto.recipe.RecipeMatchResponse;
-import com.feex.mealplannersystem.dto.recipe.RecipeResponse;
-import com.feex.mealplannersystem.dto.recipe.RecipeSummaryResponse;
+import com.feex.mealplannersystem.dto.recipe.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -32,4 +30,8 @@ public interface RecipeService {
     RecipeResponse getBySlug(String slug);
     Page<RecipeSummaryResponse> getByIngredient(Long ingredientId, Pageable pageable);
     List<RecipeMatchResponse> findRecipesByIngredients(List<Long> ingredientIds);
+
+    RecipeResponse create(CreateRecipeRequest request);
+    RecipeResponse update(Long id, UpdateRecipeRequest request);
+    void delete(Long id);
 }

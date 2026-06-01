@@ -197,8 +197,12 @@ export default function RecipeDetailPage() {
           <div className="main-content">
 
             {}
-            <div className="recipe-image" style={recipe.imageUrl ? { backgroundImage: `url(${recipe.imageUrl})` } : {}}>
-              {!recipe.imageUrl && (MEAL_TYPE_EMOJIS[recipe.mealType] || '🥑')}
+            <div className="recipe-image">
+              {recipe.imageUrl ? (
+                <img src={recipe.imageUrl} alt={recipe.name} />
+              ) : (
+                <span className="recipe-emoji">{MEAL_TYPE_EMOJIS[recipe.mealType?.toUpperCase()] || '🥑'}</span>
+              )}
             </div>
 
             {}

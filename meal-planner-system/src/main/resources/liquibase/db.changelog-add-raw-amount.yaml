@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-raw-amount-to-recipe-ingredients
+      author: feex
+      changes:
+        - addColumn:
+            tableName: recipe_ingredients
+            columns:
+              - column:
+                  name: raw_amount
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true

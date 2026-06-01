@@ -123,7 +123,6 @@ export default function CategoryRecipesPage() {
 
       <main className="container">
 
-        {}
         <div className="category-header">
           <div className="breadcrumbs">
             <Link to="/recipes">Рецепти</Link>
@@ -151,7 +150,6 @@ export default function CategoryRecipesPage() {
 
         <div className="main-layout">
 
-          {}
           <aside className="sidebar">
             <div className="sidebar-header">
               <h2>Фільтри</h2>
@@ -160,7 +158,6 @@ export default function CategoryRecipesPage() {
               )}
             </div>
 
-            {}
             <div className="filter-group search-group">
               <div className="search-bar-local">
                 <span className="search-icon">🔍</span>
@@ -173,7 +170,6 @@ export default function CategoryRecipesPage() {
               </div>
             </div>
 
-            {}
             {availableTags.length > 0 && (
               <div className="filter-group">
                 <span className="filter-label">Категорії та Теги</span>
@@ -218,7 +214,6 @@ export default function CategoryRecipesPage() {
               </div>
             )}
 
-            {}
             <div className="filter-group">
               <span className="filter-label">Прийом їжі</span>
               <ul className="filter-list">
@@ -237,7 +232,6 @@ export default function CategoryRecipesPage() {
               </ul>
             </div>
 
-            {}
             <div className="filter-group">
               <span className="filter-label">Бюджет</span>
               <ul className="filter-list">
@@ -250,7 +244,6 @@ export default function CategoryRecipesPage() {
               </ul>
             </div>
 
-            {}
             <div className="filter-group">
               <span className="filter-label">Час приготування</span>
               <ul className="filter-list">
@@ -273,7 +266,6 @@ export default function CategoryRecipesPage() {
             </div>
           </aside>
 
-          {}
           <section className="catalog-content">
             <div className="catalog-toolbar">
               <span className="results-count">
@@ -297,9 +289,11 @@ export default function CategoryRecipesPage() {
                 <div className="recipe-grid">
                   {recipes.map(recipe => (
                     <Link to={`/recipe/${recipe.slug}`} key={recipe.id} className="recipe-card">
-                      <div className="recipe-img" style={recipe.imageUrl ? { backgroundImage: `url(${recipe.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
-                        {!recipe.imageUrl && (
-                          <span className="recipe-emoji">{MEAL_TYPE_EMOJIS[recipe.mealType] || '🍽️'}</span>
+                      <div className="recipe-img">
+                        {recipe.imageUrl ? (
+                          <img src={recipe.imageUrl} alt={recipe.name} />
+                        ) : (
+                          <span className="recipe-emoji">{MEAL_TYPE_EMOJIS[recipe.mealType?.toUpperCase()] || '🍽️'}</span>
                         )}
                         <div className="recipe-badges">
                           {recipe.cookTime && (

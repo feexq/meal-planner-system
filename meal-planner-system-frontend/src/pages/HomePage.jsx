@@ -22,7 +22,7 @@ const getCategoryIcon = (name) => {
 
 const HERO_SLIDES = [
   {
-    title: "Свіжі продукти для ідеального раціону",
+    title: "Свіжі продукти для вашого раціону",
     subtitle: "Довірся алгоритму для створення меню на тиждень",
     btnText: "Спробувати",
     discountLabel: "Знижки до",
@@ -69,34 +69,64 @@ export default function HomePage() {
     setIsFetching(true);
     setError(null);
     try {
-      const { data: categories } = await categoriesAPI.getRoots();
-      const sorted = [...categories].sort((a, b) => (b.imageUrl ? 1 : 0) - (a.imageUrl ? 1 : 0));
-      setRootCategories(sorted);
+      const { data: allCategories } = await categoriesAPI.getAll();
+      const roots = allCategories.filter(c => !c.parentId);
+
+      const getDescendantIds = (parentId, all) => {
+        let ids = [parentId];
+        all.filter(c => c.parentId === parentId).forEach(child => {
+          ids = [...ids, ...getDescendantIds(child.id, all)];
+        });
+        return ids;
+      };
+
+      const sortedRoots = [...roots].sort((a, b) => {
+        if (a.slug === 'beverages-alcohol') return -1;
+        if (b.slug === 'beverages-alcohol') return 1;
+        return (b.imageUrl ? 1 : 0) - (a.imageUrl ? 1 : 0);
+      });
+      setRootCategories(sortedRoots);
 
       const results = await Promise.all(
-        categories.map(async (cat) => {
+        sortedRoots.map(async (cat) => {
           try {
-            const { data } = await productsAPI.getAll({
-              categoryIds: cat.id,
+            const descendantIds = getDescendantIds(cat.id, allCategories);
+            
+            // Try fetching products WITH images first
+            const { data: imgRes } = await productsAPI.getAll({
+              categoryIds: descendantIds,
+              hasImage: true,
               page: 0,
               size: 8,
             });
-            return { category: cat, products: data.content || [] };
-          } catch {
+
+            let products = imgRes.content || [];
+
+            // If we have less than 8, fill the rest with products WITHOUT images
+            if (products.length < 8) {
+              const { data: noImgRes } = await productsAPI.getAll({
+                categoryIds: descendantIds,
+                hasImage: false,
+                page: 0,
+                size: 8 - products.length,
+              });
+              products = [...products, ...(noImgRes.content || [])];
+            }
+
+            return { category: cat, products };
+          } catch (err) {
+            console.error(`Error fetching products for category ${cat.name}:`, err);
             return { category: cat, products: [] };
           }
         })
       );
-
 
       setCategoryData(results.filter((r) => r.products.length > 0));
 
       try {
         const { data: cart } = await cartAPI.getCart();
         setCartCount(cart.totalItems || 0);
-      } catch {
-
-      }
+      } catch { }
     } catch (err) {
       setError("Не вдалось завантажити дані. Перевірте з'єднання з сервером.");
       console.error(err);
@@ -172,13 +202,13 @@ export default function HomePage() {
                   <div className="quick-link-title">Товари тижня</div>
                   <div className="quick-link-icon" style={{ background: '#E8F7EF', color: '#1A9E5C' }}>🥬</div>
                 </div>
-                <div className="quick-link-card" onClick={() => navigate('/catalog?filter=promo')}>
-                  <div className="quick-link-title">Всі акції</div>
-                  <div className="quick-link-icon" style={{ background: '#FEF0E6', color: '#F2720C' }}>%</div>
+                <div className="quick-link-card" onClick={() => navigate('/tracker')}>
+                  <div className="quick-link-title">Трекер харчування</div>
+                  <div className="quick-link-icon" style={{ background: '#FEF0E6', color: '#F2720C' }}>🍽️</div>
                 </div>
-                <div className="quick-link-card" onClick={() => navigate('/catalog?filter=hot')}>
-                  <div className="quick-link-title">Гарячі ціни</div>
-                  <div className="quick-link-icon" style={{ background: '#FFF4ED', color: '#D14343' }}>🔥</div>
+                <div className="quick-link-card" onClick={() => navigate('/profile')}>
+                  <div className="quick-link-title">Мій профіль</div>
+                  <div className="quick-link-icon" style={{ background: '#FFF4ED', color: '#D14343' }}>👤</div>
                 </div>
                 <div className="quick-link-card" onClick={() => navigate('/recipes')}>
                   <div className="quick-link-title">Рецепти та раціон</div>
@@ -201,9 +231,9 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <div className="promo-text-wrapper">
-                  <h3>Створіть свій ідеальний раціон</h3>
+                  <h3>Створіть свій персональний раціон</h3>
                   <p>
-                    Довіртесь нашому алгоритму! Наші працьовиті прибожки підберуть тижневе меню, яке ідеально підійде саме під ваші цілі, врахує всі побажання та згенерує кошик.
+                    Довіртесь нашому алгоритму! Наші працьовиті прибожки підберуть тижневе меню, яке підійде саме під ваші цілі, врахує всі побажання та згенерує кошик.
                   </p>
                 </div>
               </div>

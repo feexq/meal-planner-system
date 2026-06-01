@@ -54,6 +54,9 @@ public class MealPlanSlotEntity {
     @Column(name = "portion_note", length = 500)
     private String portionNote;
 
+    @Column(name = "dietary_notes", columnDefinition = "TEXT")
+    private String dietaryNotes;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
@@ -64,5 +67,3 @@ public class MealPlanSlotEntity {
 
     public enum SlotStatus { PLANNED, EATEN, SKIPPED, REPLACED }
 }
-
-

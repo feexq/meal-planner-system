@@ -25,11 +25,13 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
         WHERE (:search IS NULL OR LOWER(p.nameUk) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')))
         AND (:available IS NULL OR p.available = :available)
         AND (:#{#categoryIds} IS NULL OR p.category.id IN :categoryIds)
+        AND (:hasImage IS NULL OR (:hasImage = true AND p.imageUrl IS NOT NULL) OR (:hasImage = false AND p.imageUrl IS NULL))
     """)
     Page<ProductEntity> findAllWithFilters(
             @Param("search") String search,
             @Param("available") Boolean available,
             @Param("categoryIds") List<Long> categoryIds,
+            @Param("hasImage") Boolean hasImage,
             Pageable pageable
     );
 

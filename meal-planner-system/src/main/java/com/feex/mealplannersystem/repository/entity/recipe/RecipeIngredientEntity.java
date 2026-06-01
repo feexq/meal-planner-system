@@ -33,4 +33,7 @@ public class RecipeIngredientEntity {
 
     @Column(name = "raw_name", nullable = false)
     private String rawName;
+
+    @Column(name = "raw_amount")
+    private String rawAmount;
 }

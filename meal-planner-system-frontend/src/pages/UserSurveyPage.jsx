@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mealPlanAPI, preferencesAPI } from '../api/api';
 import Navbar from '../components/Navbar';
+import { useToast } from '../context/ToastContext';
 import './UserSurveyPage.css';
 
 const TOTAL_STEPS = 6;
@@ -208,6 +209,8 @@ function Step2({ data, onChange }) {
 }
 
 function Step3({ data, onChange }) {
+    const { showToast } = useToast();
+
     const diets = [
         { value: 'OMNIVORE', label: '🍗 Omnivore' },
         { value: 'VEGETARIAN', label: '🥚 Vegetarian' },
@@ -225,12 +228,22 @@ function Step3({ data, onChange }) {
         { value: 'HIGH_CHOLESTEROL', label: 'Високий холестерин' },
         { value: 'CELIAC_DISEASE', label: 'Целіакія' },
         { value: 'LACTOSE_INTOLERANCE', label: 'Непереносимість лактози' },
+        { value: 'NUT_ALLERGY', label: 'Алергія на горіхи' },
+        { value: 'SHELLFISH_ALLERGY', label: 'Алергія на молюсків' },
+        { value: 'FISH_ALLERGY', label: 'Алергія на рибу' },
         { value: 'GERD', label: 'ГЕРХ (Рефлюкс)' },
         { value: 'IBS', label: 'IBS (СПК)' },
+        { value: 'KIDNEY_DISEASE', label: 'Захворювання нирок' },
+        { value: 'GOUT', label: 'Подагра' },
+        { value: 'PANCREATITIS', label: 'Панкреатит' },
     ];
 
     const toggleMedical = (val) => {
         const arr = data.healthConditions || [];
+        if (!arr.includes(val) && arr.length >= 3) {
+            showToast("Ви можете обрати максимум 3 медичні обмеження.", "error");
+            return;
+        }
         const next = arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val];
         onChange('healthConditions', next);
     };

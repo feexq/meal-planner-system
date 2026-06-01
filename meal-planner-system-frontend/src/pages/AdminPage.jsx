@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AdminRecipeFormModal from '../components/AdminRecipeFormModal';
 import './AdminPage.css';
 
 // ─── API helpers ────────────────────────────────────────────────────────────
@@ -60,6 +61,9 @@ const api = {
     },
     recipes: {
         getAll: (p = {}) => apiFetch('GET', '/recipes', null, p),
+        create: (d) => apiFetch('POST', '/recipes', d),
+        update: (id, d) => apiFetch('PUT', `/recipes/${id}`, d),
+        remove: (id) => apiFetch('DELETE', `/recipes/${id}`),
     },
     tags: {
         getRecipes: () => apiFetch('GET', '/tags-recipes'),
@@ -158,7 +162,7 @@ function Field({ label, name, value, onChange, type = 'text', required }) {
             <label className="adm-label">{label}{required && <span className="adm-required">*</span>}</label>
             {type === 'textarea'
                 ? <textarea className="adm-input" name={name} value={value || ''} onChange={onChange} rows={3} />
-                : <input className="adm-input" type={type} name={name} value={value || ''} onChange={onChange} required={required} />
+                : <input className="adm-input" type={type} name={name} value={value || ''} onChange={onChange} required={required} readOnly={type === 'readonly'} />
             }
         </div>
     );
@@ -192,11 +196,26 @@ function SearchBar({ value, onChange, placeholder = 'Пошук...' }) {
 function Pagination({ page, total, pageSize, onPage }) {
     const pages = Math.ceil(total / pageSize);
     if (pages <= 1) return null;
+
+    const getVisiblePages = () => {
+        if (pages <= 10) return Array.from({ length: pages }, (_, i) => i);
+        let start = Math.max(0, page - 4);
+        let end = Math.min(pages - 1, start + 5);
+        if (end - start < 9) start = Math.max(0, end - 9);
+        const p = [];
+        for (let i = start; i <= end; i++) p.push(i);
+        return p;
+    };
+
     return (
         <div className="adm-pagination">
-            {Array.from({ length: Math.min(pages, 10) }, (_, i) => (
+            <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={page === 0} onClick={() => onPage(0)}>⟪</button>
+            <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={page === 0} onClick={() => onPage(page - 1)}>←</button>
+            {getVisiblePages().map(i => (
                 <button key={i} className={`adm-page-btn ${page === i ? 'active' : ''}`} onClick={() => onPage(i)}>{i + 1}</button>
             ))}
+            <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={page >= pages - 1} onClick={() => onPage(page + 1)}>→</button>
+            <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={page >= pages - 1} onClick={() => onPage(pages - 1)}>⟫</button>
         </div>
     );
 }
@@ -332,9 +351,10 @@ function CategoriesSection({ toast }) {
                 <div className="adm-section-left"><span className="adm-count">{items.length} категорій</span></div>
                 <div className="adm-section-right"><button className="adm-btn adm-btn-primary" onClick={() => { setForm({}); setModal('create'); }}><Icon name="plus" size={16} /> Додати</button></div>
             </div>
-            <DataView view="list" items={items} fields={['name', 'slug', 'parentId']} onEdit={i => { setForm({ ...i }); setModal(i); }} onDelete={id => setConfirm(id)} />
+            <DataView view="list" items={items} fields={['id', 'name', 'slug', 'parentId']} onEdit={i => { setForm({ ...i }); setModal(i); }} onDelete={id => setConfirm(id)} />
             {modal && (
-                <Modal title="Категорія" onClose={() => setModal(null)}>
+                <Modal title={modal === 'create' ? 'Нова категорія' : `Редагування категорії #${modal.id}`} onClose={() => setModal(null)}>
+                    {modal !== 'create' && <Field label="ID" value={modal.id} type="readonly" />}
                     <Field label="Назва" name="name" value={form.name} onChange={change} required />
                     <Field label="Slug" name="slug" value={form.slug} onChange={change} required />
                     <Field label="Parent ID" name="parentId" value={form.parentId} onChange={change} type="number" />
@@ -446,13 +466,15 @@ function ProductsSection({ toast }) {
     );
 }
 
-// ─── Section: Recipes (read-only) ─────────────────────────────────────────────
+// ─── Section: Recipes ─────────────────────────────────────────────
 function RecipesSection({ toast }) {
     const [items, setItems] = useState([]);
     const [view, setView] = useState('grid');
     const [q, setQ] = useState('');
     const [page, setPage] = useState(0);
     const [total, setTotal] = useState(0);
+    const [modal, setModal] = useState(null); // null | {} for create | {id:...} for edit
+    const [confirm, setConfirm] = useState(null);
     const size = 12;
 
     const load = useCallback(async () => {
@@ -461,9 +483,37 @@ function RecipesSection({ toast }) {
             setItems(res.content || []);
             setTotal(res.page?.totalElements || res.totalElements || 0);
         } catch { toast('Помилка завантаження', 'error'); }
-    }, [page, q]);
+    }, [page, q, size, toast]);
 
     useEffect(() => { load(); }, [load]);
+
+    const handleSave = async (payload) => {
+        try {
+            if (modal.id) {
+                await api.recipes.update(modal.id, payload);
+                toast('Рецепт оновлено');
+            } else {
+                await api.recipes.create(payload);
+                toast('Рецепт створено');
+            }
+            setModal(null);
+            load();
+        } catch (err) {
+            toast('Помилка збереження', 'error');
+            throw err;
+        }
+    };
+
+    const remove = async (id) => {
+        try {
+            await api.recipes.remove(id);
+            toast('Видалено');
+            load();
+        } catch {
+            toast('Помилка видалення', 'error');
+        }
+        setConfirm(null);
+    };
 
     return (
         <div className="adm-section">
@@ -474,10 +524,38 @@ function RecipesSection({ toast }) {
                 </div>
                 <div className="adm-section-right">
                     <ViewToggle view={view} onChange={setView} />
+                    <button className="adm-btn adm-btn-primary" onClick={() => setModal({})}>
+                        <Icon name="plus" size={16} /> Додати
+                    </button>
                 </div>
             </div>
-            <DataView view={view} items={items} fields={['name', 'slug', 'calories']} imageField="imageUrl" readOnly />
+
+            <DataView
+                view={view}
+                items={items}
+                fields={['name', 'slug', 'calories']}
+                imageField="imageUrl"
+                onEdit={item => setModal(item)}
+                onDelete={id => setConfirm(id)}
+            />
+
             <Pagination page={page} total={total} pageSize={size} onPage={setPage} />
+
+            {modal && (
+                <AdminRecipeFormModal
+                    recipe={modal.id ? modal : null}
+                    onSave={handleSave}
+                    onClose={() => setModal(null)}
+                />
+            )}
+
+            {confirm && (
+                <Confirm
+                    msg="Видалити рецепт? Цю дію неможливо скасувати."
+                    onYes={() => remove(confirm)}
+                    onNo={() => setConfirm(null)}
+                />
+            )}
         </div>
     );
 }

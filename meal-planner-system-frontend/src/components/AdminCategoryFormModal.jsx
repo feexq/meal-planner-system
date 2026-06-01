@@ -62,12 +62,19 @@ export default function AdminCategoryFormModal({ category, onClose, onSave }) {
     <div className="admin-modal-overlay" onClick={onClose}>
       <div className="admin-modal admin-modal-sm" onClick={(e) => e.stopPropagation()}>
         <div className="admin-modal-header">
-          <h2>{isEdit ? 'Редагувати категорію' : 'Створити категорію'}</h2>
+          <h2>{isEdit ? `Редагувати категорію (ID: ${category.id})` : 'Створити категорію'}</h2>
           <button className="admin-modal-close" onClick={onClose}>✕</button>
         </div>
 
         <form className="admin-modal-form" onSubmit={handleSubmit}>
           {error && <div className="admin-form-error">{error}</div>}
+
+          {isEdit && (
+            <div className="admin-form-group">
+              <label>ID категорії</label>
+              <input value={category.id} readOnly disabled style={{ opacity: 0.7 }} />
+            </div>
+          )}
 
           <div className="admin-form-group">
             <label>Назва категорії *</label>
@@ -85,7 +92,7 @@ export default function AdminCategoryFormModal({ category, onClose, onSave }) {
               <option value="">— Коренева категорія —</option>
               {allCategories.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name}
+                  {c.name} (ID: {c.id})
                 </option>
               ))}
             </select>

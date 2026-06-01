@@ -22,6 +22,7 @@ import java.util.Set;
 public class RecipeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

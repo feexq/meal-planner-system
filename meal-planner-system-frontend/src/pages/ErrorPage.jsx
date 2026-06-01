@@ -15,14 +15,24 @@ export default function ErrorPage({ code, message }) {
           <p style={{ color: 'var(--text-muted)', marginBottom: '40px' }}>
             На жаль, такої сторінки не існує, або у вас немає до неї доступу.
           </p>
-          <button 
-            type="button" 
-            className="btn-submit" 
-            style={{ display: 'inline-block', width: 'auto', padding: '12px 32px' }}
-            onClick={() => navigate('/')}
-          >
-            Повернутися на Головну
-          </button>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+            <button 
+              type="button" 
+              className="btn-submit" 
+              style={{ display: 'inline-block', width: 'auto', padding: '12px 32px' }}
+              onClick={() => navigate('/')}
+            >
+              Повернутися на Головну
+            </button>
+            <button 
+              type="button" 
+              className="btn-submit" 
+              style={{ display: 'inline-block', width: 'auto', padding: '12px 32px', background: 'var(--primary-dark)' }}
+              onClick={() => navigate('/survey')}
+            >
+              Згенерувати раціон
+            </button>
+          </div>
         </div>
       </main>
     </>

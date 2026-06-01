@@ -11,7 +11,6 @@ import com.feex.mealplannersystem.dto.mealplan.score.AdditionalRecipeDto;
 import com.feex.mealplannersystem.mealplan.common.ScoringMode;
 import com.feex.mealplannersystem.mealplan.dto.scoring.RecipeCandidateDto;
 import com.feex.mealplannersystem.mealplan.mapper.IngredientClassificationAdapter;
-import com.feex.mealplannersystem.mealplan.mapper.RecipeDataAdapter;
 import com.feex.mealplannersystem.mealplan.mapper.RecipeDataCache;
 import com.feex.mealplannersystem.mealplan.mapper.UserProfileAdapter;
 import com.feex.mealplannersystem.mealplan.model.NutritionModel;
@@ -29,6 +28,7 @@ import com.feex.mealplannersystem.repository.entity.mealplan.MealPlanSlotEntity;
 import com.feex.mealplannersystem.repository.entity.preference.UserPreferenceEntity;
 import com.feex.mealplannersystem.service.AdditionalRecipeService;
 import com.feex.mealplannersystem.service.MealSwapService;
+import com.feex.mealplannersystem.service.DietaryNotesCacheService;
 import com.feex.mealplannersystem.service.RecipeTranslationService;
 import com.feex.mealplannersystem.service.WeeklyBalanceService;
 import com.feex.mealplannersystem.service.exception.CustomNotFoundException;
@@ -60,6 +60,7 @@ public class MealSwapServiceImpl implements MealSwapService {
     private final AdditionalRecipeService additionalRecipeService;
     private final FinalizeClient nlpClient;
     private final RecipeTranslationService translationService;
+    private final DietaryNotesCacheService dietaryNotesCacheService;
 
     @Transactional
     public MealPlanSlotEntity swapMainSlot(Long slotId, String userEmail) {
@@ -208,6 +209,10 @@ public class MealSwapServiceImpl implements MealSwapService {
         slot.setRecipeName(best.getRecipeName());
         slot.setTargetCalories(best.getScaledCalories());
         slot.setRecommendedServings(best.getRecommendedServings());
+        
+        if (best.getDietaryNotes() != null && !best.getDietaryNotes().isEmpty()) {
+            dietaryNotesCacheService.putNotes(Long.valueOf(user.getUserId()), best.getRecipeId(), best.getDietaryNotes());
+        }
 
         NutritionModel bestNutrition = data.getNutrition(best.getRecipeId());
         if (bestNutrition != null) {
@@ -280,6 +285,10 @@ public class MealSwapServiceImpl implements MealSwapService {
         slot.setProteinG(chosen.getProteinG());
         slot.setCarbsG(chosen.getCarbsG());
         slot.setFatG(chosen.getFatG());
+        
+        if (chosen.getDietaryNotes() != null && !chosen.getDietaryNotes().isEmpty()) {
+            dietaryNotesCacheService.putNotes(Long.valueOf(user.getUserId()), chosen.getRecipeId(), chosen.getDietaryNotes());
+        }
 
         log.info("Swapped SIDE slotId={} → recipeId={} '{}' ({} kcal)",
                 slot.getId(), chosen.getRecipeId(), chosen.getName(), chosen.getCalories());

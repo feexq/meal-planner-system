@@ -17,8 +17,8 @@ public class RecipeNutritionEntity {
     @Id
     private Long recipeId;
 
-    @EqualsAndHashCode.Exclude // <--- ДОДАТИ ЦЕ
-    @ToString.Exclude          // <--- ДОДАТИ ЦЕ
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "recipe_id")

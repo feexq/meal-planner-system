@@ -1,15 +1,22 @@
 package com.feex.mealplannersystem.config.normalizer.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.Getter;
+import java.util.List;
 
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChosenItem {
     private Long recipeId;
     private String name;
-    private double calories;
-    private double proteinG;
-    private double carbsG;
-    private double fatG;
-    private String reason;
+    private Double calories;
+    private Double proteinG;
+    private Double carbsG;
+    private Double fatG;
+    private List<String> dietaryNotes;
 }

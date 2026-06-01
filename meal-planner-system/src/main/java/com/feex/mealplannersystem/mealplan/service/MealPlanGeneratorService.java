@@ -21,6 +21,7 @@ import com.feex.mealplannersystem.mealplan.service.calculator.MacroTarget;
 import com.feex.mealplannersystem.mealplan.service.filter.RecipeFilterService;
 import com.feex.mealplannersystem.mealplan.service.scorer.RecipeScorerService;
 import com.feex.mealplannersystem.mealplan.service.scorer.context.ScoringContext;
+import com.feex.mealplannersystem.service.DietaryNotesCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ojalgo.optimisation.Expression;
@@ -43,6 +44,7 @@ public class MealPlanGeneratorService {
     private final RecipeFilterService recipeFilter;
     private final RecipeDataCache recipeDataCache;
     private final RecipeScorerService recipeScorer;
+    private final DietaryNotesCacheService dietaryNotesCacheService;
 
     private static final int TOP_N_CANDIDATES = 150;
     private static final int BASE_PROTEIN_WEIGHT = 15;
@@ -162,8 +164,8 @@ public class MealPlanGeneratorService {
             double cMin = Math.max(0, macroTarget.carbsAbsoluteMinG * (1.0 - tolerance));
             double fMin = Math.max(0, macroTarget.fatMinG * (1.0 - tolerance));
             double fMax = macroTarget.fatMaxG * (1.0 + tolerance);
-            double calMin = dailyCalories * (0.85 - tolerance / 2);
-            double calMax = dailyCalories * (1.15 + tolerance / 2);
+            double calMin = dailyCalories * (1.0 - tolerance);
+            double calMax = dailyCalories * (1.0 + tolerance);
 
             Expression protExpr = model.addExpression("Protein").lower(pMin).upper(pMax);
             Expression carbsExpr = model.addExpression("Carbs").lower(cMin).upper(9999.0);
@@ -191,7 +193,7 @@ public class MealPlanGeneratorService {
                     log.debug("  ILP solved with tolerance {}%", Math.round(tolerance * 100));
 
                 List<MealSlotDto> finalSlots = buildFinalSlots(
-                        slotCandidates, slotBudgets, vars, usageBySlotType, data, day);
+                        slotCandidates, slotBudgets, vars, usageBySlotType, data, day, user);
                 finalSlots.sort(Comparator.comparingInt(s -> slotOrder(s.getMealType())));
                 return finalSlots;
             }
@@ -260,10 +262,11 @@ public class MealPlanGeneratorService {
             }
 
             double scaledServings = Math.round((slotBudget / calsPerServing) * 10.0) / 10.0;
-            scaledServings = Math.max(0.5, Math.min(1.5, scaledServings));
+            scaledServings = Math.max(0.5, Math.min(2.3, scaledServings));
             double scaledCalories = calsPerServing * scaledServings;
 
-            if (scaledCalories < slotBudget * 0.60 || scaledCalories > slotBudget * 1.40) continue;
+            // Звузив початковий фільтр з 40% до 15% відхилення від бюджету слота, щоб ILP було простіше знайти 5% для всього дня
+            if (scaledCalories < slotBudget * 0.85 || scaledCalories > slotBudget * 1.15) continue;
             if (usedToday.contains((int) recipe.getId())) continue;
 
             int maxRepeats = user.getMaxRecipeRepeatsPerWeek() != null
@@ -294,7 +297,6 @@ public class MealPlanGeneratorService {
                 relaxations.add("gapRelaxed");
             }
 
-            // ↓↓↓ ВИКЛИК ЗМІНИВСЯ — ctx замість 15 параметрів ↓↓↓
             RecipeCandidateDto candidate = recipeScorer.scoreRecipe(
                     recipe, user, ctx, scaledServings, scaledCalories, relaxations);
 
@@ -313,7 +315,7 @@ public class MealPlanGeneratorService {
             Map<String, Map<String, Variable>> vars,
             Map<Integer, Map<String, List<Integer>>> usageBySlotType,
             RecipeDataContext data,
-            int day) {
+            int day, UserProfileModel user) {
 
         List<MealSlotDto> finalSlots = new ArrayList<>();
 
@@ -362,6 +364,12 @@ public class MealPlanGeneratorService {
                     for (RecipeCandidateDto c : slotCandidates.get(slotName)) {
                         if (chosen.size() >= 5) break;
                         if (alreadyIn.add(c.getRecipeId())) chosen.add(c);
+                    }
+                }
+
+                for (RecipeCandidateDto c : chosen) {
+                    if (c.getDietaryNotes() != null && !c.getDietaryNotes().isEmpty()) {
+                        dietaryNotesCacheService.putNotes(Long.valueOf(user.getUserId()), c.getRecipeId(), c.getDietaryNotes());
                     }
                 }
             }

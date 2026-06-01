@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
-    Page<ProductEntity> getAll(String search, Boolean available, List<Long> categoryIds, Pageable pageable);
+    Page<ProductEntity> getAll(String search, Boolean available, List<Long> categoryIds, Boolean hasImage, Pageable pageable);
 
     ProductEntity getById(Long id);
 

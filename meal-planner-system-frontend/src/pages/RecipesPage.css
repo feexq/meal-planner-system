@@ -259,22 +259,21 @@
 
 
 .recipes-page .recipe-img {
-  width: 100%;
-  height: 210px;
-  background: linear-gradient(135deg, #ede8fa 0%, #f0eafe 100%);
+  width: 100% !important;
+  height: 200px !important;
+  padding: 4px 4px 0;
+  background: #fff;
   position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block !important;
 }
 
 .recipes-page .recipe-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
   object-position: center;
-  display: block;
+  border-radius: var(--radius-md);
+  display: block !important;
   transition: transform 0.4s ease;
 }
 

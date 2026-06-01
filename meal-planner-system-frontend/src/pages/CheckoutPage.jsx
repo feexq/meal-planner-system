@@ -4,6 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useAuth } from '../context/AuthContext';
 import { cartAPI, ordersAPI } from '../api/api';
+import { useToast } from '../context/ToastContext';
 import './CheckoutPage.css';
 
 
@@ -189,6 +190,7 @@ const CheckoutForm = ({ clientSecret, city, warehouse, cart, orderId }) => {
 export default function CheckoutPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const { city, warehouse } = location.state || {};
 
   const [clientSecret, setClientSecret] = useState(null);
@@ -226,7 +228,7 @@ export default function CheckoutPage() {
 
       } catch (err) {
         console.error('Failed to init checkout:', err);
-        alert(err.response?.data?.message || err.message || 'Помилка завантаження');
+        showToast(err.response?.data?.message || err.message || 'Помилка завантаження', 'error');
         navigate('/cart');
       } finally {
         setLoading(false);

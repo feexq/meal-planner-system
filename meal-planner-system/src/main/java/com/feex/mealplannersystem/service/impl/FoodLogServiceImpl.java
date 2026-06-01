@@ -53,6 +53,7 @@ public class FoodLogServiceImpl implements FoodLogService {
     private final DailyNutritionSummaryService summaryService;
     private final StreakService streakService;
     private final UserProfileRepository userProfileRepository;
+    private final DietaryNotesCacheService dietaryNotesCacheService;
 
     @Transactional
     public LogFoodResponse logFood(Long userId, LogFoodRequest request) {
@@ -204,7 +205,7 @@ public class FoodLogServiceImpl implements FoodLogService {
         currentDay = Math.max(1, Math.min(7, currentDay));
 
         AdaptedPlanResponse adapted = balanceService.recalculate(plan, currentDay);
-        List<DayStatusDto> days = buildDayStatuses(plan);
+        List<DayStatusDto> days = buildDayStatuses(plan, userId);
 
         return PlanStatusDto.builder()
                 .planId(plan.getId())
@@ -215,7 +216,7 @@ public class FoodLogServiceImpl implements FoodLogService {
                 .build();
     }
 
-    private List<DayStatusDto> buildDayStatuses(MealPlanRecordEntity plan) {
+    private List<DayStatusDto> buildDayStatuses(MealPlanRecordEntity plan, Long userId) {
         return plan.getSlots().stream()
                 .collect(Collectors.groupingBy(MealPlanSlotEntity::getDayNumber))
                 .entrySet().stream()
@@ -243,6 +244,13 @@ public class FoodLogServiceImpl implements FoodLogService {
                     List<SlotStatusDto> slotDtos = daySlots.stream()
                             .map(s -> {
                                 RecipeTranslationInfo t = info.get(s.getRecipeId());
+                                
+                                List<String> notesList = List.of();
+                                if (s.getRecipeId() != null) {
+                                    List<String> cached = dietaryNotesCacheService.getNotes(userId, s.getRecipeId());
+                                    if (cached != null) notesList = cached;
+                                }
+                                
                                 return SlotStatusDto.builder()
                                         .slotId(s.getId())
                                         .mealType(s.getMealType())
@@ -256,6 +264,7 @@ public class FoodLogServiceImpl implements FoodLogService {
                                         .carbsG(s.getCarbsG())
                                         .slotRole(s.getSlotRole())
                                         .status(s.getStatus().name())
+                                        .dietaryNotes(notesList)
                                         .eatenAt(s.getEatenAt())
                                         .build();
                             })

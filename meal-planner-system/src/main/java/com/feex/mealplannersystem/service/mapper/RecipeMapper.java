@@ -64,11 +64,12 @@ public interface RecipeMapper {
         return RecipeIngredientResponse.builder()
                 .ingredientId(ri.getIngredient() != null ? ri.getIngredient().getId() : null)
                 .rawName(ri.getRawName())
+                .rawAmount(ri.getRawAmount())
                 .availableInShop(ri.getIngredient() != null && ri.getIngredient().isAvailable())
                 .price(ri.getIngredient() != null ? ri.getIngredient().getPrice() : null)
                 .unit(ri.getIngredient() != null ? ri.getIngredient().getUnit() : null)
                 .imageUrl(ri.getIngredient() != null ? ri.getIngredient().getImageUrl() : null)
-                .productId(ri.getIngredient() != null ? ri.getIngredient().getProduct().getId() : null)
+                .productId(ri.getIngredient() != null && ri.getIngredient().getProduct() != null ? ri.getIngredient().getProduct().getId() : null)
                 .build();
     }
 }

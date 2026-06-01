@@ -12,7 +12,7 @@ router = APIRouter(tags=["finalize"])
 def _to_meal_item(m: dict | None) -> MealItem | None:
     if not m:
         return None
-    recipe_id = m.get("recipeId") or m.get("id")
+    recipe_id = m.get("recipeId") or m.get("id") or m.get("sideId") or m.get("mainId")
     if recipe_id is None:
         raise ValueError(f"Missing recipeId in: {m}")
     est_cals = (

@@ -51,3 +51,7 @@ databaseChangeLog:
       file: liquibase/db.changelog-init-achievements.yaml
   - include:
       file: liquibase/db.changelog-seed-achievements.sql
+  - include:
+      file: liquibase/db.changelog-add-raw-amount.yaml
+  - include:
+      file: liquibase/db.changelog-add-cascade-delete-to-recipe-translations.yaml

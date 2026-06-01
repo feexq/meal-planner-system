@@ -42,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductEntity> getAll(String search, Boolean available, List<Long> categoryIds, Pageable pageable) {
-        return productRepository.findAllWithFilters(search, available, categoryIds, pageable);
+    public Page<ProductEntity> getAll(String search, Boolean available, List<Long> categoryIds, Boolean hasImage, Pageable pageable) {
+        return productRepository.findAllWithFilters(search, available, categoryIds, hasImage, pageable);
     }
 
     @Override

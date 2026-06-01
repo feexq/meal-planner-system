@@ -20,6 +20,8 @@ import java.util.Optional;
 public interface RecipeRepository extends JpaRepository<RecipeEntity, Long> {
 
     Optional<RecipeEntity> findBySlug(String slug);
+    
+    boolean existsBySlug(String slug);
 
     @Query(
             value = """

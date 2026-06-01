@@ -111,13 +111,12 @@
 
 .recipe-detail-page .recipe-image {
   width: 100%;
-  height: 420px;
-  background: linear-gradient(135deg, var(--primary-light) 0%, #e8ddf9 100%);
+  height: 480px;
+  background: #f8f9fa;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 100px;
   border: 1px solid var(--border);
   overflow: hidden;
   position: relative;
@@ -126,7 +125,13 @@
 .recipe-detail-page .recipe-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  display: block;
+}
+
+.recipe-detail-page .recipe-emoji {
+  font-size: 100px;
+  line-height: 1;
 }
 
 
@@ -289,6 +294,7 @@
   background: var(--neutral);
   border-color: var(--primary-light);
 }
+
 
 .recipe-detail-page .step-number {
   width: 30px;

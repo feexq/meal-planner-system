@@ -16,8 +16,8 @@ public class RecipeStepEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @EqualsAndHashCode.Exclude // <--- ДОДАТИ ЦЕ
-    @ToString.Exclude          // <--- ДОДАТИ ЦЕ
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
     private RecipeEntity recipe;

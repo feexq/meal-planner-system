@@ -5,6 +5,8 @@ import com.feex.mealplannersystem.dto.recipe.RecipeStepDetail;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 import java.util.List;
 
@@ -20,10 +22,11 @@ public class RecipeTranslationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private RecipeEntity recipe;
 
     @Column(name = "language_code", nullable = false, length = 10)
-    private String languageCode; // 'uk', 'en', 'pl' тощо
+    private String languageCode;
 
     @Column(nullable = false)
     private String name;

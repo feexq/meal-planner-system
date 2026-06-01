@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import { profileAPI, preferencesAPI, ordersAPI } from '../api/api';
+import { useToast } from '../context/ToastContext';
 import './ProfilePage.css';
 
 const TIMEZONES = [
@@ -45,6 +46,7 @@ const handleMaskedDate = (e, setter) => {
 };
 
 const ProfilePage = () => {
+  const { showToast } = useToast();
   const [profile, setProfile] = useState(null);
   const [hasPreferences, setHasPreferences] = useState(true);
   const [lastOrder, setLastOrder] = useState(null);
@@ -105,7 +107,7 @@ const ProfilePage = () => {
 
   const handleSaveWeight = async () => {
     if (weightDate.length !== 10) {
-      alert('Будь ласка, введіть повну дату у форматі ДД.ММ.РРРР');
+      showToast('Будь ласка, введіть повну дату у форматі ДД.ММ.РРРР', 'error');
       return;
     }
 
@@ -131,7 +133,7 @@ const ProfilePage = () => {
         setWeightDate(formatToDDMMYYYY(new Date()));
         fetchData();
       } catch (err) {
-        alert('Помилка при збереженні ваги. Перевірте з\'єднання.');
+        showToast("Помилка при збереженні ваги. Перевірте з'єднання.", 'error');
       }
     }
   };
@@ -148,7 +150,7 @@ const ProfilePage = () => {
 
   const handleSaveProfile = async () => {
     if (editForm.dateOfBirth && editForm.dateOfBirth.length !== 10) {
-      alert('Будь ласка, введіть повну дату народження у форматі ДД.ММ.РРРР');
+      showToast('Будь ласка, введіть повну дату народження у форматі ДД.ММ.РРРР', 'error');
       return;
     }
 
@@ -162,7 +164,7 @@ const ProfilePage = () => {
       setIsEditModalOpen(false);
       fetchData();
     } catch (err) {
-      alert('Помилка при оновленні профілю');
+      showToast('Помилка при оновленні профілю', 'error');
     }
   };
 
@@ -184,7 +186,7 @@ const ProfilePage = () => {
       setAvatarFile(null);
       fetchData();
     } catch (err) {
-      alert('Помилка при завантаженні фото');
+      showToast('Помилка при завантаженні фото', 'error');
     }
   };
 
@@ -313,7 +315,10 @@ const ProfilePage = () => {
             {profile && (
               <>
                 <div className="profile-card">
-                  <button className="btn-edit" onClick={openEditModal}>✏️ Редагувати</button>
+                  <div style={{ position: 'absolute', top: '24px', right: '24px', display: 'flex', gap: '10px' }}>
+                    <Link to="/tracker" className="btn-edit" style={{ position: 'static', textDecoration: 'none', background: '#FEE2E2', color: '#991B1B', border: 'none' }}>🍽️ Трекер</Link>
+                    <button className="btn-edit" onClick={openEditModal} style={{ position: 'static' }}>✏️ Редагувати</button>
+                  </div>
 
                   <div className="avatar-large" onClick={() => setIsAvatarModalOpen(true)} style={{ cursor: 'pointer' }}>
                     {profile.avatarUrl ? (

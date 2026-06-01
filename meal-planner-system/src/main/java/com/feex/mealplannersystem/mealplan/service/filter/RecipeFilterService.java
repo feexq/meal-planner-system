@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @Component
 public class RecipeFilterService {
 
-    private static final double DIABETES_MAX_SUGARS_G   = 10.0;
-    private static final double DIABETES_MAX_CARBS_G    = 45.0;
+    private static final double DIABETES_MAX_SUGARS_G = 10.0;
+    private static final double DIABETES_MAX_CARBS_G = 45.0;
     private static final double HYPERTENSION_MAX_SODIUM = 600.0;
     private static final double HIGH_CHOLESTEROL_MAX_FAT_G = 7.0;
     private static final double HIGH_CHOLESTEROL_MAX_CHOL_MG = 100.0;

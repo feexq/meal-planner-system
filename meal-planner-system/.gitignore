@@ -36,6 +36,12 @@ out/
 ### VS Code ###
 .vscode/
 
+### Environment Files ###
+.env
+.env.production
+.env.local
+.env.*.local
+
 ### Data Files ###
 src/main/resources/data/recipes.json
 src/main/resources/data/nutrition.json

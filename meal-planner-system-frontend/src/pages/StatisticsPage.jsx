@@ -18,6 +18,7 @@ import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
 import Navbar from '../components/Navbar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import { profileAPI, ordersAPI, preferencesAPI, mealPlanAPI, recipesAPI, productsAPI } from '../api/api';
+import { useToast } from '../context/ToastContext';
 import './StatisticsPage.css';
 
 ChartJS.register(
@@ -194,6 +195,7 @@ const buildIngredientCloud = (topRecipeDetails) => {
 };
 
 const StatisticsPage = () => {
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('7');
   const [macroTab, setMacroTab] = useState('protein');
@@ -342,7 +344,7 @@ const StatisticsPage = () => {
   };
 
   const handleSaveWeight = async () => {
-    if (weightDate.length !== 10) { alert('Будь ласка, введіть повну дату у форматі ДД.ММ.РРРР'); return; }
+    if (weightDate.length !== 10) { showToast('Будь ласка, введіть повну дату у форматі ДД.ММ.РРРР', 'error'); return; }
     if (weightInput && !isNaN(parseFloat(weightInput))) {
       try {
         const payload = { weightKg: parseFloat(weightInput) };
@@ -353,7 +355,7 @@ const StatisticsPage = () => {
         else await profileAPI.logWeight(payload);
         setIsWeightModalOpen(false);
         fetchData();
-      } catch { alert('Помилка при збереженні ваги.'); }
+      } catch { showToast('Помилка при збереженні ваги.', 'error'); }
     }
   };
 

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -20,6 +21,6 @@ public class SlotStatusDto {
     private String recipeSlug;
     private String slotRole;
     private String status;
+    private List<String> dietaryNotes;
     private LocalDateTime eatenAt;
 }
-

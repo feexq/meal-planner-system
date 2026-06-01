@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { cartAPI, deliveryAPI, ordersAPI, recipesAPI } from '../api/api';
 import { useAuth } from '../context/AuthContext';
+import { useConfirm } from '../context/ConfirmContext';
 import './CartPage.css';
 
 const MEAL_TYPE_LABELS = {
@@ -78,6 +79,7 @@ function useDebounce(value, delay) {
 
 export default function CartPage() {
   const navigate = useNavigate();
+  const { confirm } = useConfirm();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -281,7 +283,8 @@ export default function CartPage() {
   };
 
   const handleClearCart = async () => {
-    if (!window.confirm('Ви впевнені, що хочете очистити весь кошик?')) return;
+    const isConfirmed = await confirm('Ви впевнені, що хочете очистити весь кошик?');
+    if (!isConfirmed) return;
     try {
       setLoading(true);
       await cartAPI.clearCart();
