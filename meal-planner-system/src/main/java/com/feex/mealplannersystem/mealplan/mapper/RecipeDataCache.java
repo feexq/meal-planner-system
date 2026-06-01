@@ -5,7 +5,7 @@ import com.feex.mealplannersystem.mealplan.model.NutritionModel;
 import com.feex.mealplannersystem.mealplan.model.RecipeModel;
 import com.feex.mealplannersystem.repository.RecipeRepository;
 import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
-import jakarta.annotation.PostConstruct;
+import com.feex.mealplannersystem.repository.entity.recipe.RecipeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,11 +26,6 @@ public class RecipeDataCache {
     private final RecipeDataAdapter  adapter;
 
     private RecipeDataContext cachedContext;
-
-    @PostConstruct
-    public void init() {
-        transactionTemplate.executeWithoutResult(s -> refreshCache());
-    }
 
     public RecipeDataContext buildContext() {
         if (cachedContext == null) {
