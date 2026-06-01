@@ -34,6 +34,13 @@ public class RecipeDataCache {
         return cachedContext;
     }
 
+    /*
+    @PostConstruct
+    public void init() {
+        transactionTemplate.executeWithoutResult(s -> refreshCache());
+    }
+    */
+
     public void refreshCache() {
         List<RecipeEntity> entities = recipeRepository.findAllForGenerator();
         List<RecipeModel> recipes = new ArrayList<>();
