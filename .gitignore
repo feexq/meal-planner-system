@@ -81,3 +81,5 @@ temp/
 #######################################
 INTEGRATION_GUIDE.md
 meal-planner-system/etc/main_old.py
+.vite/deps/_metadata.json
+.vite/deps/package.json
