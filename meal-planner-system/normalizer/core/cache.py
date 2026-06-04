@@ -8,19 +8,11 @@ REDIS_PORT = int(os.environ.get("REDIS_PORT", 6379))
 REDIS_DB   = int(os.environ.get("REDIS_DB", 1))
 REDIS_TTL  = 60 * 60 * 24 * 30  # 30 days
 
-from redis.backoff import ExponentialBackoff
-from redis.retry import Retry
-from redis.exceptions import ConnectionError, TimeoutError
-
 redis_client = redis.Redis(
     host=REDIS_HOST,
     port=REDIS_PORT,
     db=REDIS_DB,
     decode_responses=True,
-    health_check_interval=30,
-    retry_on_timeout=True,
-    retry_on_error=[ConnectionError, TimeoutError, ConnectionResetError],
-    retry=Retry(ExponentialBackoff(cap=10, base=1), 3)
 )
 
 
@@ -32,9 +24,16 @@ def _cache_key(food_name: str) -> str:
 
 
 def get_cached_nutrition(food_name: str) -> dict | None:
-    raw = redis_client.get(_cache_key(food_name))
-    return json.loads(raw) if raw else None
+    try:
+        raw = redis_client.get(_cache_key(food_name))
+        return json.loads(raw) if raw else None
+    except Exception as e:
+        print(f"Redis get error: {e}")
+        return None
 
 
 def cache_nutrition(food_name: str, nutrition: dict) -> None:
-    redis_client.setex(_cache_key(food_name), REDIS_TTL, json.dumps(nutrition, ensure_ascii=False))
+    try:
+        redis_client.setex(_cache_key(food_name), REDIS_TTL, json.dumps(nutrition, ensure_ascii=False))
+    except Exception as e:
+        print(f"Redis set error: {e}")
