@@ -59,14 +59,16 @@ export default function AuthPage() {
     }
   };
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+
   const handleGoogleLogin = () => {
     if (redirectParam !== '/') localStorage.setItem('postLoginRedirect', redirectParam);
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = `${backendUrl}/oauth2/authorization/google`;
   };
 
   const handleGithubLogin = () => {
     if (redirectParam !== '/') localStorage.setItem('postLoginRedirect', redirectParam);
-    window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+    window.location.href = `${backendUrl}/oauth2/authorization/github`;
   };
 
   return (
