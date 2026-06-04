@@ -8,12 +8,19 @@ REDIS_PORT = int(os.environ.get("REDIS_PORT", 6379))
 REDIS_DB   = int(os.environ.get("REDIS_DB", 1))
 REDIS_TTL  = 60 * 60 * 24 * 30  # 30 days
 
+from redis.backoff import ExponentialBackoff
+from redis.retry import Retry
+from redis.exceptions import ConnectionError, TimeoutError
+
 redis_client = redis.Redis(
     host=REDIS_HOST,
     port=REDIS_PORT,
     db=REDIS_DB,
     decode_responses=True,
     health_check_interval=30,
+    retry_on_timeout=True,
+    retry_on_error=[ConnectionError, TimeoutError, ConnectionResetError],
+    retry=Retry(ExponentialBackoff(cap=10, base=1), 3)
 )
 
 
