@@ -13,6 +13,7 @@ redis_client = redis.Redis(
     port=REDIS_PORT,
     db=REDIS_DB,
     decode_responses=True,
+    health_check_interval=30,
 )
 
 
