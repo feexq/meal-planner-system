@@ -85,5 +85,5 @@ normalizer:
   url: ${NORMALIZER_URL}
   batch-size: 35
   service:
-    timeout-seconds: 300
+    timeout-seconds: 600
 
