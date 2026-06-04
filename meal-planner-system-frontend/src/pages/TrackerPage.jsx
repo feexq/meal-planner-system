@@ -5,6 +5,8 @@ import { mealPlanAPI } from '../api/api';
 import { useToast } from '../context/ToastContext';
 import './TrackerPage.css';
 
+const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
 const DAY_NAMES = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 const MEAL_LABELS = { BREAKFAST: '🍳 Сніданок', LUNCH: '🍲 Обід', DINNER: '🐟 Вечеря', SNACK: '🥜 Перекус' };
 const MEAL_ORDER = { 'breakfast': 1, 'lunch': 2, 'snack': 3, 'dinner': 4 };
@@ -276,7 +278,7 @@ export default function TrackerPage() {
     const fetchStatus = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/meal-plan/status', {
+            const res = await fetch(`${API_URL}/meal-plan/status`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
             });
             if (res.status === 404) { navigate('/survey'); return; }
@@ -334,7 +336,7 @@ export default function TrackerPage() {
 
             const recipesPromises = currentRecipeIds.map(async id => {
                 try {
-                    const res = await fetch(`/api/recipes/${id}`, {
+                    const res = await fetch(`${API_URL}/recipes/${id}`, {
                         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
                     });
                     if (!res.ok) {
@@ -370,7 +372,7 @@ export default function TrackerPage() {
             if (allIngredientIds.size > 0) {
                 const idsArray = Array.from(allIngredientIds);
                 try {
-                    const productsRes = await fetch(`/api/products/by-ingredients?ingredientIds=${idsArray.join(',')}`, {
+                    const productsRes = await fetch(`${API_URL}/products/by-ingredients?ingredientIds=${idsArray.join(',')}`, {
                         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
                     });
                     if (productsRes.ok) {
@@ -648,7 +650,7 @@ export default function TrackerPage() {
 
 
             const promises = currentRecipeIds.map(id =>
-                fetch(`/api/cart/add-recipe/${id}`, {
+                fetch(`${API_URL}/cart/add-recipe/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -678,7 +680,7 @@ export default function TrackerPage() {
 
     const handleMarkEaten = async (slotId, actualCalories) => {
         try {
-            await fetch(`/api/meal-plan/mark-eaten`, {
+            await fetch(`${API_URL}/meal-plan/mark-eaten`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -694,7 +696,7 @@ export default function TrackerPage() {
 
     const handleSwap = async (slotId) => {
         try {
-            const res = await fetch(`/api/meal-plan/swap-slot/${slotId}`, {
+            const res = await fetch(`${API_URL}/meal-plan/swap-slot/${slotId}`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
             });
@@ -710,7 +712,7 @@ export default function TrackerPage() {
         setLogLoading(true);
         const currentDayNumber = planData.days[activeDayIndex]?.dayNumber || 1;
         try {
-            const res = await fetch('/api/meal-plan/log-food', {
+            const res = await fetch(`${API_URL}/meal-plan/log-food`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
                 body: JSON.stringify({ foodText: val, dayNumber: currentDayNumber }),
