@@ -113,7 +113,27 @@ export const preferencesAPI = {
 
 
 export const mealPlanAPI = {
-  generateFinal: () => api.post('/meal-plan/generate/final'),
+  generateFinal: async () => {
+    const res = await api.post('/meal-plan/generate/final/async');
+    const jobId = res.data.jobId;
+    return new Promise((resolve, reject) => {
+      const interval = setInterval(async () => {
+        try {
+          const statusRes = await api.get(`/meal-plan/generate/final/status/${jobId}`);
+          if (statusRes.data.status === 'COMPLETED') {
+            clearInterval(interval);
+            resolve({ data: statusRes.data.result });
+          } else if (statusRes.data.status === 'ERROR') {
+            clearInterval(interval);
+            reject(new Error(statusRes.data.error || 'Generation failed'));
+          }
+        } catch (err) {
+          clearInterval(interval);
+          reject(err);
+        }
+      }, 5000);
+    });
+  },
   getStatus: () => api.get('/meal-plan/status'),
   activatePlan: (planId) => api.post('/meal-plan/status', { planId, action: 'ACTIVATE' }),
   markEaten: (slotId, actualCalories) => api.post('/meal-plan/mark-eaten', { slotId, actualCalories }),

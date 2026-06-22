@@ -68,6 +68,54 @@ public class FinalizeClient {
         }
     }
 
+    public static class AsyncStartResponse {
+        public String jobId;
+    }
+
+    public static class JobStatusResponse {
+        public String status;
+        public FinalizedMealPlanDto result;
+        public String error;
+    }
+
+    public String finalizeAsync(FinalizeRequestDto request) {
+        log.info("Calling Python /finalize/async for user={}", request.getUserId());
+        try {
+            AsyncStartResponse response = webClientBuilder
+                    .baseUrl(nlpServiceUrl)
+                    .build()
+                    .post()
+                    .uri("/finalize/async")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(request)
+                    .retrieve()
+                    .bodyToMono(AsyncStartResponse.class)
+                    .timeout(java.time.Duration.ofSeconds(30))
+                    .block();
+            return response != null ? response.jobId : null;
+        } catch (Exception e) {
+            log.error("Python /finalize/async call failed: {}", e.getMessage());
+            throw new MealPlanFinalizationException(e);
+        }
+    }
+
+    public JobStatusResponse getFinalizeStatus(String jobId) {
+        try {
+            return webClientBuilder
+                    .baseUrl(nlpServiceUrl)
+                    .build()
+                    .get()
+                    .uri("/finalize/status/" + jobId)
+                    .retrieve()
+                    .bodyToMono(JobStatusResponse.class)
+                    .timeout(java.time.Duration.ofSeconds(30))
+                    .block();
+        } catch (Exception e) {
+            log.error("Python /finalize/status call failed: {}", e.getMessage());
+            throw new MealPlanFinalizationException(e);
+        }
+    }
+
     public ParseFoodResponse parseFood(String foodText) {
         log.info("Calling Python /parse-food: \"{}\"", foodText);
         try {

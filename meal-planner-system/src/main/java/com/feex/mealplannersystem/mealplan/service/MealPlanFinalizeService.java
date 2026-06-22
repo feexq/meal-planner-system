@@ -67,7 +67,29 @@ public class MealPlanFinalizeService {
         log.info("RAW DAYS COUNT = {}", weeklyPlan.getDays().size());
 
         FinalizeRequestDto request = buildFinalizeRequest(weeklyPlan, model, additional);
-        FinalizedMealPlanDto finalizedPlan = nlpClient.finalize(request);
+        String pythonJobId = nlpClient.finalizeAsync(request);
+        if (pythonJobId == null) {
+            throw new RuntimeException("Failed to start Python finalize async task");
+        }
+        
+        FinalizedMealPlanDto finalizedPlan = null;
+        while (true) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Polling interrupted", e);
+            }
+            
+            FinalizeClient.JobStatusResponse statusResponse = nlpClient.getFinalizeStatus(pythonJobId);
+            if ("COMPLETED".equals(statusResponse.status)) {
+                finalizedPlan = statusResponse.result;
+                break;
+            } else if ("ERROR".equals(statusResponse.status)) {
+                throw new RuntimeException("Python finalize failed: " + statusResponse.error);
+            }
+        }
+
         applyTranslationsToFinalizedPlan(finalizedPlan);
         log.info("FINALIZED DAYS COUNT = {}", finalizedPlan.getDays().size());
 

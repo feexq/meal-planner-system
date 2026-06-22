@@ -737,6 +737,29 @@ export default function UserSurveyPage() {
                 </div>
             </main>
 
+            {submitting && (
+                <div className="modal-overlay">
+                    <div className="modal-content" style={{ textAlign: 'center', padding: '40px 20px', maxWidth: '400px' }}>
+                        <svg 
+                            width="64" 
+                            height="64" 
+                            viewBox="0 0 24 24" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{ animation: 'spin 1s linear infinite', color: '#10B981', margin: '0 auto' }}
+                        >
+                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3a9 9 0 1 0 9 9" />
+                        </svg>
+                        <style>{`
+                            @keyframes spin { 100% { transform: rotate(360deg); } }
+                        `}</style>
+                        <h3 style={{ marginTop: '24px', fontSize: '20px', fontWeight: 600 }}>Генеруємо раціон...</h3>
+                        <p style={{ color: '#4b5563', marginTop: '12px', lineHeight: 1.6 }}>
+                            Це може зайняти до 5 хвилин. Будь ласка, зачекайте.
+                        </p>
+                    </div>
+                </div>
+            )}
+
             {showExistingPlanModal && (
                 <div className="modal-overlay" onClick={() => setShowExistingPlanModal(false)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>

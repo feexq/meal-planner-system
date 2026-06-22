@@ -82,7 +82,27 @@ const api = {
     },
     mealPlanner: {
         generate: (email) => apiFetch('POST', `/meal-plan/generate/${email}`),
-        generateFinal: (email) => apiFetch('POST', `/meal-plan/generate/final/${email}`),
+        generateFinal: async (email) => {
+            const res = await apiFetch('POST', `/meal-plan/generate/final/${email}/async`);
+            const jobId = res.jobId;
+            return new Promise((resolve, reject) => {
+                const interval = setInterval(async () => {
+                    try {
+                        const statusRes = await apiFetch('GET', `/meal-plan/generate/final/status/${jobId}`);
+                        if (statusRes.status === 'COMPLETED') {
+                            clearInterval(interval);
+                            resolve(statusRes.result);
+                        } else if (statusRes.status === 'ERROR') {
+                            clearInterval(interval);
+                            reject(new Error(statusRes.error || 'Generation failed'));
+                        }
+                    } catch (err) {
+                        clearInterval(interval);
+                        reject(err);
+                    }
+                }, 5000);
+            });
+        },
     }
 };
 

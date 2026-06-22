@@ -31,8 +31,12 @@ def _to_meal_item(m: dict | None) -> MealItem | None:
     )
 
 
-@router.post("/finalize", response_model=FinalizeResponse)
-def finalize_meal_plan(request: FinalizeRequest):
+import uuid
+from threading import Thread
+
+tasks = {}
+
+def _process_finalize(request: FinalizeRequest) -> FinalizeResponse:
     try:
         parsed = finalize_plan(request.model_dump())
     except Exception as exc:
@@ -73,3 +77,35 @@ def finalize_meal_plan(request: FinalizeRequest):
         ))
 
     return FinalizeResponse(userId=request.userId, days=finalized_days)
+
+
+@router.post("/finalize", response_model=FinalizeResponse)
+def finalize_meal_plan(request: FinalizeRequest):
+    return _process_finalize(request)
+
+
+def background_finalize(task_id: str, request: FinalizeRequest):
+    try:
+        result = _process_finalize(request)
+        tasks[task_id] = {"status": "COMPLETED", "result": result.model_dump()}
+    except Exception as e:
+        tasks[task_id] = {"status": "ERROR", "error": str(e)}
+
+
+@router.post("/finalize/async")
+def finalize_meal_plan_async(request: FinalizeRequest):
+    task_id = str(uuid.uuid4())
+    tasks[task_id] = {"status": "PROCESSING"}
+    thread = Thread(target=background_finalize, args=(task_id, request))
+    thread.start()
+    return {"jobId": task_id}
+
+
+@router.get("/finalize/status/{task_id}")
+def get_finalize_status(task_id: str):
+    if task_id not in tasks:
+        raise HTTPException(status_code=404, detail="Task not found")
+    data = tasks[task_id]
+    if data["status"] in ("COMPLETED", "ERROR"):
+        return tasks.pop(task_id)
+    return data

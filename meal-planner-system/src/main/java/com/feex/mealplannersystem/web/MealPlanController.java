@@ -23,6 +23,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import com.feex.mealplannersystem.service.AsyncJobTrackerService;
+
 @RestController
 @RequestMapping("/api/meal-plan")
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class MealPlanController {
     private final FoodLogService foodLogService;
     private final MealPlanHelper mealPlanHelper;
     private final MealSwapService mealSwapService;
+    private final AsyncJobTrackerService asyncJobTrackerService;
 
     @PostMapping("/generate")
     public ResponseEntity<WeeklyMealPlanDto> generate(
@@ -116,6 +120,27 @@ public class MealPlanController {
         return ResponseEntity.ok(new GenerateFinalResponse(
                 result.getPlanId(), result.getFinalizedPlan()));
     }
+
+    @PostMapping("/generate/final/async")
+    public ResponseEntity<Map<String, String>> generateFinalAsync(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        String jobId = asyncJobTrackerService.startJob(() -> {
+            SavedPlanResult result = finalizeService.generateAndFinalize(userDetails.getUsername());
+            return new GenerateFinalResponse(result.getPlanId(), result.getFinalizedPlan());
+        });
+
+        return ResponseEntity.ok(Map.of("jobId", jobId));
+    }
+
+    @GetMapping("/generate/final/status/{jobId}")
+    public ResponseEntity<?> getGenerateFinalStatus(@PathVariable String jobId) {
+        Map<String, Object> status = asyncJobTrackerService.getJobStatus(jobId);
+        if ("ERROR".equals(status.get("status"))) {
+            return ResponseEntity.badRequest().body(status);
+        }
+        return ResponseEntity.ok(status);
+    }
     @PostMapping("/generate/{email}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<WeeklyMealPlanDto> generateForUser(@PathVariable String email) {
@@ -128,6 +153,16 @@ public class MealPlanController {
         SavedPlanResult result = finalizeService.generateAndFinalize(email);
         return ResponseEntity.ok(new GenerateFinalResponse(
                 result.getPlanId(), result.getFinalizedPlan()));
+    }
+
+    @PostMapping("/generate/final/{email}/async")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, String>> generateFinalForUserAsync(@PathVariable String email) {
+        String jobId = asyncJobTrackerService.startJob(() -> {
+            SavedPlanResult result = finalizeService.generateAndFinalize(email);
+            return new GenerateFinalResponse(result.getPlanId(), result.getFinalizedPlan());
+        });
+        return ResponseEntity.ok(Map.of("jobId", jobId));
     }
 
     @PostMapping("/log-food")
