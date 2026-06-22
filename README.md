@@ -1,5 +1,10 @@
 # FoodMart — Meal Planner System
 
+### 🔗 [**Live App**](https://meal-planner-system-seven.vercel.app/)
+
+> Demo account: `test@example.com` / `12345678`
+> A meal plan is already generated for this account. Generating a new one is async (polling-based) — the UI shows a loading indicator and may take up to 5 minutes due to the LLM call.
+
 FoodMart is an advanced full-stack platform that **algorithmically generates** personalized weekly meal plans, **intelligently optimizing** a database of **12,000+ recipes** to meet caloric targets, dietary restrictions, and budget constraints. It features an **AI-powered nutrition assistant** for natural language food logging, an **integrated grocery store** with **Stripe payments**, and adaptive daily rebalancing. Built with **Spring Boot 4** and **React 19**, the system automates the entire journey from BMR calculation to **Nova Poshta** integration for warehouse selection.
 
 ![Java 17](https://img.shields.io/badge/Java-17-orange?logo=openjdk)
