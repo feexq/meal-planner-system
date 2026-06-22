@@ -32,9 +32,29 @@ def _to_meal_item(m: dict | None) -> MealItem | None:
 
 
 import uuid
+import json
+import os
 from threading import Thread
 
-tasks = {}
+TASKS_DIR = "/tmp/tasks"
+os.makedirs(TASKS_DIR, exist_ok=True)
+
+def _read_task(task_id: str):
+    path = os.path.join(TASKS_DIR, f"{task_id}.json")
+    if not os.path.exists(path):
+        return None
+    with open(path, "r") as f:
+        return json.load(f)
+
+def _write_task(task_id: str, data: dict):
+    path = os.path.join(TASKS_DIR, f"{task_id}.json")
+    with open(path, "w") as f:
+        json.dump(data, f)
+
+def _delete_task(task_id: str):
+    path = os.path.join(TASKS_DIR, f"{task_id}.json")
+    if os.path.exists(path):
+        os.remove(path)
 
 def _process_finalize(request: FinalizeRequest) -> FinalizeResponse:
     try:
@@ -87,15 +107,15 @@ def finalize_meal_plan(request: FinalizeRequest):
 def background_finalize(task_id: str, request: FinalizeRequest):
     try:
         result = _process_finalize(request)
-        tasks[task_id] = {"status": "COMPLETED", "result": result.model_dump()}
+        _write_task(task_id, {"status": "COMPLETED", "result": result.model_dump()})
     except Exception as e:
-        tasks[task_id] = {"status": "ERROR", "error": str(e)}
+        _write_task(task_id, {"status": "ERROR", "error": str(e)})
 
 
 @router.post("/finalize/async")
 def finalize_meal_plan_async(request: FinalizeRequest):
     task_id = str(uuid.uuid4())
-    tasks[task_id] = {"status": "PROCESSING"}
+    _write_task(task_id, {"status": "PROCESSING"})
     thread = Thread(target=background_finalize, args=(task_id, request))
     thread.start()
     return {"jobId": task_id}
@@ -103,9 +123,12 @@ def finalize_meal_plan_async(request: FinalizeRequest):
 
 @router.get("/finalize/status/{task_id}")
 def get_finalize_status(task_id: str):
-    if task_id not in tasks:
+    data = _read_task(task_id)
+    if not data:
         raise HTTPException(status_code=404, detail="Task not found")
-    data = tasks[task_id]
+        
     if data["status"] in ("COMPLETED", "ERROR"):
-        return tasks.pop(task_id)
+        _delete_task(task_id)
+        return data
+        
     return data
